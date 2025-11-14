@@ -77,12 +77,12 @@
 
         /* Hide the video entirely in this theme – we rely on a static hero artwork */
         #bg-video {
-            opacity: 0;
+            opacity: 1; /* DIUBAH: Dibuat terlihat */
             z-index: 1;
         }
         
         #bg-image {
-            opacity: 0.45;
+            opacity: 0; /* DIUBAH: Disembunyikan awalnya */
             z-index: 0;
         }
 
@@ -600,9 +600,9 @@
     <!-- Background -->
     <div id="bg-container">
         <video id="bg-video" class="bg-media" autoplay muted playsinline>
-            <source src="" type="video/mp4"><!-- intentionally blank in this theme -->
+            <source src="https://files.catbox.moe/gpwsaa.mp4" type="video/mp4"><!-- Tautan video diperbarui -->
         </video>
-        <img id="bg-image" class="bg-media" src="hayabusa.jpg" alt="Hayabusa Shura Background">
+        <img id="bg-image" class="bg-media" src="https://i.imghippo.com/files/eJmg6984JU.jpg" alt="Hayabusa Shura Background">
     </div>
     <canvas id="particle-canvas"></canvas>
 
@@ -686,10 +686,10 @@
     <!-- Main Content -->
     <main class="container content-layer" style="padding-top: 120px; padding-bottom: 2rem;">
         <header style="text-align: center; margin-bottom: 3rem;">
-            <!-- Profile -->
-            <div class="profile">
-                <img src="hayabusa.jpg" alt="Hayabusa Shura Avatar" style="object-position: 50% 30%; will-change: transform;">
-            </div>
+            <!-- Profile (MODIFIKASI: Diubah dari <img> menjadi <video>) --><div class="profile">
+            <!-- Ganti img dengan video, tambahkan object-position --><video src="https://files.catbox.moe/gs4lq5.mp4" alt="Profile Video" autoplay loop muted playsinline
+                style="object-position: 50% 25%; will-change: transform;"> <!-- [DITAMBAHKAN] Memicu akselerasi GPU --></video>
+        </div>
 
             <!-- Hero Title -->
             <div style="display: inline-block; margin-bottom: 1.5rem;">
@@ -816,11 +816,31 @@
             const bgVideo = document.getElementById('bg-video');
             const bgImage = document.getElementById('bg-image');
 
-            // Since our theme uses a static image, hide the video immediately.
+            // DIUBAH: Logika dikembalikan untuk memutar video dulu
             if (bgVideo && bgImage) {
-                bgVideo.style.opacity = '0';
-                bgImage.style.opacity = '0.45';
-                isVideoFinished = true;
+                const handleVideoEnd = () => {
+                    bgVideo.style.opacity = '0';
+                    if (!document.body.classList.contains('light-mode')) {
+                        bgImage.style.opacity = '0.45'; // Tampilkan gambar setelah video selesai
+                    }
+                    isVideoFinished = true;
+                };
+
+                const handleVideoError = (e) => {
+                    console.error("Video background failed:", e);
+                    handleVideoEnd();
+                };
+                
+                bgVideo.addEventListener('ended', handleVideoEnd);
+                bgVideo.addEventListener('error', handleVideoError);
+
+                const playPromise = bgVideo.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.warn("Autoplay blocked:", error);
+                        handleVideoEnd();
+                    });
+                }
             }
 
             const logoContainer = document.getElementById('logo-container');
