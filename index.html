@@ -21,7 +21,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
 
-        /* Color Variables re‑themed for Hayabusa Shura */
+        /* Color Variables re-themed for Hayabusa Shura */
         :root {
             --flame-red: #ce00a7;       /* vibrant magenta */
             --lava-orange: #4a0072;     /* deep royal purple */
@@ -882,20 +882,26 @@
             let portals = [];
             let onConfirmCallback = null;
             
-            // --- [V3] ADVANCED URL OPTIMIZATION MANAGER ---
+            // --- [V3+ OPTIMIZED] ADVANCED URL OPTIMIZATION MANAGER ---
             
             // 1. Token Dictionary (Pemetaan String Panjang ke Token Pendek)
             // Urutan penting: String yang lebih panjang sebaiknya di atas agar tidak tertimpa sebagian.
             const TOKEN_MAP = [
+                { key: 'https://api.whatsapp.com/send/?phone=', token: '~wa' },
+                { key: 'api.whatsapp.com/send/?phone=', token: '~wb' },
                 { key: 'https://', token: '~1' },
                 { key: 'http://', token: '~2' },
                 { key: '.vercel.app', token: '~3' },
+                { key: '.my.id', token: '~6' },
                 { key: 'www.', token: '~4' },
                 { key: '.com', token: '~5' },
+                { key: '&text=', token: '~t' },
                 { key: 'fas fa-', token: '~F' }, // FontAwesome Solid
                 { key: 'fab fa-', token: '~B' }, // FontAwesome Brand
                 { key: 'whatsapp', token: '~w' },
                 { key: 'instagram', token: '~i' },
+                { key: 'youtube', token: '~y' },
+                { key: 'tiktok', token: '~k' },
                 { key: '#ce00a7', token: '~C1' }, // Warna Tema 1
                 { key: '#4a0072', token: '~C2' }, // Warna Tema 2
                 { key: '#00c8e0', token: '~C3' }, // Warna Tema 3
@@ -943,20 +949,17 @@
                         let compressed = LZString.compressToBase64(jsonString);
                         compressed = UrlManager.toUrlSafe(compressed);
 
-                        // 5. Logic Hash Mode (Opsional: Jika data sangat panjang atau item > 5)
-                        // Karena requirement meminta "Jika jumlah portal > 5", kita pakai mapping lokal.
-                        if (data.length > 5) {
+                        // 5. Logic Hash Mode (kalau hasil compress kepanjangan atau portal sangat banyak)
+                        //    -> pakai localStorage dengan id pendek "id:xxxx"
+                        if (compressed.length > 140 || data.length > 6) {
                             const hashId = UrlManager.generateHash(compressed);
                             const storageKey = `sl_map_${hashId}`;
-                            
-                            // Simpan mapping data asli (bukan compressed) ke localStorage agar persist
-                            // Kita simpan string compressed-nya saja untuk hemat space
+                            // Simpan mapping data kompres (lebih hemat) ke localStorage
                             localStorage.setItem(storageKey, compressed);
-                            
                             return "id:" + hashId;
                         }
 
-                        // 6. Return standard V3
+                        // 6. Return standard V3 pendek
                         return "v3:" + compressed;
 
                     } catch (e) {
@@ -1256,7 +1259,7 @@
                 location.href = window.location.pathname;
             }
 
-            // --- [UPDATED] GENERATE SMART LINK SYSTEM V3 ---
+            // --- [UPDATED] GENERATE SMART LINK SYSTEM V3+ OPTIMIZED ---
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 
@@ -1270,7 +1273,7 @@
                 
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
-                inputField.value = "Generating v3 link...";
+                inputField.value = "Generating link...";
 
                 // Delay sedikit agar UI sempat render 'Generating...'
                 setTimeout(() => {
