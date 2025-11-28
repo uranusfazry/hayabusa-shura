@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- LZString untuk kompresi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
-    <!-- [DIGANTI] QRious untuk QR Code yang lebih stabil & support Canvas -->
+    <!-- QRious untuk QR Code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
     <style>
@@ -619,9 +619,10 @@
         #qr-code {
             margin: 0 auto;
             padding: 0.5rem;
-            background: #ffffff; /* DIUBAH: Background putih agar bisa di-scan */
+            background: #ffffff;
             border-radius: 12px;
             display: inline-block;
+            box-shadow: 0 0 20px rgba(0, 200, 224, 0.2);
         }
 
         #qr-note {
@@ -834,7 +835,6 @@
             </div>
             <!-- QR Code Auto Share -->
             <div id="qr-wrapper">
-                <!-- DIUBAH: Menggunakan CANVAS untuk QRious -->
                 <canvas id="qr-code"></canvas>
                 <div id="qr-note">Scan QR ini atau kirim link di atas ke temanmu.</div>
             </div>
@@ -910,112 +910,98 @@
             let portals = [];
             let onConfirmCallback = null;
 
-            /* ███ SMART LINK ENGINE — V4.3 PRO (Intelligent ID + QR) ███ */
+            // --- [V5] ULTIMATE COMPRESSION ENGINE ---
+            const SEP_ITEM = '\x01';
+            const SEP_FIELD = '\x02';
+
             const TOKEN_MAP = [
-                ["https://", "~H"],
-                ["http://", "~h"],
-                [".com", "~C"],
-                ["www.", "~W"],
-                ["api.whatsapp.com", "@WA"],
-                ["youtube.com", "@YT"],
-                ["instagram.com", "@IG"],
-                ["tiktok.com", "@TT"],
-                ["fas fa-", "!F"],
-                ["fab fa-", "!B"],
+                ["https://api.whatsapp.com/send/?phone=", "*w"],
+                ["https://", "*h"],
+                ["http://", "*H"],
+                [".com", "*c"],
+                [".vercel.app", "*v"],
+                ["&text=", "*t"],
+                ["%20", "*s"],
+                ["fas fa-", "*f"],
+                ["fab fa-", "*b"],
+                ["#ce00a7", "*1"],
+                ["#4a0072", "*2"],
+                ["#00c8e0", "*3"],
                 [" ", "_"]
             ];
 
-            function applyTokens(str) {
-                TOKEN_MAP.forEach(([from, to]) => {
-                    str = str.split(from).join(to);
-                });
-                return str;
-            }
-
-            function reverseTokens(str) {
-                [...TOKEN_MAP].reverse().forEach(([from, to]) => {
-                    str = str.split(to).join(from);
-                });
-                return str;
-            }
-
-            // Intelligent ID System (deterministik dari payload)
-            function createSmartId(payload) {
-                let hash = 0;
-                for (let i = 0; i < payload.length; i++) {
-                    hash = ((hash << 5) - hash) + payload.charCodeAt(i);
-                    hash |= 0;
-                }
-                let id = Math.abs(hash).toString(36).toUpperCase();
-                if (id.length > 7) id = id.slice(0, 7);
-                return id.padStart(5, '0'); // minimal 5 char
-            }
-
             const UrlManager = {
-                encodeArray(portalArray) {
-                    let json = JSON.stringify(portalArray);
-                    json = applyTokens(json);
-                    let b64 = LZString.compressToBase64(json);
-                    return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+                tokenize(str) {
+                    TOKEN_MAP.forEach(([from, to]) => {
+                        str = str.split(from).join(to);
+                    });
+                    return str;
                 },
-                decodeArray(encoded) {
-                    let b64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
-                    while (b64.length % 4 !== 0) b64 += "=";
-                    let json = LZString.decompressFromBase64(b64);
-                    if (!json) return null;
-                    json = reverseTokens(json);
-                    const arr = JSON.parse(json);
-                    return arr.map(p => ({
-                        name: p[0],
-                        url: p[1],
-                        icon: p[2],
-                        color: p[3],
-                        description: p[4]
-                    }));
+                detokenize(str) {
+                    [...TOKEN_MAP].reverse().forEach(([from, to]) => {
+                        str = str.split(to).join(from);
+                    });
+                    return str;
                 },
-                make(portals) {
-                    const minified = portals.map(p => [p.name, p.url, p.icon, p.color, p.description || ""]);
-                    const compressed = UrlManager.encodeArray(minified);
-
-                    // Jika payload pendek, pakai v4 langsung
-                    if (compressed.length < 120) {
-                        return "v4:" + compressed;
+                serialize(portals) {
+                    return portals.map(p => {
+                        return [
+                            p.name,
+                            p.url,
+                            p.icon,
+                            p.color,
+                            p.description || ""
+                        ].join(SEP_FIELD);
+                    }).join(SEP_ITEM);
+                },
+                deserialize(str) {
+                    if (!str) return [];
+                    return str.split(SEP_ITEM).map(itemStr => {
+                        const parts = itemStr.split(SEP_FIELD);
+                        return {
+                            name: parts[0],
+                            url: parts[1],
+                            icon: parts[2],
+                            color: parts[3],
+                            description: parts[4] || ""
+                        };
+                    });
+                },
+                encode(portals) {
+                    try {
+                        let raw = UrlManager.serialize(portals);
+                        raw = UrlManager.tokenize(raw);
+                        let compressed = LZString.compressToBase64(raw);
+                        return compressed.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+                    } catch (e) {
+                        console.error("Encode Error", e);
+                        return null;
                     }
-
-                    // Payload panjang -> Intelligent Hash ID
-                    const id = createSmartId(compressed);
-                    // Simpan compressed berdasarkan ID (cloudless sync lokal)
-                    localStorage.setItem("sl_" + id, compressed);
-
-                    // Sertakan backup sekali share
-                    return `id:${id}~b:${compressed}`;
+                },
+                decode(encoded) {
+                    try {
+                        let b64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
+                        while (b64.length % 4 !== 0) b64 += "=";
+                        let raw = LZString.decompressFromBase64(b64);
+                        if (!raw) return null;
+                        raw = UrlManager.detokenize(raw);
+                        return UrlManager.deserialize(raw);
+                    } catch (e) {
+                        console.error("Decode Error", e);
+                        return null;
+                    }
                 },
                 load(payload) {
-                    if (payload.startsWith("v4:")) {
-                        const body = payload.slice(3);
-                        return UrlManager.decodeArray(body);
+                    if (payload.startsWith("v5_")) {
+                        return UrlManager.decode(payload.slice(3));
                     }
-                    if (payload.startsWith("id:")) {
-                        const parts = payload.split("~b:");
-                        const hash = parts[0].slice(3);
-                        const stored = localStorage.getItem("sl_" + hash);
-
-                        if (stored) {
-                            return UrlManager.decodeArray(stored);
-                        }
-
-                        if (parts[1]) {
-                            const backup = parts[1];
-                            localStorage.setItem("sl_" + hash, backup);
-                            // bersihkan URL jadi pendek
-                            setTimeout(() => {
-                                history.replaceState({}, "", location.pathname + `?p=id:${hash}`);
-                            }, 300);
-                            return UrlManager.decodeArray(backup);
-                        }
-
-                        alert("Data hash tidak ditemukan dan tidak ada backup. Silakan generate ulang.");
-                        return null;
+                    if (payload.startsWith("v4:") || payload.startsWith("id:")) {
+                        alert("Format link versi lama terdeteksi. Silakan generate ulang link baru untuk hasil optimal.");
+                        return null; 
+                    }
+                    const legacy = LZString.decompressFromEncodedURIComponent(payload);
+                    if (legacy && legacy.startsWith("[")) {
+                        return JSON.parse(legacy);
                     }
                     return null;
                 }
@@ -1041,24 +1027,13 @@
             function initPortalApp() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const encodedData = urlParams.get('p');
-                const legacyId = urlParams.get('id');
 
                 if (encodedData) {
                     const decodedPortals = UrlManager.load(encodedData);
                     if (decodedPortals) {
                         portals = decodedPortals;
                         localStorage.setItem('portals', JSON.stringify(portals));
-                        window.history.replaceState({}, document.title, window.location.pathname + "?p=" + encodedData.split("~b:")[0]);
-                        renderPortals();
-                    } else {
-                        loadFromStorage();
-                    }
-                } else if (legacyId) {
-                    const decodedPortals = UrlManager.load("id:" + legacyId);
-                    if (decodedPortals) {
-                        portals = decodedPortals;
-                        localStorage.setItem('portals', JSON.stringify(portals));
-                        window.history.replaceState({}, document.title, window.location.pathname + "?p=id:" + legacyId);
+                        window.history.replaceState({}, document.title, window.location.pathname);
                         renderPortals();
                     } else {
                         loadFromStorage();
@@ -1228,7 +1203,6 @@
                 location.href = window.location.pathname;
             }
 
-            // GENERATE SMART LINK + AUTO QR CODE (FIXED)
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 if (!portalData || JSON.parse(portalData).length === 0) {
@@ -1246,21 +1220,46 @@
 
                 setTimeout(() => {
                     const parsedPortals = JSON.parse(portalData);
-                    const encoded = UrlManager.make(parsedPortals);
+                    const encoded = UrlManager.encode(parsedPortals);
+                    
                     if (encoded) {
-                        const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
+                        const finalUrl = `${window.location.origin}${window.location.pathname}?p=v5_${encoded}`;
                         inputField.value = finalUrl;
 
-                        // Auto QR Code Share (Menggunakan QRious)
                         if (qrCanvas) {
-                            new QRious({
+                            const qr = new QRious({
                                 element: qrCanvas,
                                 value: finalUrl,
-                                size: 200,
-                                background: '#ffffff', // Background putih wajib
+                                size: 250, 
+                                background: '#ffffff',
                                 foreground: '#000000',
-                                level: 'L' // Level Low untuk data panjang agar dot tidak terlalu kecil
+                                level: 'H' 
                             });
+
+                            // Add Watermark
+                            const ctx = qrCanvas.getContext('2d');
+                            const logoImg = document.querySelector('#logo-container img');
+                            
+                            if (logoImg && logoImg.complete) {
+                                const size = qr.size;
+                                const logoSize = size * 0.24; 
+                                const logoPos = (size - logoSize) / 2;
+
+                                ctx.beginPath();
+                                ctx.arc(size/2, size/2, logoSize/2 + 4, 0, 2 * Math.PI);
+                                ctx.fillStyle = '#ffffff';
+                                ctx.fill();
+                                ctx.lineWidth = 2;
+                                ctx.strokeStyle = '#ce00a7'; 
+                                ctx.stroke();
+
+                                ctx.save();
+                                ctx.beginPath();
+                                ctx.arc(size/2, size/2, logoSize/2, 0, 2 * Math.PI);
+                                ctx.clip();
+                                ctx.drawImage(logoImg, logoPos, logoPos, logoSize, logoSize);
+                                ctx.restore();
+                            }
                         }
                     } else {
                         inputField.value = "Error generating link.";
