@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- [BARU] Menambahkan LZString untuk kompresi URL -->
+    <!-- [WAJIB] LZString untuk kompresi stabil & support URL safe -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 
     <style>
@@ -23,8 +23,6 @@
 
         /* Color Variables re‑themed for Hayabusa Shura */
         :root {
-            /* We reuse the variable names from the original design but assign a new palette
-               inspired by the Shura skin — rich purples, bright magentas and teal glows. */
             --flame-red: #ce00a7;       /* vibrant magenta */
             --lava-orange: #4a0072;     /* deep royal purple */
             --gold: #00c8e0;            /* cool teal accent */
@@ -77,14 +75,13 @@
             transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
         }
 
-        /* Hide the video entirely in this theme – we rely on a static hero artwork */
         #bg-video {
-            opacity: 1; /* DIUBAH: Dibuat terlihat */
+            opacity: 1;
             z-index: 1;
         }
         
         #bg-image {
-            opacity: 0; /* DIUBAH: Disembunyikan awalnya */
+            opacity: 0;
             z-index: 0;
         }
 
@@ -99,7 +96,6 @@
             }
         }
 
-        /* Ethereal Overlay inspired by shrouded shadows */
         body::before {
             content: '';
             position: fixed;
@@ -121,7 +117,6 @@
             50% { opacity: 1; }
         }
 
-        /* Subtle grid overlay evocative of digital ninja scrolls */
         body::after {
             content: '';
             position: fixed;
@@ -166,17 +161,9 @@
         .font-cinzel { font-family: 'Cinzel', serif; }
         .font-playfair { font-family: 'Playfair Display', serif; }
 
-        .flame-text {
-            color: var(--flame-red);
-        }
-
-        .gold-text {
-            color: var(--gold);
-        }
-
-        .lava-text {
-            color: var(--gold);
-        }
+        .flame-text { color: var(--flame-red); }
+        .gold-text { color: var(--gold); }
+        .lava-text { color: var(--gold); }
 
         /* Navbar */
         .navbar {
@@ -224,9 +211,7 @@
             box-shadow: 0 0 10px var(--gold);
         }
 
-        .nav-item:hover::after {
-            width: 100%;
-        }
+        .nav-item:hover::after { width: 100%; }
 
         /* Dropdown */
         .dropdown {
@@ -247,9 +232,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .group:hover .dropdown {
-            display: block;
-        }
+        .group:hover .dropdown { display: block; }
 
         /* Mobile Menu */
         #mobile-menu-overlay {
@@ -281,9 +264,7 @@
             flex-direction: column;
         }
 
-        #mobile-menu.open {
-            transform: translateX(0);
-        }
+        #mobile-menu.open { transform: translateX(0); }
 
         /* Buttons */
         .btn-lava {
@@ -410,9 +391,7 @@
             border: 1px solid rgba(206, 0, 167, 0.5);
         }
 
-        .portal-card:hover .delete-btn {
-            opacity: 1;
-        }
+        .portal-card:hover .delete-btn { opacity: 1; }
 
         .delete-btn:hover {
             color: var(--flame-red);
@@ -559,7 +538,7 @@
             }
         }
 
-        /* [BARU] Styles untuk Toast Notification */
+        /* Toast Notification */
         .toast {
             visibility: hidden;
             min-width: 250px;
@@ -608,9 +587,7 @@
             box-shadow: 0 -4px 30px rgba(206, 0, 167, 0.2);
         }
 
-        footer p:first-child {
-            font-size: 14px;
-        }
+        footer p:first-child { font-size: 14px; }
 
         /* Utility Classes */
         .container {
@@ -621,7 +598,7 @@
 
         .hidden { display: none; }
 
-        /* Light Mode Override: lighten the background image and bring out colours */
+        /* Light Mode Override */
         body.light-mode #bg-image {
             opacity: 1 !important;
             filter: saturate(1.15);
@@ -637,7 +614,7 @@
     <!-- Background -->
     <div id="bg-container">
         <video id="bg-video" class="bg-media" autoplay muted playsinline>
-            <source src="https://files.catbox.moe/gpwsaa.mp4" type="video/mp4"><!-- Tautan video diperbarui -->
+            <source src="https://files.catbox.moe/gpwsaa.mp4" type="video/mp4">
         </video>
         <img id="bg-image" class="bg-media" src="https://i.imghippo.com/files/eJmg6984JU.jpg" alt="Hayabusa Shura Background">
     </div>
@@ -648,7 +625,7 @@
         <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <!-- Logo -->
-                <div id="logo-container" style="display: flex; align-items: center; cursor: pointer; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;">
+                <div id="logo-container" style="display: flex; align-items: center; cursor: pointer; user-select: none;">
                     <img src="https://i.imghippo.com/files/EePl9866XxI.png" alt="Hayabusa Shura Logo" class="logo-pulse" style="height: 50px; width: auto; border-radius: 50%;" draggable="false">
                     <span class="font-cinzel gold-text" style="font-weight: 700; font-size: 1.25rem; letter-spacing: 0.05em; margin-left: 1rem;">MLBB HAYABUSA</span>
                 </div>
@@ -672,7 +649,7 @@
                                 <button onclick="importData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
                                 <button onclick="backupData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
                             </div>
-                            <!-- [BARU] Tombol Generate Smart Link Desktop -->
+                            
                             <button onclick="generateSmartLink()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-top: 0.75rem;">
                                 <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
                             </button>
@@ -716,7 +693,7 @@
                 <button onclick="importData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
                 <button onclick="backupData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
             </div>
-            <!-- [BARU] Tombol Generate Smart Link Mobile -->
+            
             <button onclick="generateSmartLink(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
                 <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
             </button>
@@ -742,9 +719,6 @@
                 <h1 class="font-playfair" data-text="HAYABUSA SHURA" style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; color: var(--gold);">HAYABUSA SHURA</h1>
             </div>
             <p class="font-cinzel flame-text" style="font-size: 1.125rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;">MLBB Creator &amp; Web Developer</p>
-            <p style="max-width: 42rem; margin: 1.5rem auto 0; font-size: 1rem; line-height: 1.6; color: rgba(0, 200, 224, 0.8);">
-                <!-- Optionally add a subtitle or description here -->
-            </p>
         </header>
 
         <!-- Time Display -->
@@ -771,20 +745,16 @@
     <div id="add-portal-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 50;">
         <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1.5rem; position: relative; padding: 2rem;">
             <button onclick="document.getElementById('add-portal-modal').style.display = 'none'" style="position: absolute; top: 1rem; right: 1rem; font-size: 2rem; background: none; border: none; cursor: pointer; transition: all 0.3s;" class="flame-text">×</button>
-            
             <h2 class="font-cinzel gold-text" style="font-size: 1.5rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Craft New Portal</h2>
-
             <form id="portal-form" style="display: flex; flex-direction: column; gap: 1rem;">
                 <div>
                     <label for="portal-name" class="font-cinzel gold-text" style="display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em;">Portal Name</label>
                     <input type="text" id="portal-name" style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 1rem;" placeholder="Enter portal name" required>
                 </div>
-
                 <div>
                     <label for="portal-url" class="font-cinzel gold-text" style="display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em;">Destination URL</label>
                     <input type="url" id="portal-url" style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 1rem;" placeholder="https://your-link.com" required>
                 </div>
-
                 <div>
                     <label for="portal-icon" class="font-cinzel gold-text" style="display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em;">Portal Icon</label>
                     <select id="portal-icon" style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 1rem; appearance: none;">
@@ -801,12 +771,10 @@
                         <option value="fab fa-tiktok">🎵 TikTok</option>
                     </select>
                 </div>
-                
                 <div>
                     <label for="portal-description" class="font-cinzel gold-text" style="display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em;">Description</label>
                     <textarea id="portal-description" rows="2" style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 1rem; resize: vertical;" placeholder="Brief description..."></textarea>
                 </div>
-
                 <div>
                     <label class="font-cinzel gold-text" style="display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em;">Portal Theme</label>
                     <div style="display: flex; justify-content: space-around; padding-top: 0.5rem;">
@@ -824,38 +792,25 @@
                         </label>
                     </div>
                 </div>
-
                 <div style="display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 0.5rem;">
-                    <button type="button" onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn-lava" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">
-                        Craft
-                    </button>
+                    <button type="button" onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">Cancel</button>
+                    <button type="submit" class="btn-lava" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">Craft</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- [BARU] Smart Link Display Modal -->
+    <!-- Smart Link Display Modal -->
     <div id="smart-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
         <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1.5rem; position: relative; padding: 2rem;">
             <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" style="position: absolute; top: 1rem; right: 1rem; font-size: 2rem; background: none; border: none; cursor: pointer; transition: all 0.3s;" class="flame-text">×</button>
-            
-            <h2 class="font-cinzel gold-text" style="font-size: 1.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Smart Link Siap Digunakan 🚀</h2>
-            
-            <p style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.8); line-height: 1.5;">
-                Link ini sudah berisi semua portal kamu. Siapa pun yang membuka link ini akan langsung mendapatkan portal yang sama — tanpa login dan tanpa pengaturan ulang.
-            </p>
-
+            <h2 class="font-cinzel gold-text" style="font-size: 1.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Smart Link Siap 🚀</h2>
+            <p style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.8); line-height: 1.5;">Link ini sudah berisi semua portal kamu. Siapa pun yang membuka link ini akan mendapatkan portal yang sama — tanpa login dan tanpa pengaturan ulang.</p>
             <div style="margin-bottom: 1.5rem;">
                 <input type="text" id="generated-smart-link" readonly style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 0.875rem; background: rgba(0, 0, 0, 0.3); cursor: text; border: 1px solid var(--gold);">
             </div>
-
             <div style="display: flex; justify-content: flex-end;">
-                <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; padding: 0.75rem 1.5rem; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                    <i class="fas fa-copy"></i> Copy Smart Link
-                </button>
+                <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; padding: 0.75rem 1.5rem; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fas fa-copy"></i> Copy Smart Link</button>
             </div>
         </div>
     </div>
@@ -866,19 +821,14 @@
             <h2 class="font-cinzel flame-text" style="font-size: 1.25rem; margin-bottom: 1rem; font-weight: 700;">Confirm Action</h2>
             <p id="confirmation-message" style="margin-bottom: 1.5rem; font-size: 1.125rem; color: rgba(0, 200, 224, 0.9);">Are you sure?</p>
             <div style="display: flex; justify-content: center; gap: 1rem;">
-                <button id="confirm-cancel-btn" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">
-                    Cancel
-                </button>
-                <button id="confirm-ok-btn" class="btn-lava" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">
-                    Confirm
-                </button>
+                <button id="confirm-cancel-btn" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">Cancel</button>
+                <button id="confirm-ok-btn" class="btn-lava" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">Confirm</button>
             </div>
         </div>
     </div>
 
-    <!-- [BARU] Toast Notification -->
+    <!-- Toast Notification -->
     <div id="toast" class="toast">Smart Link berhasil disalin!</div>
-
     <input type="file" id="import-file-input" class="hidden" style="display: none;" accept=".zip,.txt,application/json">
 
     <script>
@@ -929,35 +879,9 @@
             const confirmOkBtn = document.getElementById('confirm-ok-btn');
             const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
 
-            // --- STATE & UTILS ---
             let portals = [];
             let onConfirmCallback = null;
             
-            // Helper: Convert Byte Array to URL-Safe Base64
-            const toBase64 = (buffer) => {
-                let binary = '';
-                const bytes = new Uint8Array(buffer);
-                const len = bytes.byteLength;
-                for (let i = 0; i < len; i++) {
-                    binary += String.fromCharCode(bytes[i]);
-                }
-                return window.btoa(binary)
-                    .replace(/\+/g, '-')
-                    .replace(/\//g, '_')
-                    .replace(/=+$/, '');
-            };
-
-            // Helper: Convert URL-Safe Base64 to Byte Array
-            const fromBase64 = (base64) => {
-                const string = window.atob(base64.replace(/-/g, '+').replace(/_/g, '/'));
-                const len = string.length;
-                const bytes = new Uint8Array(len);
-                for (let i = 0; i < len; i++) {
-                    bytes[i] = string.charCodeAt(i);
-                }
-                return bytes; // LZMA expects array/typed array
-            };
-
             const defaultPortals = [
                 {
                     name: 'Hayabusa Premium Access',
@@ -977,58 +901,45 @@
 
             // --- MAIN APP INIT ---
             function initPortalApp() {
-                // [DIUBAH] Logika Decode LZMA + Restore Data
                 const urlParams = new URLSearchParams(window.location.search);
                 const encodedData = urlParams.get('p');
-                const idParam = urlParams.get('id'); // Hash ID placeholder
+                const idParam = urlParams.get('id');
 
                 if (encodedData) {
                     try {
-                        // 1. Convert Base64URL to ByteArray
-                        const compressedBytes = fromBase64(encodedData);
+                        // 1. Decompress (Synchronous LZString)
+                        const decompressed = LZString.decompressFromEncodedURIComponent(encodedData);
                         
-                        // 2. Decompress LZMA (Async)
-                        LZMA.decompress(compressedBytes, (result, error) => {
-                            if (error) {
-                                console.error("LZMA Decompress Error:", error);
-                                loadFromStorage();
-                                return;
+                        if (decompressed) {
+                            const parsedData = JSON.parse(decompressed);
+                            
+                            // 2. Cek apakah format MINIFIED (Array of Arrays) atau LEGACY (Array of Objects)
+                            if (Array.isArray(parsedData) && parsedData.length > 0 && Array.isArray(parsedData[0])) {
+                                // Format Baru: [[name, url, icon, color, desc], ...]
+                                portals = parsedData.map(p => ({
+                                    name: p[0],
+                                    url: p[1],
+                                    icon: p[2],
+                                    color: p[3],
+                                    description: p[4]
+                                }));
+                            } else if (Array.isArray(parsedData)) {
+                                // Format Lama
+                                portals = parsedData;
                             }
                             
-                            try {
-                                const parsedData = JSON.parse(result);
-                                
-                                // 3. Restore Minified Data (Array -> Object)
-                                // Format: [name, url, icon, color, desc]
-                                if (Array.isArray(parsedData) && Array.isArray(parsedData[0])) {
-                                    portals = parsedData.map(p => ({
-                                        name: p[0],
-                                        url: p[1],
-                                        icon: p[2],
-                                        color: p[3],
-                                        description: p[4]
-                                    }));
-                                } else if (Array.isArray(parsedData)) {
-                                    // Backward compatibility if JSON isn't minified
-                                    portals = parsedData;
-                                }
-
-                                localStorage.setItem('portals', JSON.stringify(portals));
-                                // Bersihkan URL agar terlihat rapi
-                                window.history.replaceState({}, document.title, window.location.pathname);
-                                renderPortals();
-                            } catch (e) {
-                                console.error("JSON Parse Error:", e);
-                                loadFromStorage();
-                            }
-                        });
+                            localStorage.setItem('portals', JSON.stringify(portals));
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            renderPortals();
+                        } else {
+                            loadFromStorage();
+                        }
                     } catch (e) {
-                        console.error("Base64 Decode Error:", e);
+                        console.error("Decoding Error:", e);
                         loadFromStorage();
                     }
                 } else if (idParam) {
-                    // Logic placeholder untuk Hash ID (membutuhkan database)
-                    console.log("Hash ID detected. Client-side lookup not possible without backend DB.");
+                    console.log("Hash ID detected.");
                     loadFromStorage();
                 } else {
                     loadFromStorage();
@@ -1192,7 +1103,7 @@
                 location.href = window.location.pathname;
             }
 
-            // --- [DIUBAH] GENERATE SMART LINK SYSTEM (LZMA) ---
+            // --- [PERBAIKAN] GENERATE SMART LINK SYSTEM (Synchronous + Minified) ---
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 
@@ -1204,41 +1115,35 @@
                 const inputField = document.getElementById('generated-smart-link');
                 const modal = document.getElementById('smart-link-modal');
                 
-                // Tampilkan Modal dengan status Loading
-                inputField.value = "Generating compressed link...";
+                // Tampilkan Modal langsung
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
 
-                // 1. Minify Data: Convert Array of Objects to Array of Arrays
-                // Ini menghemat space dengan membuang keys "name", "url", dll.
-                const rawData = JSON.parse(portalData);
-                const minifiedData = rawData.map(p => [
-                    p.name, 
-                    p.url, 
-                    p.icon, 
-                    p.color, 
-                    p.description || ""
-                ]);
+                try {
+                    // 1. Minify Data: Ubah Object jadi Array of Arrays agar URL lebih pendek
+                    // Ini menghilangkan key "name", "url" dsb yang memakan karakter
+                    const rawData = JSON.parse(portalData);
+                    const minifiedData = rawData.map(p => [
+                        p.name, 
+                        p.url, 
+                        p.icon, 
+                        p.color, 
+                        p.description || ""
+                    ]);
 
-                // 2. Compress with LZMA (Mode 9 - Max Compression)
-                // LZMA bekerja secara Asynchronous
-                LZMA.compress(JSON.stringify(minifiedData), 9, (result, error) => {
-                    if (error) {
-                        alert("Compression failed: " + error);
-                        return;
-                    }
+                    // 2. Compress LZString (Synchronous = Tidak loading)
+                    const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(minifiedData));
                     
-                    // 3. Convert Byte Array to URL-Safe Base64
-                    const encoded = toBase64(result);
-                    
-                    // 4. Construct Final URL
+                    // 3. Construct Final URL
                     const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
                     
                     inputField.value = finalUrl;
-                });
+                } catch (err) {
+                    console.error("Compression Error:", err);
+                    inputField.value = "Error generating link.";
+                }
             }
 
-            // Fungsi Copy Smart Link
             window.copySmartLink = function() {
                 const inputField = document.getElementById('generated-smart-link');
                 inputField.select();
@@ -1253,7 +1158,6 @@
                 });
             }
 
-            // Backup & Import Logic
             window.backupData = async () => {
                 const dataToBackup = { portals: JSON.parse(localStorage.getItem('portals')) || defaultPortals };
                 const dataStr = JSON.stringify(dataToBackup, null, 2);
