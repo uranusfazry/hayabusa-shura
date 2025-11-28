@@ -14,8 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- LZString untuk kompresi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
-    <!-- QRCode JS untuk Auto QR Code Share -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- [DIGANTI] QRious untuk QR Code yang lebih stabil & support Canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
     <style>
         /* Import Fonts */
@@ -619,7 +619,7 @@
         #qr-code {
             margin: 0 auto;
             padding: 0.5rem;
-            background: rgba(0,0,0,0.4);
+            background: #ffffff; /* DIUBAH: Background putih agar bisa di-scan */
             border-radius: 12px;
             display: inline-block;
         }
@@ -834,7 +834,8 @@
             </div>
             <!-- QR Code Auto Share -->
             <div id="qr-wrapper">
-                <div id="qr-code"></div>
+                <!-- DIUBAH: Menggunakan CANVAS untuk QRious -->
+                <canvas id="qr-code"></canvas>
                 <div id="qr-note">Scan QR ini atau kirim link di atas ke temanmu.</div>
             </div>
             <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
@@ -1227,7 +1228,7 @@
                 location.href = window.location.pathname;
             }
 
-            // GENERATE SMART LINK + AUTO QR CODE
+            // GENERATE SMART LINK + AUTO QR CODE (FIXED)
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 if (!portalData || JSON.parse(portalData).length === 0) {
@@ -1237,12 +1238,11 @@
 
                 const inputField = document.getElementById('generated-smart-link');
                 const modal = document.getElementById('smart-link-modal');
-                const qrContainer = document.getElementById('qr-code');
+                const qrCanvas = document.getElementById('qr-code');
                 
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
                 inputField.value = "Generating...";
-                if (qrContainer) qrContainer.innerHTML = "";
 
                 setTimeout(() => {
                     const parsedPortals = JSON.parse(portalData);
@@ -1251,14 +1251,15 @@
                         const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
                         inputField.value = finalUrl;
 
-                        // Auto QR Code Share
-                        if (qrContainer) {
-                            qrContainer.innerHTML = "";
-                            new QRCode(qrContainer, {
-                                text: finalUrl,
-                                width: 180,
-                                height: 180,
-                                correctLevel: QRCode.CorrectLevel.M
+                        // Auto QR Code Share (Menggunakan QRious)
+                        if (qrCanvas) {
+                            new QRious({
+                                element: qrCanvas,
+                                value: finalUrl,
+                                size: 200,
+                                background: '#ffffff', // Background putih wajib
+                                foreground: '#000000',
+                                level: 'L' // Level Low untuk data panjang agar dot tidak terlalu kecil
                             });
                         }
                     } else {
