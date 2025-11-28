@@ -882,87 +882,165 @@
             let portals = [];
             let onConfirmCallback = null;
             
-            // --- [NEW] URL OPTIMIZATION MANAGER ---
-            // Dictionary untuk Token Compression (Symbol Substitution)
-            const TOKEN_DICT = {
-                'https://': '~1',
-                'http://': '~2',
-                'www.': '~3',
-                '.com': '~4',
-                '.vercel.app': '~5',
-                'fas fa-': '~6',
-                'fab fa-': '~7',
-                '#': '~8',
-                'whatsapp': '~9',
-                'instagram': '~0'
-            };
+            // --- [V3] ADVANCED URL OPTIMIZATION MANAGER ---
+            
+            // 1. Token Dictionary (Pemetaan String Panjang ke Token Pendek)
+            // Urutan penting: String yang lebih panjang sebaiknya di atas agar tidak tertimpa sebagian.
+            const TOKEN_MAP = [
+                { key: 'https://', token: '~1' },
+                { key: 'http://', token: '~2' },
+                { key: '.vercel.app', token: '~3' },
+                { key: 'www.', token: '~4' },
+                { key: '.com', token: '~5' },
+                { key: 'fas fa-', token: '~F' }, // FontAwesome Solid
+                { key: 'fab fa-', token: '~B' }, // FontAwesome Brand
+                { key: 'whatsapp', token: '~w' },
+                { key: 'instagram', token: '~i' },
+                { key: '#ce00a7', token: '~C1' }, // Warna Tema 1
+                { key: '#4a0072', token: '~C2' }, // Warna Tema 2
+                { key: '#00c8e0', token: '~C3' }, // Warna Tema 3
+                { key: ' ', token: '~_' }         // Spasi diganti ~_
+            ];
 
             const UrlManager = {
+                // Helper: Base64 to URL Safe Base64
+                toUrlSafe: (base64) => {
+                    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+                },
+
+                // Helper: URL Safe Base64 to Base64
+                fromUrlSafe: (base64) => {
+                    let str = base64.replace(/-/g, '+').replace(/_/g, '/');
+                    while (str.length % 4) str += '=';
+                    return str;
+                },
+
+                // Hash Function Sederhana (DJB2) untuk ID mode
+                generateHash: (str) => {
+                    let hash = 5381;
+                    for (let i = 0; i < str.length; i++) {
+                        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+                    }
+                    return (hash >>> 0).toString(36); // Base36 string
+                },
+
                 encode: (data) => {
                     try {
-                        // 1. Minify: Object -> Array [name, url, icon, color, desc]
+                        // 1. Minify Structure: Object -> Array [name, url, icon, color, desc]
                         let minified = data.map(p => [
                             p.name, p.url, p.icon, p.color, p.description || ""
                         ]);
 
-                        // 2. Stringify
+                        // 2. Stringify JSON
                         let jsonString = JSON.stringify(minified);
 
-                        // 3. Tokenize: Ganti string umum dengan simbol pendek
-                        for (const [key, val] of Object.entries(TOKEN_DICT)) {
-                            // Gunakan global replaceAll
-                            jsonString = jsonString.split(key).join(val);
+                        // 3. Tokenize (Replace common strings)
+                        TOKEN_MAP.forEach(map => {
+                            jsonString = jsonString.split(map.key).join(map.token);
+                        });
+
+                        // 4. Compress: LZString to Base64 (Lebih padat dari URIComponent)
+                        let compressed = LZString.compressToBase64(jsonString);
+                        compressed = UrlManager.toUrlSafe(compressed);
+
+                        // 5. Logic Hash Mode (Opsional: Jika data sangat panjang atau item > 5)
+                        // Karena requirement meminta "Jika jumlah portal > 5", kita pakai mapping lokal.
+                        if (data.length > 5) {
+                            const hashId = UrlManager.generateHash(compressed);
+                            const storageKey = `sl_map_${hashId}`;
+                            
+                            // Simpan mapping data asli (bukan compressed) ke localStorage agar persist
+                            // Kita simpan string compressed-nya saja untuk hemat space
+                            localStorage.setItem(storageKey, compressed);
+                            
+                            return "id:" + hashId;
                         }
 
-                        // 4. Compress: LZString
-                        const compressed = LZString.compressToEncodedURIComponent(jsonString);
+                        // 6. Return standard V3
+                        return "v3:" + compressed;
 
-                        // 5. Hash Slim Layer (Pseudo): Add prefix versioning
-                        return "v2:" + compressed;
                     } catch (e) {
-                        console.error("Encode Error:", e);
+                        console.error("V3 Encode Error:", e);
                         return null;
                     }
                 },
 
                 decode: (encodedString) => {
                     try {
-                        // Check Versioning
-                        let isV2 = encodedString.startsWith('v2:');
-                        let payload = isV2 ? encodedString.substring(3) : encodedString;
-
-                        // 1. Decompress
-                        let decompressed = LZString.decompressFromEncodedURIComponent(payload);
-                        if (!decompressed) return null;
-
-                        // 2. Detokenize (Only for V2)
-                        if (isV2) {
-                            for (const [key, val] of Object.entries(TOKEN_DICT)) {
-                                decompressed = decompressed.split(val).join(key);
+                        // A. Check Hash Mode
+                        if (encodedString.startsWith('id:')) {
+                            const hashId = encodedString.substring(3);
+                            const storedCompressed = localStorage.getItem(`sl_map_${hashId}`);
+                            
+                            if (storedCompressed) {
+                                // Rekursif decode data yang ditemukan
+                                return UrlManager.processV3Decode(storedCompressed);
+                            } else {
+                                alert("Link Hash ini tidak ditemukan di browser ini. Menggunakan data lokal.");
+                                return null;
                             }
                         }
 
-                        // 3. Parse JSON
-                        const parsed = JSON.parse(decompressed);
-
-                        // 4. Map back to Objects (Support Backward Compatibility)
-                        if (Array.isArray(parsed) && parsed.length > 0 && Array.isArray(parsed[0])) {
-                            // Format: [name, url, icon, color, desc]
-                            return parsed.map(p => ({
-                                name: p[0],
-                                url: p[1],
-                                icon: p[2],
-                                color: p[3],
-                                description: p[4]
-                            }));
-                        } else if (Array.isArray(parsed)) {
-                            // Legacy Format (Array of Objects)
-                            return parsed;
+                        // B. Check Versioning
+                        if (encodedString.startsWith('v3:')) {
+                            return UrlManager.processV3Decode(encodedString.substring(3));
+                        } 
+                        
+                        // C. Fallback V2 (Array Minified + LZString URI)
+                        else if (encodedString.startsWith('v2:')) {
+                            const decompressed = LZString.decompressFromEncodedURIComponent(encodedString.substring(3));
+                            return UrlManager.restoreDataStructure(JSON.parse(decompressed), 'array');
                         }
-                        return null;
+
+                        // D. Fallback V1 (Legacy JSON + LZString URI)
+                        else {
+                            const decompressed = LZString.decompressFromEncodedURIComponent(encodedString);
+                            if (!decompressed) return null;
+                            const parsed = JSON.parse(decompressed);
+                            return UrlManager.restoreDataStructure(parsed, 'auto');
+                        }
                     } catch (e) {
                         console.error("Decode Error:", e);
                         return null;
+                    }
+                },
+
+                // Core V3 Decoding Logic
+                processV3Decode: (payload) => {
+                    // 1. URL Safe -> Base64
+                    const base64 = UrlManager.fromUrlSafe(payload);
+                    
+                    // 2. Decompress Base64
+                    let jsonString = LZString.decompressFromBase64(base64);
+                    if (!jsonString) return null;
+
+                    // 3. De-Tokenize (Restore strings)
+                    // Loop terbalik agar tidak salah replace jika ada token nesting
+                    [...TOKEN_MAP].reverse().forEach(map => {
+                        jsonString = jsonString.split(map.token).join(map.key);
+                    });
+
+                    // 4. Parse & Restore
+                    const parsed = JSON.parse(jsonString);
+                    return UrlManager.restoreDataStructure(parsed, 'array');
+                },
+
+                // Helper untuk menormalkan data kembali ke Object standard
+                restoreDataStructure: (data, format) => {
+                    if (format === 'auto') {
+                        format = (Array.isArray(data) && data.length > 0 && Array.isArray(data[0])) ? 'array' : 'object';
+                    }
+
+                    if (format === 'array') {
+                        return data.map(p => ({
+                            name: p[0],
+                            url: p[1],
+                            icon: p[2],
+                            color: p[3],
+                            description: p[4]
+                        }));
+                    } else {
+                        return data; // Sudah object
                     }
                 }
             };
@@ -988,24 +1066,30 @@
             function initPortalApp() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const encodedData = urlParams.get('p');
-                const idParam = urlParams.get('id');
+                // Support legacy ?id= param jika ada, tapi diarahkan ke logic baru
+                const idParam = urlParams.get('id'); 
 
                 if (encodedData) {
                     const decodedPortals = UrlManager.decode(encodedData);
                     if (decodedPortals) {
                         portals = decodedPortals;
                         localStorage.setItem('portals', JSON.stringify(portals));
-                        // Clean URL
+                        // Clean URL agar rapi
                         window.history.replaceState({}, document.title, window.location.pathname);
                         renderPortals();
                     } else {
-                        console.warn("Failed to decode URL data, loading local storage.");
+                        console.warn("Gagal decode URL, memuat data lokal.");
                         loadFromStorage();
                     }
                 } else if (idParam) {
-                    // Placeholder for future backend hash implementation
-                    console.log("Hash ID detected.");
-                    loadFromStorage();
+                    // Handle legacy/manual hash ID param
+                    const decodedPortals = UrlManager.decode("id:" + idParam);
+                    if(decodedPortals) {
+                         portals = decodedPortals;
+                         renderPortals();
+                    } else {
+                        loadFromStorage();
+                    }
                 } else {
                     loadFromStorage();
                 }
@@ -1165,10 +1249,14 @@
 
             window.resetAllSettings = function() {
                 localStorage.removeItem('portals');
+                // Hapus semua mapping hash juga
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith('sl_map_')) localStorage.removeItem(key);
+                });
                 location.href = window.location.pathname;
             }
 
-            // --- [UPDATED] GENERATE SMART LINK SYSTEM ---
+            // --- [UPDATED] GENERATE SMART LINK SYSTEM V3 ---
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 
@@ -1182,16 +1270,20 @@
                 
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
+                inputField.value = "Generating v3 link...";
 
-                const parsedPortals = JSON.parse(portalData);
-                const encoded = UrlManager.encode(parsedPortals);
+                // Delay sedikit agar UI sempat render 'Generating...'
+                setTimeout(() => {
+                    const parsedPortals = JSON.parse(portalData);
+                    const encoded = UrlManager.encode(parsedPortals);
 
-                if (encoded) {
-                    const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
-                    inputField.value = finalUrl;
-                } else {
-                    inputField.value = "Error generating link.";
-                }
+                    if (encoded) {
+                        const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
+                        inputField.value = finalUrl;
+                    } else {
+                        inputField.value = "Error generating link.";
+                    }
+                }, 100);
             }
 
             window.copySmartLink = function() {
