@@ -883,8 +883,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- VIDEO BACKGROUND LOGIC ---
             let isVideoFinished = false;
-
             const bgVideo = document.getElementById('bg-video');
             const bgImage = document.getElementById('bg-image');
 
@@ -914,6 +914,7 @@
                 }
             }
 
+            // --- DOM ELEMENTS ---
             const logoContainer = document.getElementById('logo-container');
             const portalsGrid = document.getElementById('portals-grid');
             const portalForm = document.getElementById('portal-form');
@@ -928,62 +929,125 @@
             const confirmOkBtn = document.getElementById('confirm-ok-btn');
             const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
 
+            // --- STATE & UTILS ---
             let portals = [];
             let onConfirmCallback = null;
+            
+            // Helper: Convert Byte Array to URL-Safe Base64
+            const toBase64 = (buffer) => {
+                let binary = '';
+                const bytes = new Uint8Array(buffer);
+                const len = bytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return window.btoa(binary)
+                    .replace(/\+/g, '-')
+                    .replace(/\//g, '_')
+                    .replace(/=+$/, '');
+            };
+
+            // Helper: Convert URL-Safe Base64 to Byte Array
+            const fromBase64 = (base64) => {
+                const string = window.atob(base64.replace(/-/g, '+').replace(/_/g, '/'));
+                const len = string.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    bytes[i] = string.charCodeAt(i);
+                }
+                return bytes; // LZMA expects array/typed array
+            };
 
             const defaultPortals = [
                 {
                     name: 'Hayabusa Premium Access',
-                    url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=Halo%2C+saya+ingin+membeli+Akses+Website+Premium+Hayabusa+tanpa+iklan+sebesar+Rp25.000.+Mohon+transfer+ke+DANA+087734421123+dan+kirimkan+bukti+pembayarannya.+Pesanan+akan+diproses+maksimal+1x24+jam.+Terima+kasih.&type=phone_number&app_absent=0',
+                    url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=Halo',
                     icon: 'fas fa-mask',
                     color: '#ce00a7',
                     description: 'Upgrade sekarang — akses semua website uranus tanpa iklan cuma Rp25K'
                 },
                 {
                     name: 'Buy Hayabusa Shura Skin',
-                    url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=Halo%2C+saya+ingin+membeli+Kode+Website+MLBB+Hayabusa+Skin+Shura+sebesar+Rp100.000.+Mohon+transfer+ke+DANA+087734421123+dan+kirimkan+bukti+pembayarannya.+Pesanan+akan+diproses+maksimal+1x24+jam.+Terima+kasih.&type=phone_number&app_absent=0',
+                    url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=BeliSkin',
                     icon: 'fas fa-crosshairs',
                     color: '#4a0072',
                     description: 'Beli kode website MLBB Hayabusa Shura edisi premium seharga Rp100K'
                 }
             ];
 
+            // --- MAIN APP INIT ---
             function initPortalApp() {
-                // [BARU] Logika Cek URL Parameter saat website dimuat
+                // [DIUBAH] Logika Decode LZMA + Restore Data
                 const urlParams = new URLSearchParams(window.location.search);
                 const encodedData = urlParams.get('p');
+                const idParam = urlParams.get('id'); // Hash ID placeholder
 
                 if (encodedData) {
                     try {
-                        const decompressed = LZString.decompressFromEncodedURIComponent(encodedData);
-                        if (decompressed) {
-                            const parsedData = JSON.parse(decompressed);
-                            if (Array.isArray(parsedData)) {
-                                portals = parsedData;
-                                localStorage.setItem('portals', JSON.stringify(portals));
-                                // Hapus parameter dari URL agar bersih (opsional)
-                                window.history.replaceState({}, document.title, window.location.pathname);
-                            } else {
-                                // Fallback jika data rusak
-                                portals = JSON.parse(localStorage.getItem('portals')) || defaultPortals;
+                        // 1. Convert Base64URL to ByteArray
+                        const compressedBytes = fromBase64(encodedData);
+                        
+                        // 2. Decompress LZMA (Async)
+                        LZMA.decompress(compressedBytes, (result, error) => {
+                            if (error) {
+                                console.error("LZMA Decompress Error:", error);
+                                loadFromStorage();
+                                return;
                             }
-                        }
+                            
+                            try {
+                                const parsedData = JSON.parse(result);
+                                
+                                // 3. Restore Minified Data (Array -> Object)
+                                // Format: [name, url, icon, color, desc]
+                                if (Array.isArray(parsedData) && Array.isArray(parsedData[0])) {
+                                    portals = parsedData.map(p => ({
+                                        name: p[0],
+                                        url: p[1],
+                                        icon: p[2],
+                                        color: p[3],
+                                        description: p[4]
+                                    }));
+                                } else if (Array.isArray(parsedData)) {
+                                    // Backward compatibility if JSON isn't minified
+                                    portals = parsedData;
+                                }
+
+                                localStorage.setItem('portals', JSON.stringify(portals));
+                                // Bersihkan URL agar terlihat rapi
+                                window.history.replaceState({}, document.title, window.location.pathname);
+                                renderPortals();
+                            } catch (e) {
+                                console.error("JSON Parse Error:", e);
+                                loadFromStorage();
+                            }
+                        });
                     } catch (e) {
-                        console.error("Gagal decode Smart Link", e);
-                        portals = JSON.parse(localStorage.getItem('portals')) || defaultPortals;
+                        console.error("Base64 Decode Error:", e);
+                        loadFromStorage();
                     }
+                } else if (idParam) {
+                    // Logic placeholder untuk Hash ID (membutuhkan database)
+                    console.log("Hash ID detected. Client-side lookup not possible without backend DB.");
+                    loadFromStorage();
                 } else {
-                    portals = JSON.parse(localStorage.getItem('portals')) || defaultPortals;
+                    loadFromStorage();
                 }
 
-                renderPortals();
                 updateTime();
                 setInterval(updateTime, 1000);
+                setupEventListeners();
+                updateNavDisplay();
+            }
 
+            function loadFromStorage() {
+                portals = JSON.parse(localStorage.getItem('portals')) || defaultPortals;
+                renderPortals();
+            }
+
+            function setupEventListeners() {
                 logoContainer.addEventListener('click', () => {
-                    if (!isVideoFinished) {
-                        return;
-                    }
+                    if (!isVideoFinished) return;
                     document.body.classList.toggle('light-mode');
                     if (!document.body.classList.contains('light-mode') && bgVideo.style.opacity === '0') {
                         bgImage.style.opacity = '0.45';
@@ -998,24 +1062,21 @@
                 });
 
                 mobileMenuOverlay.addEventListener('click', closeMobileMenu);
-
                 portalForm.addEventListener('submit', handlePortalFormSubmit);
                 importFileInput.addEventListener('change', handleFileImport);
+                
                 confirmCancelBtn.addEventListener('click', () => {
                     confirmationModal.classList.add('hidden');
                     confirmationModal.style.display = 'none';
                 });
                 confirmOkBtn.addEventListener('click', () => {
-                    if (typeof onConfirmCallback === 'function') {
-                        onConfirmCallback();
-                    }
+                    if (typeof onConfirmCallback === 'function') onConfirmCallback();
                     confirmationModal.classList.add('hidden');
                     confirmationModal.style.display = 'none';
                     onConfirmCallback = null;
                 });
 
                 window.addEventListener('resize', updateNavDisplay);
-                updateNavDisplay();
             }
 
             function updateNavDisplay() {
@@ -1046,7 +1107,6 @@
 
             function renderPortals() {
                 portalsGrid.innerHTML = '';
-
                 portals.forEach((portal, index) => {
                     const portalElement = document.createElement('div');
                     portalElement.style.height = '100%';
@@ -1074,27 +1134,23 @@
                                     <h3 class="font-cinzel" style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; word-break: break-word; font-size: 1.125rem; margin-bottom: 0.5rem; ${textStyle}">${portal.name}</h3>
                                     <p style="font-size: 0.875rem; color: rgba(0, 200, 224, 0.8); margin-top: 0.5rem; line-height: 1.4;">${descriptionHtml}</p>
                                 </div>
-                                
                                 <button onclick="event.preventDefault(); event.stopPropagation(); showConfirmationModal('Destroy portal ${portal.name}?', () => deletePortalAction(${index}))" class="delete-btn">
                                     <i class="fas fa-times" style="font-size: 0.875rem;"></i>
                                 </button>
                             </a>
                         </div>
                     `;
-
                     portalsGrid.appendChild(portalElement);
                 });
             }
 
             function handlePortalFormSubmit(e) {
                 e.preventDefault();
-
                 const name = document.getElementById('portal-name').value;
                 const url = document.getElementById('portal-url').value || "#";
                 const description = document.getElementById('portal-description').value || "";
                 const icon = document.getElementById('portal-icon').value;
                 const color = document.querySelector('input[name="portal-color"]:checked').value;
-
                 addPortalToArray(name, url, icon, color, description);
             }
 
@@ -1113,21 +1169,14 @@
                 renderPortals();
             }
 
-            function resetPortalForm() {
-                portalForm.reset();
-            }
-
-            function savePortals() {
-                localStorage.setItem('portals', JSON.stringify(portals));
-            }
+            function resetPortalForm() { portalForm.reset(); }
+            function savePortals() { localStorage.setItem('portals', JSON.stringify(portals)); }
 
             window.showAddLinkModal = function() {
                 document.getElementById('add-portal-modal').classList.remove('hidden');
                 document.getElementById('add-portal-modal').style.display = 'flex';
                 resetPortalForm();
-                if (mobileMenu.classList.contains('open')) {
-                    closeMobileMenu();
-                }
+                if (mobileMenu.classList.contains('open')) closeMobileMenu();
             }
 
             function updateTime() {
@@ -1140,10 +1189,10 @@
 
             window.resetAllSettings = function() {
                 localStorage.removeItem('portals');
-                location.href = window.location.pathname; // Reload tanpa parameter query
+                location.href = window.location.pathname;
             }
 
-            // [BARU] Fungsi Generate Smart Link
+            // --- [DIUBAH] GENERATE SMART LINK SYSTEM (LZMA) ---
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 
@@ -1152,34 +1201,49 @@
                     return;
                 }
 
-                // Kompres data menjadi string URI safe
-                const compressed = LZString.compressToEncodedURIComponent(portalData);
-                
-                // Buat URL final
-                // Menggunakan window.location.origin + pathname agar dinamis (berfungsi di vercel atau local)
-                const finalUrl = `${window.location.origin}${window.location.pathname}?p=${compressed}`;
-
-                // Tampilkan di input
                 const inputField = document.getElementById('generated-smart-link');
-                inputField.value = finalUrl;
-
-                // Tampilkan Modal
                 const modal = document.getElementById('smart-link-modal');
+                
+                // Tampilkan Modal dengan status Loading
+                inputField.value = "Generating compressed link...";
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
+
+                // 1. Minify Data: Convert Array of Objects to Array of Arrays
+                // Ini menghemat space dengan membuang keys "name", "url", dll.
+                const rawData = JSON.parse(portalData);
+                const minifiedData = rawData.map(p => [
+                    p.name, 
+                    p.url, 
+                    p.icon, 
+                    p.color, 
+                    p.description || ""
+                ]);
+
+                // 2. Compress with LZMA (Mode 9 - Max Compression)
+                // LZMA bekerja secara Asynchronous
+                LZMA.compress(JSON.stringify(minifiedData), 9, (result, error) => {
+                    if (error) {
+                        alert("Compression failed: " + error);
+                        return;
+                    }
+                    
+                    // 3. Convert Byte Array to URL-Safe Base64
+                    const encoded = toBase64(result);
+                    
+                    // 4. Construct Final URL
+                    const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
+                    
+                    inputField.value = finalUrl;
+                });
             }
 
-            // [BARU] Fungsi Copy Smart Link
+            // Fungsi Copy Smart Link
             window.copySmartLink = function() {
                 const inputField = document.getElementById('generated-smart-link');
-                
-                // Select text
                 inputField.select();
-                inputField.setSelectionRange(0, 99999); // Untuk mobile
-
-                // Copy to clipboard
+                inputField.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(inputField.value).then(() => {
-                    // Tampilkan notifikasi toast
                     const toast = document.getElementById("toast");
                     toast.className = "toast show";
                     setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
@@ -1189,10 +1253,9 @@
                 });
             }
 
+            // Backup & Import Logic
             window.backupData = async () => {
-                const dataToBackup = {
-                    portals: JSON.parse(localStorage.getItem('portals')) || defaultPortals,
-                };
+                const dataToBackup = { portals: JSON.parse(localStorage.getItem('portals')) || defaultPortals };
                 const dataStr = JSON.stringify(dataToBackup, null, 2);
                 try {
                     const zip = new JSZip();
@@ -1206,65 +1269,34 @@
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
-                } catch (error) {
-                    console.error("Error creating ZIP:", error);
-                    alert("Backup failed.");
-                }
+                } catch (error) { console.error("Error creating ZIP:", error); alert("Backup failed."); }
             };
 
-            window.importData = () => {
-                importFileInput.click();
-            };
+            window.importData = () => { importFileInput.click(); };
 
             async function handleFileImport(event) {
                 const file = event.target.files[0];
                 if (!file) return;
-
-                if (file.type === "application/zip" || file.name.endsWith(".zip")) {
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        try {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        let jsonContent;
+                        if (file.name.endsWith(".zip")) {
                             const zip = await JSZip.loadAsync(e.target.result);
-                            const backupFile = zip.file("uranusfazry_backup.json");
-                            if (backupFile) {
-                                const jsonContent = await backupFile.async("string");
-                                await processImportedData(jsonContent);
-                            } else {
-                                alert('Invalid ZIP file.');
-                            }
-                        } catch (error) {
-                            console.error('Error reading ZIP:', error);
-                            alert('Failed to read ZIP file.');
+                            jsonContent = await zip.file("uranusfazry_backup.json").async("string");
+                        } else {
+                            jsonContent = e.target.result;
                         }
-                    };
-                    reader.readAsArrayBuffer(file);
-                } else if (file.type === "text/plain" || file.type === "application/json" || file.name.endsWith(".txt")) {
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        await processImportedData(e.target.result);
-                    };
-                    reader.readAsText(file);
-                } else {
-                    alert("Unsupported file type.");
-                }
+                        const imported = JSON.parse(jsonContent);
+                        if (imported && Array.isArray(imported.portals)) {
+                            localStorage.setItem('portals', JSON.stringify(imported.portals));
+                            showConfirmationModal('Data imported. Page will reload.', () => location.reload());
+                        } else { alert('Invalid backup format.'); }
+                    } catch (error) { alert('Failed to read file.'); }
+                };
+                if (file.name.endsWith(".zip")) reader.readAsArrayBuffer(file);
+                else reader.readAsText(file);
                 event.target.value = '';
-            }
-
-            async function processImportedData(jsonContent) {
-                try {
-                    const importedData = JSON.parse(jsonContent);
-                    if (importedData && Array.isArray(importedData.portals)) {
-                        localStorage.setItem('portals', JSON.stringify(importedData.portals));
-                        showConfirmationModal('Data imported. Page will reload.', () => {
-                            location.reload();
-                        });
-                    } else {
-                        alert('Invalid backup format.');
-                    }
-                } catch (error) {
-                    console.error('Error parsing backup:', error);
-                    alert('Failed to parse backup file.');
-                }
             }
 
             initPortalApp();
