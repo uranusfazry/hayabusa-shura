@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- [WAJIB] LZString untuk kompresi stabil & support URL safe -->
+    <!-- LZString untuk kompresi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 
     <style>
@@ -800,7 +800,7 @@
         </div>
     </div>
 
-    <!-- Smart Link Display Modal -->
+    <!-- Smart Link Modal -->
     <div id="smart-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
         <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1.5rem; position: relative; padding: 2rem;">
             <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" style="position: absolute; top: 1rem; right: 1rem; font-size: 2rem; background: none; border: none; cursor: pointer; transition: all 0.3s;" class="flame-text">×</button>
@@ -827,7 +827,6 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast">Smart Link berhasil disalin!</div>
     <input type="file" id="import-file-input" class="hidden" style="display: none;" accept=".zip,.txt,application/json">
 
@@ -881,170 +880,98 @@
 
             let portals = [];
             let onConfirmCallback = null;
-            
-            // --- [V3+ OPTIMIZED] ADVANCED URL OPTIMIZATION MANAGER ---
-            
-            // 1. Token Dictionary (Pemetaan String Panjang ke Token Pendek)
-            // Urutan penting: String yang lebih panjang sebaiknya di atas agar tidak tertimpa sebagian.
+
+            /* ███ SMART LINK ENGINE — V4.2 ███ */
             const TOKEN_MAP = [
-                { key: 'https://api.whatsapp.com/send/?phone=', token: '~wa' },
-                { key: 'api.whatsapp.com/send/?phone=', token: '~wb' },
-                { key: 'https://', token: '~1' },
-                { key: 'http://', token: '~2' },
-                { key: '.vercel.app', token: '~3' },
-                { key: '.my.id', token: '~6' },
-                { key: 'www.', token: '~4' },
-                { key: '.com', token: '~5' },
-                { key: '&text=', token: '~t' },
-                { key: 'fas fa-', token: '~F' }, // FontAwesome Solid
-                { key: 'fab fa-', token: '~B' }, // FontAwesome Brand
-                { key: 'whatsapp', token: '~w' },
-                { key: 'instagram', token: '~i' },
-                { key: 'youtube', token: '~y' },
-                { key: 'tiktok', token: '~k' },
-                { key: '#ce00a7', token: '~C1' }, // Warna Tema 1
-                { key: '#4a0072', token: '~C2' }, // Warna Tema 2
-                { key: '#00c8e0', token: '~C3' }, // Warna Tema 3
-                { key: ' ', token: '~_' }         // Spasi diganti ~_
+                ["https://", "~H"],
+                ["http://", "~h"],
+                [".com", "~C"],
+                ["www.", "~W"],
+                ["api.whatsapp.com", "@WA"],
+                ["youtube.com", "@YT"],
+                ["instagram.com", "@IG"],
+                ["tiktok.com", "@TT"],
+                ["fas fa-", "!F"],
+                ["fab fa-", "!B"],
+                [" ", "_"]
             ];
 
+            function applyTokens(str) {
+                TOKEN_MAP.forEach(([from, to]) => {
+                    str = str.split(from).join(to);
+                });
+                return str;
+            }
+
+            function reverseTokens(str) {
+                [...TOKEN_MAP].reverse().forEach(([from, to]) => {
+                    str = str.split(to).join(from);
+                });
+                return str;
+            }
+
             const UrlManager = {
-                // Helper: Base64 to URL Safe Base64
-                toUrlSafe: (base64) => {
-                    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+                encodeArray(portalArray) {
+                    let json = JSON.stringify(portalArray);
+                    json = applyTokens(json);
+                    let b64 = LZString.compressToBase64(json);
+                    return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
                 },
-
-                // Helper: URL Safe Base64 to Base64
-                fromUrlSafe: (base64) => {
-                    let str = base64.replace(/-/g, '+').replace(/_/g, '/');
-                    while (str.length % 4) str += '=';
-                    return str;
+                decodeArray(encoded) {
+                    let b64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
+                    while (b64.length % 4 !== 0) b64 += "=";
+                    let json = LZString.decompressFromBase64(b64);
+                    if (!json) return null;
+                    json = reverseTokens(json);
+                    const arr = JSON.parse(json);
+                    return arr.map(p => ({
+                        name: p[0],
+                        url: p[1],
+                        icon: p[2],
+                        color: p[3],
+                        description: p[4]
+                    }));
                 },
-
-                // Hash Function Sederhana (DJB2) untuk ID mode
-                generateHash: (str) => {
-                    let hash = 5381;
-                    for (let i = 0; i < str.length; i++) {
-                        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+                make(portals) {
+                    const minified = portals.map(p => [p.name, p.url, p.icon, p.color, p.description || ""]);
+                    const compressed = UrlManager.encodeArray(minified);
+                    // kalau pendek, langsung v4
+                    if (compressed.length < 120) {
+                        return "v4:" + compressed;
                     }
-                    return (hash >>> 0).toString(36); // Base36 string
+                    // kalau panjang -> hash + backup
+                    const hash = (Math.random().toString(36).slice(2, 9)).toUpperCase();
+                    localStorage.setItem("sl_" + hash, compressed);
+                    return `id:${hash}~b:${compressed}`;
                 },
+                load(payload) {
+                    if (payload.startsWith("v4:")) {
+                        const body = payload.slice(3);
+                        return UrlManager.decodeArray(body);
+                    }
+                    if (payload.startsWith("id:")) {
+                        const parts = payload.split("~b:");
+                        const hash = parts[0].slice(3);
+                        const stored = localStorage.getItem("sl_" + hash);
 
-                encode: (data) => {
-                    try {
-                        // 1. Minify Structure: Object -> Array [name, url, icon, color, desc]
-                        let minified = data.map(p => [
-                            p.name, p.url, p.icon, p.color, p.description || ""
-                        ]);
-
-                        // 2. Stringify JSON
-                        let jsonString = JSON.stringify(minified);
-
-                        // 3. Tokenize (Replace common strings)
-                        TOKEN_MAP.forEach(map => {
-                            jsonString = jsonString.split(map.key).join(map.token);
-                        });
-
-                        // 4. Compress: LZString to Base64 (Lebih padat dari URIComponent)
-                        let compressed = LZString.compressToBase64(jsonString);
-                        compressed = UrlManager.toUrlSafe(compressed);
-
-                        // 5. Logic Hash Mode (kalau hasil compress kepanjangan atau portal sangat banyak)
-                        //    -> pakai localStorage dengan id pendek "id:xxxx"
-                        if (compressed.length > 140 || data.length > 6) {
-                            const hashId = UrlManager.generateHash(compressed);
-                            const storageKey = `sl_map_${hashId}`;
-                            // Simpan mapping data kompres (lebih hemat) ke localStorage
-                            localStorage.setItem(storageKey, compressed);
-                            return "id:" + hashId;
+                        if (stored) {
+                            return UrlManager.decodeArray(stored);
                         }
 
-                        // 6. Return standard V3 pendek
-                        return "v3:" + compressed;
+                        if (parts[1]) {
+                            const backup = parts[1];
+                            localStorage.setItem("sl_" + hash, backup);
+                            // bersihkan URL jadi pendek
+                            setTimeout(() => {
+                                history.replaceState({}, "", location.pathname + `?p=id:${hash}`);
+                            }, 300);
+                            return UrlManager.decodeArray(backup);
+                        }
 
-                    } catch (e) {
-                        console.error("V3 Encode Error:", e);
+                        alert("Data hash tidak ditemukan dan tidak ada backup. Silakan generate ulang.");
                         return null;
                     }
-                },
-
-                decode: (encodedString) => {
-                    try {
-                        // A. Check Hash Mode
-                        if (encodedString.startsWith('id:')) {
-                            const hashId = encodedString.substring(3);
-                            const storedCompressed = localStorage.getItem(`sl_map_${hashId}`);
-                            
-                            if (storedCompressed) {
-                                // Rekursif decode data yang ditemukan
-                                return UrlManager.processV3Decode(storedCompressed);
-                            } else {
-                                alert("Link Hash ini tidak ditemukan di browser ini. Menggunakan data lokal.");
-                                return null;
-                            }
-                        }
-
-                        // B. Check Versioning
-                        if (encodedString.startsWith('v3:')) {
-                            return UrlManager.processV3Decode(encodedString.substring(3));
-                        } 
-                        
-                        // C. Fallback V2 (Array Minified + LZString URI)
-                        else if (encodedString.startsWith('v2:')) {
-                            const decompressed = LZString.decompressFromEncodedURIComponent(encodedString.substring(3));
-                            return UrlManager.restoreDataStructure(JSON.parse(decompressed), 'array');
-                        }
-
-                        // D. Fallback V1 (Legacy JSON + LZString URI)
-                        else {
-                            const decompressed = LZString.decompressFromEncodedURIComponent(encodedString);
-                            if (!decompressed) return null;
-                            const parsed = JSON.parse(decompressed);
-                            return UrlManager.restoreDataStructure(parsed, 'auto');
-                        }
-                    } catch (e) {
-                        console.error("Decode Error:", e);
-                        return null;
-                    }
-                },
-
-                // Core V3 Decoding Logic
-                processV3Decode: (payload) => {
-                    // 1. URL Safe -> Base64
-                    const base64 = UrlManager.fromUrlSafe(payload);
-                    
-                    // 2. Decompress Base64
-                    let jsonString = LZString.decompressFromBase64(base64);
-                    if (!jsonString) return null;
-
-                    // 3. De-Tokenize (Restore strings)
-                    // Loop terbalik agar tidak salah replace jika ada token nesting
-                    [...TOKEN_MAP].reverse().forEach(map => {
-                        jsonString = jsonString.split(map.token).join(map.key);
-                    });
-
-                    // 4. Parse & Restore
-                    const parsed = JSON.parse(jsonString);
-                    return UrlManager.restoreDataStructure(parsed, 'array');
-                },
-
-                // Helper untuk menormalkan data kembali ke Object standard
-                restoreDataStructure: (data, format) => {
-                    if (format === 'auto') {
-                        format = (Array.isArray(data) && data.length > 0 && Array.isArray(data[0])) ? 'array' : 'object';
-                    }
-
-                    if (format === 'array') {
-                        return data.map(p => ({
-                            name: p[0],
-                            url: p[1],
-                            icon: p[2],
-                            color: p[3],
-                            description: p[4]
-                        }));
-                    } else {
-                        return data; // Sudah object
-                    }
+                    return null;
                 }
             };
 
@@ -1065,31 +992,28 @@
                 }
             ];
 
-            // --- MAIN APP INIT ---
             function initPortalApp() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const encodedData = urlParams.get('p');
-                // Support legacy ?id= param jika ada, tapi diarahkan ke logic baru
-                const idParam = urlParams.get('id'); 
+                const legacyId = urlParams.get('id');
 
                 if (encodedData) {
-                    const decodedPortals = UrlManager.decode(encodedData);
+                    const decodedPortals = UrlManager.load(encodedData);
                     if (decodedPortals) {
                         portals = decodedPortals;
                         localStorage.setItem('portals', JSON.stringify(portals));
-                        // Clean URL agar rapi
-                        window.history.replaceState({}, document.title, window.location.pathname);
+                        window.history.replaceState({}, document.title, window.location.pathname + "?p=" + encodedData.split("~b:")[0]);
                         renderPortals();
                     } else {
-                        console.warn("Gagal decode URL, memuat data lokal.");
                         loadFromStorage();
                     }
-                } else if (idParam) {
-                    // Handle legacy/manual hash ID param
-                    const decodedPortals = UrlManager.decode("id:" + idParam);
-                    if(decodedPortals) {
-                         portals = decodedPortals;
-                         renderPortals();
+                } else if (legacyId) {
+                    const decodedPortals = UrlManager.load("id:" + legacyId);
+                    if (decodedPortals) {
+                        portals = decodedPortals;
+                        localStorage.setItem('portals', JSON.stringify(portals));
+                        window.history.replaceState({}, document.title, window.location.pathname + "?p=id:" + legacyId);
+                        renderPortals();
                     } else {
                         loadFromStorage();
                     }
@@ -1252,17 +1176,15 @@
 
             window.resetAllSettings = function() {
                 localStorage.removeItem('portals');
-                // Hapus semua mapping hash juga
                 Object.keys(localStorage).forEach(key => {
-                    if (key.startsWith('sl_map_')) localStorage.removeItem(key);
+                    if (key.startsWith('sl_')) localStorage.removeItem(key);
                 });
                 location.href = window.location.pathname;
             }
 
-            // --- [UPDATED] GENERATE SMART LINK SYSTEM V3+ OPTIMIZED ---
+            // GENERATE SMART LINK
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
-                
                 if (!portalData || JSON.parse(portalData).length === 0) {
                     alert("Tidak ada portal yang dapat dibuat. Tambahkan portal dulu.");
                     return;
@@ -1273,13 +1195,11 @@
                 
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
-                inputField.value = "Generating link...";
+                inputField.value = "Generating...";
 
-                // Delay sedikit agar UI sempat render 'Generating...'
                 setTimeout(() => {
                     const parsedPortals = JSON.parse(portalData);
-                    const encoded = UrlManager.encode(parsedPortals);
-
+                    const encoded = UrlManager.make(parsedPortals);
                     if (encoded) {
                         const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
                         inputField.value = finalUrl;
