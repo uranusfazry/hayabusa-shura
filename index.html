@@ -882,6 +882,91 @@
             let portals = [];
             let onConfirmCallback = null;
             
+            // --- [NEW] URL OPTIMIZATION MANAGER ---
+            // Dictionary untuk Token Compression (Symbol Substitution)
+            const TOKEN_DICT = {
+                'https://': '~1',
+                'http://': '~2',
+                'www.': '~3',
+                '.com': '~4',
+                '.vercel.app': '~5',
+                'fas fa-': '~6',
+                'fab fa-': '~7',
+                '#': '~8',
+                'whatsapp': '~9',
+                'instagram': '~0'
+            };
+
+            const UrlManager = {
+                encode: (data) => {
+                    try {
+                        // 1. Minify: Object -> Array [name, url, icon, color, desc]
+                        let minified = data.map(p => [
+                            p.name, p.url, p.icon, p.color, p.description || ""
+                        ]);
+
+                        // 2. Stringify
+                        let jsonString = JSON.stringify(minified);
+
+                        // 3. Tokenize: Ganti string umum dengan simbol pendek
+                        for (const [key, val] of Object.entries(TOKEN_DICT)) {
+                            // Gunakan global replaceAll
+                            jsonString = jsonString.split(key).join(val);
+                        }
+
+                        // 4. Compress: LZString
+                        const compressed = LZString.compressToEncodedURIComponent(jsonString);
+
+                        // 5. Hash Slim Layer (Pseudo): Add prefix versioning
+                        return "v2:" + compressed;
+                    } catch (e) {
+                        console.error("Encode Error:", e);
+                        return null;
+                    }
+                },
+
+                decode: (encodedString) => {
+                    try {
+                        // Check Versioning
+                        let isV2 = encodedString.startsWith('v2:');
+                        let payload = isV2 ? encodedString.substring(3) : encodedString;
+
+                        // 1. Decompress
+                        let decompressed = LZString.decompressFromEncodedURIComponent(payload);
+                        if (!decompressed) return null;
+
+                        // 2. Detokenize (Only for V2)
+                        if (isV2) {
+                            for (const [key, val] of Object.entries(TOKEN_DICT)) {
+                                decompressed = decompressed.split(val).join(key);
+                            }
+                        }
+
+                        // 3. Parse JSON
+                        const parsed = JSON.parse(decompressed);
+
+                        // 4. Map back to Objects (Support Backward Compatibility)
+                        if (Array.isArray(parsed) && parsed.length > 0 && Array.isArray(parsed[0])) {
+                            // Format: [name, url, icon, color, desc]
+                            return parsed.map(p => ({
+                                name: p[0],
+                                url: p[1],
+                                icon: p[2],
+                                color: p[3],
+                                description: p[4]
+                            }));
+                        } else if (Array.isArray(parsed)) {
+                            // Legacy Format (Array of Objects)
+                            return parsed;
+                        }
+                        return null;
+                    } catch (e) {
+                        console.error("Decode Error:", e);
+                        return null;
+                    }
+                }
+            };
+
             const defaultPortals = [
                 {
                     name: 'Hayabusa Premium Access',
@@ -906,39 +991,19 @@
                 const idParam = urlParams.get('id');
 
                 if (encodedData) {
-                    try {
-                        // 1. Decompress (Synchronous LZString)
-                        const decompressed = LZString.decompressFromEncodedURIComponent(encodedData);
-                        
-                        if (decompressed) {
-                            const parsedData = JSON.parse(decompressed);
-                            
-                            // 2. Cek apakah format MINIFIED (Array of Arrays) atau LEGACY (Array of Objects)
-                            if (Array.isArray(parsedData) && parsedData.length > 0 && Array.isArray(parsedData[0])) {
-                                // Format Baru: [[name, url, icon, color, desc], ...]
-                                portals = parsedData.map(p => ({
-                                    name: p[0],
-                                    url: p[1],
-                                    icon: p[2],
-                                    color: p[3],
-                                    description: p[4]
-                                }));
-                            } else if (Array.isArray(parsedData)) {
-                                // Format Lama
-                                portals = parsedData;
-                            }
-                            
-                            localStorage.setItem('portals', JSON.stringify(portals));
-                            window.history.replaceState({}, document.title, window.location.pathname);
-                            renderPortals();
-                        } else {
-                            loadFromStorage();
-                        }
-                    } catch (e) {
-                        console.error("Decoding Error:", e);
+                    const decodedPortals = UrlManager.decode(encodedData);
+                    if (decodedPortals) {
+                        portals = decodedPortals;
+                        localStorage.setItem('portals', JSON.stringify(portals));
+                        // Clean URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        renderPortals();
+                    } else {
+                        console.warn("Failed to decode URL data, loading local storage.");
                         loadFromStorage();
                     }
                 } else if (idParam) {
+                    // Placeholder for future backend hash implementation
                     console.log("Hash ID detected.");
                     loadFromStorage();
                 } else {
@@ -1103,7 +1168,7 @@
                 location.href = window.location.pathname;
             }
 
-            // --- [PERBAIKAN] GENERATE SMART LINK SYSTEM (Synchronous + Minified) ---
+            // --- [UPDATED] GENERATE SMART LINK SYSTEM ---
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 
@@ -1115,31 +1180,16 @@
                 const inputField = document.getElementById('generated-smart-link');
                 const modal = document.getElementById('smart-link-modal');
                 
-                // Tampilkan Modal langsung
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
 
-                try {
-                    // 1. Minify Data: Ubah Object jadi Array of Arrays agar URL lebih pendek
-                    // Ini menghilangkan key "name", "url" dsb yang memakan karakter
-                    const rawData = JSON.parse(portalData);
-                    const minifiedData = rawData.map(p => [
-                        p.name, 
-                        p.url, 
-                        p.icon, 
-                        p.color, 
-                        p.description || ""
-                    ]);
+                const parsedPortals = JSON.parse(portalData);
+                const encoded = UrlManager.encode(parsedPortals);
 
-                    // 2. Compress LZString (Synchronous = Tidak loading)
-                    const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(minifiedData));
-                    
-                    // 3. Construct Final URL
+                if (encoded) {
                     const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
-                    
                     inputField.value = finalUrl;
-                } catch (err) {
-                    console.error("Compression Error:", err);
+                } else {
                     inputField.value = "Error generating link.";
                 }
             }
