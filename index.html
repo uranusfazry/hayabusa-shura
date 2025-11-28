@@ -14,6 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- LZString untuk kompresi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+    <!-- QRCode JS untuk Auto QR Code Share -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         /* Import Fonts */
@@ -607,6 +609,27 @@
             opacity: 0.35;
             z-index: 1;
         }
+
+        /* QR Wrapper */
+        #qr-wrapper {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        #qr-code {
+            margin: 0 auto;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        #qr-note {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+            color: rgba(0, 200, 224, 0.9);
+        }
     </style>
 </head>
 <body>
@@ -805,11 +828,16 @@
         <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1.5rem; position: relative; padding: 2rem;">
             <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" style="position: absolute; top: 1rem; right: 1rem; font-size: 2rem; background: none; border: none; cursor: pointer; transition: all 0.3s;" class="flame-text">×</button>
             <h2 class="font-cinzel gold-text" style="font-size: 1.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Smart Link Siap 🚀</h2>
-            <p style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.8); line-height: 1.5;">Link ini sudah berisi semua portal kamu. Siapa pun yang membuka link ini akan mendapatkan portal yang sama — tanpa login dan tanpa pengaturan ulang.</p>
-            <div style="margin-bottom: 1.5rem;">
+            <p style="margin-bottom: 1rem; font-size: 1rem; color: rgba(0, 200, 224, 0.8); line-height: 1.5;">Link ini sudah berisi semua portal kamu. Scan QR atau klik copy di bawah untuk share.</p>
+            <div style="margin-bottom: 1rem;">
                 <input type="text" id="generated-smart-link" readonly style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 0.875rem; background: rgba(0, 0, 0, 0.3); cursor: text; border: 1px solid var(--gold);">
             </div>
-            <div style="display: flex; justify-content: flex-end;">
+            <!-- QR Code Auto Share -->
+            <div id="qr-wrapper">
+                <div id="qr-code"></div>
+                <div id="qr-note">Scan QR ini atau kirim link di atas ke temanmu.</div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
                 <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; padding: 0.75rem 1.5rem; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fas fa-copy"></i> Copy Smart Link</button>
             </div>
         </div>
@@ -881,7 +909,7 @@
             let portals = [];
             let onConfirmCallback = null;
 
-            /* ███ SMART LINK ENGINE — V4.2 ███ */
+            /* ███ SMART LINK ENGINE — V4.3 PRO (Intelligent ID + QR) ███ */
             const TOKEN_MAP = [
                 ["https://", "~H"],
                 ["http://", "~h"],
@@ -910,6 +938,18 @@
                 return str;
             }
 
+            // Intelligent ID System (deterministik dari payload)
+            function createSmartId(payload) {
+                let hash = 0;
+                for (let i = 0; i < payload.length; i++) {
+                    hash = ((hash << 5) - hash) + payload.charCodeAt(i);
+                    hash |= 0;
+                }
+                let id = Math.abs(hash).toString(36).toUpperCase();
+                if (id.length > 7) id = id.slice(0, 7);
+                return id.padStart(5, '0'); // minimal 5 char
+            }
+
             const UrlManager = {
                 encodeArray(portalArray) {
                     let json = JSON.stringify(portalArray);
@@ -935,14 +975,19 @@
                 make(portals) {
                     const minified = portals.map(p => [p.name, p.url, p.icon, p.color, p.description || ""]);
                     const compressed = UrlManager.encodeArray(minified);
-                    // kalau pendek, langsung v4
+
+                    // Jika payload pendek, pakai v4 langsung
                     if (compressed.length < 120) {
                         return "v4:" + compressed;
                     }
-                    // kalau panjang -> hash + backup
-                    const hash = (Math.random().toString(36).slice(2, 9)).toUpperCase();
-                    localStorage.setItem("sl_" + hash, compressed);
-                    return `id:${hash}~b:${compressed}`;
+
+                    // Payload panjang -> Intelligent Hash ID
+                    const id = createSmartId(compressed);
+                    // Simpan compressed berdasarkan ID (cloudless sync lokal)
+                    localStorage.setItem("sl_" + id, compressed);
+
+                    // Sertakan backup sekali share
+                    return `id:${id}~b:${compressed}`;
                 },
                 load(payload) {
                     if (payload.startsWith("v4:")) {
@@ -1182,7 +1227,7 @@
                 location.href = window.location.pathname;
             }
 
-            // GENERATE SMART LINK
+            // GENERATE SMART LINK + AUTO QR CODE
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 if (!portalData || JSON.parse(portalData).length === 0) {
@@ -1192,10 +1237,12 @@
 
                 const inputField = document.getElementById('generated-smart-link');
                 const modal = document.getElementById('smart-link-modal');
+                const qrContainer = document.getElementById('qr-code');
                 
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
                 inputField.value = "Generating...";
+                if (qrContainer) qrContainer.innerHTML = "";
 
                 setTimeout(() => {
                     const parsedPortals = JSON.parse(portalData);
@@ -1203,6 +1250,17 @@
                     if (encoded) {
                         const finalUrl = `${window.location.origin}${window.location.pathname}?p=${encoded}`;
                         inputField.value = finalUrl;
+
+                        // Auto QR Code Share
+                        if (qrContainer) {
+                            qrContainer.innerHTML = "";
+                            new QRCode(qrContainer, {
+                                text: finalUrl,
+                                width: 180,
+                                height: 180,
+                                correctLevel: QRCode.CorrectLevel.M
+                            });
+                        }
                     } else {
                         inputField.value = "Error generating link.";
                     }
