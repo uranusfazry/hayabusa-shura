@@ -46,6 +46,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
+            /* Static gradient background kept for structure */
             background: linear-gradient(180deg, var(--dark-stone) 0%, var(--deep-magma) 100%);
             color: #fff;
             min-height: 100vh;
@@ -100,48 +101,6 @@
             }
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 30%, rgba(206, 0, 167, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(74, 0, 114, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(0, 200, 224, 0.1) 0%, transparent 70%);
-            z-index: 1;
-            pointer-events: none;
-            animation: shuraPulse 8s ease-in-out infinite;
-        }
-
-        @keyframes shuraPulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:  
-                linear-gradient(rgba(255, 93, 216, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(74, 0, 114, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            z-index: 1;
-            pointer-events: none;
-            animation: scrollDrift 25s linear infinite;
-        }
-
-        @keyframes scrollDrift {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(60px, 60px); }
-        }
-
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -171,11 +130,12 @@
 
         /* Navbar */
         .navbar {
-            background: rgba(11, 14, 49, 0.7);
+            background: rgba(11, 14, 49, 0.9); /* Sedikit lebih solid */
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-bottom: 2px solid rgba(255, 93, 216, 0.3);
-            box-shadow: 0 4px 30px rgba(0, 200, 224, 0.2);
+            /* Removed colored box-shadow */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
             transition: all 0.3s ease;
         }
 
@@ -198,7 +158,7 @@
 
         .nav-item:hover span, .nav-item:hover i {
             color: var(--gold);
-            text-shadow: 0 0 15px var(--bright-gold);
+            /* Removed text-shadow glow */
         }
 
         .nav-item::after {
@@ -212,7 +172,7 @@
             background: linear-gradient(90deg, var(--lava-orange), var(--gold));
             transition: width 0.3s ease;
             border-radius: 2px;
-            box-shadow: 0 0 10px var(--gold);
+            /* Removed box-shadow glow */
         }
 
         .nav-item:hover::after { width: 100%; }
@@ -221,11 +181,10 @@
         .dropdown {
             display: none;
             position: absolute;
-            background: rgba(11, 14, 49, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(11, 14, 49, 0.98);
             border: 2px solid var(--gold);
-            box-shadow: 0 10px 40px rgba(0, 200, 224, 0.3);
+            /* Removed colored shadow, kept simple shadow */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             border-radius: 12px;
             margin-top: 12px;
             animation: dropFadeIn 0.3s ease;
@@ -256,7 +215,7 @@
             height: 100%;
             width: 80%;
             max-width: 320px;
-            background: rgba(11, 14, 49, 0.95);
+            background: rgba(11, 14, 49, 0.98);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-left: 2px solid var(--gold);
@@ -288,37 +247,20 @@
             align-items: center;
             justify-content: center;
             color: #fff;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 20px rgba(206, 0, 167, 0.4);
-        }
-
-        .btn-lava::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 200, 224, 0.6), transparent);
-            transition: left 0.5s ease;
-            z-index: -1;
-            animation: lavaFlow 3s ease-in-out infinite;
-        }
-
-        @keyframes lavaFlow {
-            0%, 100% { left: -100%; }
-            50% { left: 100%; }
+            /* Removed glow shadows */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
         }
 
         .btn-lava:hover {
-            box-shadow: 0 0 30px var(--gold), 0 0 50px var(--flame-red);
+            /* Removed intense glow on hover */
             transform: translateY(-3px);
-            border-color: var(--bright-gold);
+            border-color: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
         .btn-lava:active {
             transform: translateY(0) scale(0.97);
-            box-shadow: 0 0 15px var(--gold);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             transition-duration: 0.1s;
         }
 
@@ -338,12 +280,13 @@
         .btn-secondary:hover {
             background: rgba(0, 200, 224, 0.2);
             border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(0, 200, 224, 0.3);
+            /* Removed glow shadow */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         /* Portal Cards */
         .portal-card {
-            background: rgba(23, 5, 30, 0.6);
+            background: rgba(23, 5, 30, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 2px solid;
@@ -351,30 +294,14 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+            /* Standard shadow only */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
         .portal-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 40px currentColor;
-        }
-
-        .portal-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(0, 200, 224, 0.1) 50%, transparent 70%);
-            transform: rotate(45deg);
-            animation: shimmer 5s linear infinite;
-            opacity: 0.8;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            transform: translateY(-5px);
+            /* Removed color glow, kept shadow */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
         }
 
         .delete-btn {
@@ -401,16 +328,16 @@
             color: var(--flame-red);
             background: rgba(0, 0, 0, 0.6);
             transform: scale(1.15);
-            box-shadow: 0 0 15px var(--flame-red);
+            /* Removed glow */
         }
 
-        /* Profile/Avatar Updated for Premium Esports Look */
+        /* Profile/Avatar */
         .profile-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px; /* Jarak ideal 8-14px */
+            gap: 12px; 
             margin-bottom: 3rem;
             position: relative;
             z-index: 20;
@@ -418,21 +345,21 @@
 
         .profile {
             margin: 0;
-            width: 140px; /* Ukuran Mobile: Besar & Focal Point */
+            width: 140px; 
             height: 140px;
             border-radius: 50%;
             overflow: hidden;
-            /* Border & Glow disamakan dengan teks */
             border: 3px solid var(--gold); 
-            box-shadow: 0 0 25px rgba(0, 200, 224, 0.4); 
+            /* Removed glow box-shadow */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
             position: relative;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .profile:hover {
-            box-shadow: 0 0 40px rgba(0, 200, 224, 0.7);
+            /* Removed glow box-shadow */
             transform: scale(1.05);
-            border-color: #fff; /* Highlight saat hover */
+            border-color: #fff; 
         }
 
         .profile img, .profile video {
@@ -443,39 +370,38 @@
             z-index: 1;
         }
 
-        /* Garis Neon Tipis (Separator) */
+        /* Separator - Removed glow */
         .profile-separator {
             width: 60px;
             height: 1px;
             background: var(--gold);
             opacity: 0.5;
-            box-shadow: 0 0 8px var(--gold);
             border-radius: 1px;
         }
 
         .hero-title {
-            font-size: 1.35rem; /* Sedikit lebih kecil dari foto agar balance */
+            font-size: 1.35rem; 
             font-weight: 800;
-            color: var(--gold); /* Warna sama dengan border foto */
+            color: var(--gold); 
             margin: 0;
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            /* Glow disamakan dengan border foto */
-            text-shadow: 0 0 20px rgba(0, 200, 224, 0.5); 
+            /* Removed text-shadow glow */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             line-height: 1;
         }
 
         @media (min-width: 768px) {
             .profile {
-                width: 180px; /* Desktop: Lebih besar */
+                width: 180px; 
                 height: 180px;
             }
             .hero-title {
-                font-size: 1.75rem; /* Desktop: Tetap proporsional */
+                font-size: 1.75rem; 
             }
             .profile-separator {
-                width: 80px; /* Garis sedikit lebih panjang di desktop */
+                width: 80px; 
             }
         }
 
@@ -488,11 +414,12 @@
         }
 
         .modal-content {
-            background: rgba(23, 5, 30, 0.95);
+            background: rgba(23, 5, 30, 0.98);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 2px solid var(--gold);
-            box-shadow: 0 0 50px rgba(0, 200, 224, 0.4);
+            /* Removed glow, standard shadow */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             border-radius: 16px;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -519,7 +446,7 @@
 
         input:focus, textarea:focus, select:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(0, 200, 224, 0.5);
+            /* Removed glow box-shadow */
             outline: none;
             background: rgba(11, 14, 49, 0.95) !important;
         }
@@ -554,20 +481,10 @@
             background: linear-gradient(180deg, var(--gold), var(--flame-red));
         }
 
-        /* Logo Animation */
+        /* Logo - Removed Pulse/Glow Animation */
         .logo-pulse {
-            animation: logoPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes logoPulse {
-            0%, 100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 15px var(--gold));
-            }
-            50% {
-                transform: scale(1.15);
-                filter: drop-shadow(0 0 30px var(--lava-orange));
-            }
+            /* No animation or drop-shadow */
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
         /* === PROFESSIONAL NOTIFICATION SYSTEM === */
@@ -585,13 +502,14 @@
         .notif-toast {
             min-width: 320px;
             max-width: 400px;
-            background: rgba(11, 14, 49, 0.9);
+            background: rgba(11, 14, 49, 0.95);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-left: 4px solid var(--gold);
             border-radius: 8px;
             padding: 16px 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 200, 224, 0.2);
+            /* Removed glow shadow */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: flex-start;
             gap: 15px;
@@ -706,7 +624,7 @@
             align-items: center;
             justify-content: center;
             padding: 0 1rem;
-            box-shadow: 0 -4px 30px rgba(206, 0, 167, 0.2);
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
         }
 
         footer p:first-child { font-size: 14px; }
@@ -1170,7 +1088,8 @@
                     portalElement.style.height = '100%';
                     const portalColor = portal.color || '#4a0072';
                     const cardStyle = `color: ${portalColor}; border-color: ${portalColor};`;
-                    const textStyle = `color: ${portalColor}; text-shadow: 0 0 15px ${portalColor};`;
+                    // REMOVED GLOW TEXT SHADOW
+                    const textStyle = `color: ${portalColor};`;
                     let iconClass = portal.icon || 'fas fa-mask';
                     if (!portal.icon || (!portal.icon.startsWith('fa') && !portal.icon.startsWith('http') && !portal.icon.startsWith('data:image'))) iconClass = 'fas fa-mask';
                     const iconHtml = (iconClass.startsWith('data:image') || iconClass.startsWith('http'))
