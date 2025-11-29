@@ -798,6 +798,20 @@
             margin-top: 1rem;
         }
 
+        /* Badge Style for URL Shorteners */
+        .shortener-badge {
+            background: rgba(0, 200, 224, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin: 0 4px;
+        }
+
         /* Mobile Optimization */
         @media (max-width: 480px) {
             .modal-content {
@@ -1053,6 +1067,32 @@
         </div>
     </div>
 
+    <!-- Limit Warning Modal (NEW PROFESSIONAL NOTIFICATION) -->
+    <div id="limit-warning-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
+        <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1rem; position: relative; padding: 2.5rem; text-align: center;">
+            <div style="font-size: 3rem; color: var(--gold); margin-bottom: 1rem;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2 class="font-cinzel flame-text" style="font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">Kapasitas Maksimal ⚠️</h2>
+            <p style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
+                Data portal Anda (Judul, Deskripsi, Link) telah mencapai batas ukuran optimal untuk QR Code.
+                <br><br>
+                <strong class="gold-text" style="text-transform: uppercase; letter-spacing: 0.05em;">Solusi Profesional:</strong><br>
+                Mohon persingkat <b>Judul & Deskripsi</b>, atau gunakan <b>URL Shortener</b> untuk link yang panjang agar QR Code tetap bisa dipindai dengan cepat.
+            </p>
+            <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+                <span class="shortener-badge">bit.ly</span>
+                <span class="shortener-badge">s.id</span>
+                <span class="shortener-badge">tinyurl.com</span>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <button onclick="document.getElementById('limit-warning-modal').style.display='none'" class="btn-lava" style="padding: 0.75rem 2rem; font-size: 0.9rem;">
+                    Mengerti & Perbaiki
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Confirmation Modal -->
     <div id="confirmation-modal" class="fixed inset-0 flex items-center justify-center hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
         <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1rem; position: relative; padding: 2rem; text-align: center;">
@@ -1069,6 +1109,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- KONFIGURASI BATAS DATA ---
+            // Ubah angka ini untuk mengatur sensitivitas peringatan.
+            // 2900 = Batas aman QR Code normal.
+            // Ganti jadi 100 atau 200 jika ingin MENGETES modal peringatan muncul sekarang.
+            const MAX_QR_LENGTH = 2900; 
+
             // --- VIDEO BACKGROUND LOGIC ---
             let isVideoFinished = false;
             const bgVideo = document.getElementById('bg-video');
@@ -1164,8 +1210,20 @@
             };
 
             const defaultPortals = [
-                { name: 'Hayabusa Premium Access', url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=Halo', icon: 'fas fa-mask', color: '#ce00a7', description: 'Upgrade sekarang — akses semua website uranus tanpa iklan cuma Rp25K' },
-                { name: 'Buy Hayabusa Shura Skin', url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=BeliSkin', icon: 'fas fa-crosshairs', color: '#4a0072', description: 'Beli kode website MLBB Hayabusa Shura edisi premium seharga Rp100K' },
+                {
+                    name: 'Hayabusa Premium Access',
+                    url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=Halo%2C+saya+ingin+membeli+Akses+Website+Premium+Hayabusa+tanpa+iklan+sebesar+Rp25.000.+Mohon+transfer+ke+DANA+087734421123+dan+kirimkan+bukti+pembayarannya.+Pesanan+akan+diproses+maksimal+1x24+jam.+Terima+kasih.&type=phone_number&app_absent=0',
+                    icon: 'fas fa-mask',
+                    color: '#ce00a7',
+                    description: 'Upgrade sekarang — akses semua website uranus tanpa iklan cuma Rp25K'
+                },
+                {
+                    name: 'Buy Hayabusa Shura Skin',
+                    url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=Halo%2C+saya+ingin+membeli+Kode+Website+MLBB+Hayabusa+Skin+Shura+sebesar+Rp100.000.+Mohon+transfer+ke+DANA+087734421123+dan+kirimkan+bukti+pembayarannya.+Pesanan+akan+diproses+maksimal+1x24+jam.+Terima+kasih.&type=phone_number&app_absent=0',
+                    icon: 'fas fa-crosshairs',
+                    color: '#4a0072',
+                    description: 'Beli kode website MLBB Hayabusa Shura edisi premium seharga Rp100K'
+                }
             ];
 
             // --- APP INITIALIZATION ---
@@ -1299,6 +1357,7 @@
                 document.getElementById('btn-show-qr').style.display = 'flex';
                 document.getElementById('qr-content').style.display = 'none';
 
+                // Tampilkan loading sementara
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
                 inputField.value = "Generating...";
@@ -1310,8 +1369,12 @@
                     if (encoded) {
                         const finalParam = `v5_${encoded}`;
                         
-                        if (finalParam.length > 2900) {
-                            alert(`⚠️ PERINGATAN: DATA SANGAT BESAR (${finalParam.length} chars)\nQR Code mungkin terlalu padat. Gunakan link pendek untuk portal!`);
+                        // NEW LOGIC: Menggunakan variabel MAX_QR_LENGTH
+                        if (finalParam.length > MAX_QR_LENGTH) {
+                            document.getElementById('smart-link-modal').style.display = 'none'; // Sembunyikan modal sukses
+                            document.getElementById('limit-warning-modal').classList.remove('hidden');
+                            document.getElementById('limit-warning-modal').style.display = 'flex';
+                            return; // Hentikan proses agar QR tidak digambar
                         }
 
                         const finalUrl = `${window.location.origin}${window.location.pathname}?p=${finalParam}`;
