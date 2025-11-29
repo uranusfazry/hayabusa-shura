@@ -812,31 +812,6 @@
             margin: 0 4px;
         }
 
-        /* Desktop Optimization for Smart Link Modal (NEW ADDITION) */
-        @media (min-width: 768px) {
-            #smart-link-modal .modal-content {
-                max-width: 50rem; /* Wider modal on desktop */
-                padding: 3rem !important;
-            }
-
-            #smart-link-modal .modal-actions {
-                flex-direction: row; /* Side-by-side layout */
-                align-items: flex-start; /* Align top */
-                gap: 2.5rem; /* Gap between columns */
-            }
-
-            #smart-link-modal .modal-actions > div {
-                flex: 1; /* Equal width columns */
-                /* width: 50% is handled by flex: 1 */
-            }
-
-            /* Optional: Add separator */
-            #smart-link-modal .modal-actions > div:first-child {
-                border-right: 1px solid rgba(0, 200, 224, 0.2);
-                padding-right: 2.5rem;
-            }
-        }
-
         /* Mobile Optimization */
         @media (max-width: 480px) {
             .modal-content {
