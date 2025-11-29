@@ -427,6 +427,33 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             border-radius: 16px;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 2.5rem 2.5rem 3.5rem 2.5rem !important; /* Increased bottom padding for breathing room */
+        }
+
+        /* Enhanced Close Button (More Subtle) */
+        .modal-close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.75rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.5); /* Subtle default color */
+            line-height: 1;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close-btn:hover {
+            transform: scale(1.1);
+            color: var(--flame-red); /* Pop color on hover only */
+            text-shadow: 0 0 10px rgba(206, 0, 167, 0.6);
         }
 
         @keyframes modalFadeIn {
@@ -656,6 +683,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* Added transition for smooth reveal */
+            transition: all 0.5s ease;
         }
 
         .qr-frame {
@@ -698,6 +727,78 @@
             background: #f0f0f0;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Reveal Buttons for Hidden Content - Professional Look */
+        .reveal-btn {
+            width: 100%;
+            padding: 1rem 1.5rem; /* Symmetry Padding */
+            background: rgba(11, 14, 49, 0.6); 
+            border: 2px solid var(--gold); /* SOLID Border */
+            border-radius: 12px; 
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem; /* Adjusted Font Size */
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em; /* Tighter letter spacing for readability */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reveal-btn:hover {
+            background: rgba(0, 200, 224, 0.15);
+            border-color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 200, 224, 0.3);
+            text-shadow: 0 0 8px rgba(0, 200, 224, 0.8);
+        }
+
+        .reveal-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Modal Typography Hierarchy */
+        .modal-title-custom {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .modal-desc-custom {
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: rgba(0, 200, 224, 0.85);
+            line-height: 1.6;
+        }
+
+        /* Spacing Container for Buttons */
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem; /* Consistent Gap */
+        }
+
+        /* Hidden Content Initial State */
+        .hidden-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -827,7 +928,9 @@
     <!-- Add Portal Modal -->
     <div id="add-portal-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 50;">
         <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1.5rem; position: relative; padding: 2rem;">
-            <button onclick="document.getElementById('add-portal-modal').style.display = 'none'" style="position: absolute; top: 1rem; right: 1rem; font-size: 2rem; background: none; border: none; cursor: pointer; transition: all 0.3s;" class="flame-text">×</button>
+            <button onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="modal-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
             <h2 class="font-cinzel gold-text" style="font-size: 1.5rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Craft New Portal</h2>
             <form id="portal-form" style="display: flex; flex-direction: column; gap: 1rem;">
                 <div>
@@ -883,29 +986,48 @@
         </div>
     </div>
 
-    <!-- Smart Link Modal -->
+    <!-- Smart Link Modal (REFINED PROFESSIONAL LOOK) -->
     <div id="smart-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
-        <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1.5rem; position: relative; padding: 2rem;">
-            <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" style="position: absolute; top: 1rem; right: 1rem; font-size: 2rem; background: none; border: none; cursor: pointer; transition: all 0.3s;" class="flame-text">×</button>
-            <h2 class="font-cinzel gold-text" style="font-size: 1.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Smart Link Siap 🚀</h2>
-            <p style="margin-bottom: 1rem; font-size: 1rem; color: rgba(0, 200, 224, 0.8); line-height: 1.5;">Link ini sudah berisi semua portal kamu. Scan QR atau klik copy di bawah untuk share.</p>
-            <div style="margin-bottom: 1rem;">
-                <input type="text" id="generated-smart-link" readonly style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 0.875rem; background: rgba(0, 0, 0, 0.3); cursor: text; border: 1px solid var(--gold);">
-            </div>
+        <div class="modal-content" style="max-width: 28rem; width: 100%; margin: 0 1.5rem; position: relative;">
+            <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" class="modal-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="font-cinzel modal-title-custom">Smart Link Siap 🚀</h2>
+            <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
             
-            <!-- QR Code Auto Share & Download -->
-            <div id="qr-wrapper">
-                <div class="qr-frame">
-                    <canvas id="qr-canvas-display"></canvas>
+            <div class="modal-actions">
+                <!-- Link Section with Toggle -->
+                <div style="width: 100%;">
+                    <button id="btn-show-link" onclick="revealLink()" class="reveal-btn">
+                        <i class="fas fa-eye"></i> Tampilkan Link
+                    </button>
+                    <div id="link-content" class="hidden-content">
+                        <input type="text" id="generated-smart-link" readonly style="width: 100%; padding: 0.75rem; border-radius: 8px; font-size: 0.875rem; background: rgba(0, 0, 0, 0.3); cursor: text; border: 1px solid var(--gold);">
+                        <div style="display: flex; justify-content: flex-end; margin-top: 0.75rem;">
+                            <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; padding: 0.75rem 1.5rem; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fas fa-copy"></i> Copy Smart Link</button>
+                        </div>
+                    </div>
                 </div>
-                <!-- 4K Download Button -->
-                <button onclick="downloadHighResQR()" class="btn-download-4k">
-                    <i class="fas fa-download"></i> Unduh QR 4K
-                </button>
-            </div>
-            
-            <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
-                <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; padding: 0.75rem 1.5rem; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fas fa-copy"></i> Copy Smart Link</button>
+                
+                <!-- QR Section with Toggle -->
+                <div style="width: 100%;">
+                    <button id="btn-show-qr" onclick="revealQR()" class="reveal-btn">
+                        <i class="fas fa-qrcode"></i> Tampilkan QR Code
+                    </button>
+                    
+                    <div id="qr-content" class="hidden-content">
+                        <!-- QR Code Auto Share & Download -->
+                        <div id="qr-wrapper">
+                            <div class="qr-frame">
+                                <canvas id="qr-canvas-display"></canvas>
+                            </div>
+                            <!-- 4K Download Button -->
+                            <button onclick="downloadHighResQR()" class="btn-download-4k">
+                                <i class="fas fa-download"></i> Unduh QR 4K
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1127,6 +1249,17 @@
             function updateTime() { const now = new Date(); timeDisplay.textContent = now.toLocaleTimeString('en-GB'); dateDisplay.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); }
             window.resetAllSettings = function() { localStorage.removeItem('portals'); Object.keys(localStorage).forEach(key => { if (key.startsWith('sl_')) localStorage.removeItem(key); }); location.href = window.location.pathname; }
 
+            // --- TOGGLE REVEAL FUNCTIONS ---
+            window.revealLink = function() {
+                document.getElementById('btn-show-link').style.display = 'none';
+                document.getElementById('link-content').style.display = 'block';
+            }
+
+            window.revealQR = function() {
+                document.getElementById('btn-show-qr').style.display = 'none';
+                document.getElementById('qr-content').style.display = 'block';
+            }
+
             // --- QR CODE GENERATION LOGIC ---
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
@@ -1139,6 +1272,12 @@
                 const modal = document.getElementById('smart-link-modal');
                 const qrDisplayCanvas = document.getElementById('qr-canvas-display');
                 
+                // RESET VISIBILITY STATE EVERY TIME MODAL OPENS
+                document.getElementById('btn-show-link').style.display = 'flex';
+                document.getElementById('link-content').style.display = 'none';
+                document.getElementById('btn-show-qr').style.display = 'flex';
+                document.getElementById('qr-content').style.display = 'none';
+
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
                 inputField.value = "Generating...";
@@ -1158,7 +1297,7 @@
                         inputField.value = finalUrl;
                         currentGeneratedUrl = finalUrl; 
 
-                        // Generate Preview on small canvas
+                        // Generate Preview on small canvas (Even if hidden, canvas can be drawn)
                         renderCustomQR(qrDisplayCanvas, finalUrl, false); 
                     } else {
                         inputField.value = "Error generating link.";
