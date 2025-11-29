@@ -427,24 +427,25 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             border-radius: 16px;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 2.5rem 2.5rem 3.5rem 2.5rem !important; /* Increased bottom padding for breathing room */
+            /* Increased side padding for cleaner look, maintained bottom breathing room */
+            padding: 2.5rem 3.5rem 3.5rem 3.5rem !important; 
         }
 
-        /* Enhanced Close Button (More Subtle) */
+        /* Enhanced Close Button (More Subtle & Smaller) */
         .modal-close-btn {
             position: absolute;
             top: 1.5rem;
             right: 1.5rem;
-            font-size: 1.75rem;
+            font-size: 1.5rem; /* Reduced size */
             background: none;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: rgba(255, 255, 255, 0.5); /* Subtle default color */
+            color: rgba(255, 255, 255, 0.4); /* Very Subtle default color */
             line-height: 1;
             padding: 0;
-            width: 40px;
-            height: 40px;
+            width: 32px; /* Fixed touch target */
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -454,6 +455,7 @@
             transform: scale(1.1);
             color: var(--flame-red); /* Pop color on hover only */
             text-shadow: 0 0 10px rgba(206, 0, 167, 0.6);
+            opacity: 1;
         }
 
         @keyframes modalFadeIn {
@@ -768,7 +770,7 @@
         /* Modal Typography Hierarchy */
         .modal-title-custom {
             font-size: 1.6rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem; /* Increased spacing between title and description */
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-weight: 700;
@@ -786,7 +788,7 @@
         .modal-actions {
             display: flex;
             flex-direction: column;
-            gap: 1.25rem; /* Consistent Gap */
+            gap: 0.85rem; /* Consistent, tighter Gap for grouped feel */
         }
 
         /* Hidden Content Initial State */
@@ -794,6 +796,25 @@
             display: none;
             animation: fadeIn 0.5s ease;
             margin-top: 1rem;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 2rem 1.5rem 2.5rem 1.5rem !important; /* Adjusted container padding for mobile */
+            }
+            .modal-title-custom {
+                font-size: 1.35rem;
+                margin-bottom: 1rem;
+            }
+            .modal-close-btn {
+                right: 1rem;
+                top: 1rem;
+            }
+            .modal-desc-custom {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
         }
 
         @keyframes fadeIn {
@@ -992,7 +1013,7 @@
             <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" class="modal-close-btn">
                 <i class="fas fa-times"></i>
             </button>
-            <h2 class="font-cinzel modal-title-custom">Smart Link Siap 🚀</h2>
+            <h2 class="font-cinzel modal-title-custom">Smart Link Siap <span style="display:inline-block; margin-left: 0.1em;">🚀</span></h2>
             <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
             
             <div class="modal-actions">
