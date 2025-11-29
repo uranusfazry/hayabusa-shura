@@ -912,16 +912,23 @@
             <h2 class="font-cinzel modal-title-custom">Smart Link Siap <span style="display:inline-block; margin-left: 0.1em;">🚀</span></h2>
             <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
 
-            <!-- Capacity Indicator -->
-            <div id="capacity-container" style="margin-bottom: 1.5rem; background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: rgba(255,255,255,0.8);">
-                    <span>Kapasitas QR</span>
-                    <span id="capacity-text">0%</span>
+            <!-- Capacity Indicator (Refined Spacing & Alignment) -->
+            <div id="capacity-container" style="margin-bottom: 2.25rem; background: rgba(0,0,0,0.2); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(0, 200, 224, 0.15);">
+                <!-- Header: Label & Percentage aligned to baseline -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.85rem;">
+                    <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.05em; line-height: 1;">Kapasitas Data</span>
+                    <span id="capacity-text" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1;">0%</span>
                 </div>
-                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                    <div id="capacity-bar" style="width: 0%; height: 100%; background: var(--success-green); transition: width 0.5s ease, background 0.5s ease;"></div>
+                
+                <!-- Progress Bar with rounded corners -->
+                <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;">
+                    <div id="capacity-bar" style="width: 0%; height: 100%; background: var(--success-green); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.6s ease; border-radius: 10px;"></div>
                 </div>
-                <p id="capacity-detail" style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem; text-align: right;">Menghitung...</p>
+                
+                <!-- Detail Text with spacing -->
+                <div style="display: flex; justify-content: flex-end; margin-top: 0.75rem;">
+                    <span id="capacity-detail" style="font-size: 0.75rem; color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif; letter-spacing: 0.02em;">Menghitung...</span>
+                </div>
             </div>
             
             <div class="modal-actions">
