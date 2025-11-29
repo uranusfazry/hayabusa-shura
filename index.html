@@ -514,6 +514,17 @@
 
         .logo-pulse { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 
+        /* Animation Class for Hiding Capacity */
+        .hide-capacity {
+            opacity: 0;
+            max-height: 0;
+            margin-bottom: 0 !important; /* Override inline styles */
+            padding: 0 !important;
+            border: none !important;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+
         /* === PROFESSIONAL NOTIFICATION SYSTEM === */
         .notif-container {
             position: fixed; top: 20px; right: 20px; z-index: 9999;
@@ -1234,11 +1245,13 @@
             window.revealLink = function() {
                 document.getElementById('btn-show-link').style.display = 'none';
                 document.getElementById('link-content').style.display = 'block';
+                document.getElementById('capacity-container').classList.add('hide-capacity');
             }
 
             window.revealQR = function() {
                 document.getElementById('btn-show-qr').style.display = 'none';
                 document.getElementById('qr-content').style.display = 'block';
+                document.getElementById('capacity-container').classList.add('hide-capacity');
             }
 
             // --- QR CODE GENERATION LOGIC ---
@@ -1258,6 +1271,9 @@
                 document.getElementById('link-content').style.display = 'none';
                 document.getElementById('btn-show-qr').style.display = 'flex';
                 document.getElementById('qr-content').style.display = 'none';
+                
+                // Reset capacity container visibility
+                document.getElementById('capacity-container').classList.remove('hide-capacity');
 
                 // Tampilkan loading sementara
                 modal.classList.remove('hidden');
