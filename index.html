@@ -211,7 +211,8 @@
             background: linear-gradient(135deg, var(--lava-orange), var(--flame-red));
             border: 2px solid var(--gold);
             border-radius: 8px;
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1.2rem; /* Reduced padding */
+            font-size: 0.8rem; /* Smaller Font */
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -243,7 +244,8 @@
             background: rgba(0, 200, 224, 0.1);
             border: 2px solid rgba(0, 200, 224, 0.4);
             border-radius: 8px;
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1.2rem; /* Reduced Padding */
+            font-size: 0.8rem; /* Smaller Font */
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -383,21 +385,21 @@
             border-radius: 16px;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             /* Reduced padding and width for a sleeker look */
-            padding: 2rem 2.5rem !important; 
-            max-width: 420px !important; /* Made narrower for "ramping" look */
+            padding: 2rem !important; 
+            max-width: 380px !important; /* Narrower width for ramping look */
             width: 90%;
             margin: 0 auto;
         }
 
         .modal-close-btn {
             position: absolute;
-            top: 1rem; right: 1rem;
-            font-size: 1.25rem; /* Slightly smaller */
+            top: 0.8rem; right: 0.8rem;
+            font-size: 1.1rem; /* Smaller close icon */
             background: none; border: none;
             cursor: pointer;
             transition: all 0.3s ease;
             color: rgba(255, 255, 255, 0.4);
-            padding: 0; width: 28px; height: 28px;
+            padding: 0; width: 24px; height: 24px;
             display: flex; align-items: center; justify-content: center;
         }
 
@@ -422,17 +424,19 @@
         
         /* Modal Title - Prominent but not huge */
         .modal-content h2 {
-            font-size: 1.4rem !important; 
+            font-size: 1.25rem !important; /* Smaller title */
             margin-bottom: 1.25rem !important;
             font-weight: 700;
         }
 
         /* Labels - Smaller, concise */
         label.gold-text {
-            font-size: 0.75rem !important;
-            margin-bottom: 0.35rem !important;
+            font-size: 0.7rem !important; /* Smaller Label */
+            margin-bottom: 0.25rem !important;
             font-weight: 600;
             opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         /* Inputs - Slimmer height, centered feel */
@@ -440,11 +444,11 @@
             background: rgba(11, 14, 49, 0.9) !important;
             border: 2px solid rgba(0, 200, 224, 0.4);
             transition: all 0.3s ease;
-            border-radius: 6px; /* Slightly tighter radius */
+            border-radius: 6px; 
             color: #fff;
             font-family: 'Inter', sans-serif;
-            padding: 0.6rem 0.8rem !important; /* Reduced padding for slimmer look */
-            font-size: 0.9rem !important; /* Balanced text size */
+            padding: 0.5rem 0.75rem !important; /* Very Compact Padding */
+            font-size: 0.85rem !important; /* Smaller Font */
             width: 100%;
         }
 
@@ -457,19 +461,19 @@
         select option {
             background: var(--dark-stone);
             color: #fff;
-            padding: 10px;
+            padding: 8px;
         }
 
         /* Placeholder - Subtle hierarchy */
         ::placeholder {
             color: rgba(0, 200, 224, 0.5);
             opacity: 1;
-            font-size: 0.85rem; /* Smaller than input text */
+            font-size: 0.8rem; /* Smaller placeholder */
         }
 
         /* Input Group Spacing - Tighter */
         #portal-form > div {
-            margin-bottom: 0.85rem; 
+            margin-bottom: 0.75rem; 
         }
 
         /* Form Buttons - Proportional & Clean */
@@ -477,12 +481,11 @@
             display: flex;
             justify-content: flex-end;
             gap: 0.75rem; /* Clean spacing */
-            margin-top: 1.5rem;
+            margin-top: 1.25rem;
         }
 
         .form-actions button {
-            padding: 0.6rem 1.5rem !important; /* Smaller vertical padding */
-            font-size: 0.85rem !important;
+            /* Handled by .btn classes above */
         }
 
         .modal-content code {
