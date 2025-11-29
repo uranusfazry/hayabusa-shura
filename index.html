@@ -159,6 +159,9 @@
 
         main.content-layer {
             flex-grow: 1;
+            /* Layout Adjustment: Reduced top padding for tighter feel */
+            padding-top: 100px !important; 
+            padding-bottom: 3rem;
         }
 
         /* Typography */
@@ -171,11 +174,11 @@
 
         /* Navbar */
         .navbar {
-            background: rgba(11, 14, 49, 0.7);
+            background: rgba(11, 14, 49, 0.85); /* Slightly more opaque for better contrast */
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border-bottom: 2px solid rgba(255, 93, 216, 0.3);
-            box-shadow: 0 4px 30px rgba(0, 200, 224, 0.2);
+            border-bottom: 1px solid rgba(255, 93, 216, 0.2); /* Thinner border */
+            box-shadow: 0 4px 30px rgba(0, 200, 224, 0.1);
             transition: all 0.3s ease;
         }
 
@@ -186,7 +189,7 @@
 
         @media (min-width: 768px) {
             .navbar .container > div {
-                height: 90px;
+                height: 80px; /* Slightly reduced desktop nav height */
             }
         }
 
@@ -198,7 +201,7 @@
 
         .nav-item:hover span, .nav-item:hover i {
             color: var(--gold);
-            text-shadow: 0 0 15px var(--bright-gold);
+            text-shadow: 0 0 10px rgba(255, 93, 216, 0.7); /* Softer glow */
         }
 
         .nav-item::after {
@@ -208,14 +211,14 @@
             left: 50%;
             transform: translateX(-50%);
             width: 0;
-            height: 3px;
+            height: 2px; /* Thinner underline */
             background: linear-gradient(90deg, var(--lava-orange), var(--gold));
             transition: width 0.3s ease;
             border-radius: 2px;
-            box-shadow: 0 0 10px var(--gold);
+            box-shadow: 0 0 8px var(--gold);
         }
 
-        .nav-item:hover::after { width: 100%; }
+        .nav-item:hover::after { width: 80%; /* Not full width for elegance */ }
 
         /* Dropdown */
         .dropdown {
@@ -224,8 +227,8 @@
             background: rgba(11, 14, 49, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 2px solid var(--gold);
-            box-shadow: 0 10px 40px rgba(0, 200, 224, 0.3);
+            border: 1px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             border-radius: 12px;
             margin-top: 12px;
             animation: dropFadeIn 0.3s ease;
@@ -274,7 +277,7 @@
         .btn-lava {
             font-family: 'Cinzel', serif;
             background: linear-gradient(135deg, var(--lava-orange), var(--flame-red));
-            border: 2px solid var(--gold);
+            border: 1px solid var(--gold);
             border-radius: 8px;
             padding: 0.75rem 1.5rem;
             font-weight: 700;
@@ -288,8 +291,8 @@
             align-items: center;
             justify-content: center;
             color: #fff;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 20px rgba(206, 0, 167, 0.4);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(206, 0, 167, 0.3);
         }
 
         .btn-lava::before {
@@ -311,21 +314,21 @@
         }
 
         .btn-lava:hover {
-            box-shadow: 0 0 30px var(--gold), 0 0 50px var(--flame-red);
-            transform: translateY(-3px);
-            border-color: var(--bright-gold);
+            box-shadow: 0 0 25px rgba(0, 200, 224, 0.4);
+            transform: translateY(-2px);
+            border-color: #fff;
         }
 
         .btn-lava:active {
-            transform: translateY(0) scale(0.97);
-            box-shadow: 0 0 15px var(--gold);
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 0 10px var(--gold);
             transition-duration: 0.1s;
         }
 
         .btn-secondary {
             font-family: 'Cinzel', serif;
-            background: rgba(0, 200, 224, 0.1);
-            border: 2px solid rgba(0, 200, 224, 0.4);
+            background: rgba(0, 200, 224, 0.05);
+            border: 1px solid rgba(0, 200, 224, 0.3);
             border-radius: 8px;
             padding: 0.75rem 1.5rem;
             font-weight: 700;
@@ -336,27 +339,27 @@
         }
 
         .btn-secondary:hover {
-            background: rgba(0, 200, 224, 0.2);
+            background: rgba(0, 200, 224, 0.15);
             border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(0, 200, 224, 0.3);
+            box-shadow: 0 0 15px rgba(0, 200, 224, 0.2);
         }
 
         /* Portal Cards */
         .portal-card {
-            background: rgba(23, 5, 30, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 2px solid;
-            border-radius: 16px;
+            background: rgba(23, 5, 30, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid;
+            border-radius: 12px; /* Slightly tighter radius */
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
         }
 
         .portal-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 40px currentColor;
+            transform: translateY(-5px); /* More subtle lift */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 25px currentColor; /* Softer glow */
         }
 
         .portal-card::before {
@@ -366,9 +369,9 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(0, 200, 224, 0.1) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 200, 224, 0.08) 50%, transparent 70%); /* Reduced opacity */
             transform: rotate(45deg);
-            animation: shimmer 5s linear infinite;
+            animation: shimmer 6s linear infinite; /* Slower animation */
             opacity: 0.8;
         }
 
@@ -379,29 +382,29 @@
 
         .delete-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 10px;
+            right: 10px;
             color: rgba(206, 0, 167, 0.7);
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
             z-index: 20;
-            opacity: 0.7;
-            border: 1px solid rgba(206, 0, 167, 0.5);
+            opacity: 0; /* Hidden by default for cleaner look */
+            border: 1px solid rgba(206, 0, 167, 0.4);
         }
 
-        .portal-card:hover .delete-btn { opacity: 1; }
-
+        .portal-card:hover .delete-btn { opacity: 0.8; }
         .delete-btn:hover {
+            opacity: 1 !important;
             color: var(--flame-red);
             background: rgba(0, 0, 0, 0.6);
-            transform: scale(1.15);
-            box-shadow: 0 0 15px var(--flame-red);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--flame-red);
         }
 
         /* Profile/Avatar Updated for Premium Esports Look */
@@ -410,29 +413,29 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px; /* Jarak ideal 8-14px */
-            margin-bottom: 3rem;
+            /* Layout Adjustment: Precise spacing */
+            gap: 0; 
+            margin-bottom: 2.5rem; /* ~40px spacing to cards */
             position: relative;
             z-index: 20;
         }
 
         .profile {
             margin: 0;
-            width: 140px; /* Ukuran Mobile: Besar & Focal Point */
+            width: 140px;
             height: 140px;
             border-radius: 50%;
             overflow: hidden;
-            /* Border & Glow disamakan dengan teks */
-            border: 3px solid var(--gold); 
-            box-shadow: 0 0 25px rgba(0, 200, 224, 0.4); 
+            border: 2px solid var(--gold); /* Thinner border */
+            box-shadow: 0 0 20px rgba(0, 200, 224, 0.3); /* Softer glow */
             position: relative;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .profile:hover {
-            box-shadow: 0 0 40px rgba(0, 200, 224, 0.7);
-            transform: scale(1.05);
-            border-color: #fff; /* Highlight saat hover */
+            box-shadow: 0 0 30px rgba(0, 200, 224, 0.5);
+            transform: scale(1.02);
+            border-color: #fff;
         }
 
         .profile img, .profile video {
@@ -441,42 +444,6 @@
             object-fit: cover;
             position: relative;
             z-index: 1;
-        }
-
-        /* Garis Neon Tipis (Separator) */
-        .profile-separator {
-            width: 60px;
-            height: 1px;
-            background: var(--gold);
-            opacity: 0.5;
-            box-shadow: 0 0 8px var(--gold);
-            border-radius: 1px;
-        }
-
-        .hero-title {
-            font-size: 1.35rem; /* Sedikit lebih kecil dari foto agar balance */
-            font-weight: 800;
-            color: var(--gold); /* Warna sama dengan border foto */
-            margin: 0;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            /* Glow disamakan dengan border foto */
-            text-shadow: 0 0 20px rgba(0, 200, 224, 0.5); 
-            line-height: 1;
-        }
-
-        @media (min-width: 768px) {
-            .profile {
-                width: 180px; /* Desktop: Lebih besar */
-                height: 180px;
-            }
-            .hero-title {
-                font-size: 1.75rem; /* Desktop: Tetap proporsional */
-            }
-            .profile-separator {
-                width: 80px; /* Garis sedikit lebih panjang di desktop */
-            }
         }
 
         /* Modals */
@@ -491,8 +458,8 @@
             background: rgba(23, 5, 30, 0.95);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 50px rgba(0, 200, 224, 0.4);
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 40px rgba(0, 200, 224, 0.3);
             border-radius: 16px;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -510,7 +477,7 @@
         /* Inputs */
         input, textarea, select {
             background: rgba(11, 14, 49, 0.9) !important;
-            border: 2px solid rgba(0, 200, 224, 0.4);
+            border: 1px solid rgba(0, 200, 224, 0.3);
             transition: all 0.3s ease;
             border-radius: 8px;
             color: #fff;
@@ -519,7 +486,7 @@
 
         input:focus, textarea:focus, select:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(0, 200, 224, 0.5);
+            box-shadow: 0 0 15px rgba(0, 200, 224, 0.3);
             outline: none;
             background: rgba(11, 14, 49, 0.95) !important;
         }
@@ -544,11 +511,11 @@
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: rgba(11, 14, 49, 0.6); }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, var(--lava-orange), var(--gold));
-            border-radius: 6px;
+            border-radius: 5px;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(180deg, var(--gold), var(--flame-red));
@@ -562,11 +529,11 @@
         @keyframes logoPulse {
             0%, 100% {
                 transform: scale(1);
-                filter: drop-shadow(0 0 15px var(--gold));
+                filter: drop-shadow(0 0 10px var(--gold));
             }
             50% {
-                transform: scale(1.15);
-                filter: drop-shadow(0 0 30px var(--lava-orange));
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 20px var(--lava-orange));
             }
         }
 
@@ -698,7 +665,7 @@
         /* Footer */
         footer {
             background: rgba(11, 14, 49, 0.9);
-            border-top: 2px solid rgba(0, 200, 224, 0.3);
+            border-top: 1px solid rgba(0, 200, 224, 0.2);
             margin-top: auto;
             height: 70px;
             display: flex;
@@ -706,7 +673,7 @@
             align-items: center;
             justify-content: center;
             padding: 0 1rem;
-            box-shadow: 0 -4px 30px rgba(206, 0, 167, 0.2);
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.2);
         }
 
         footer p:first-child { font-size: 14px; }
@@ -803,8 +770,8 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <!-- Logo -->
                 <div id="logo-container" style="display: flex; align-items: center; cursor: pointer; user-select: none;">
-                    <img src="https://i.imghippo.com/files/EePl9866XxI.png" alt="Hayabusa Shura Logo" class="logo-pulse" style="height: 50px; width: auto; border-radius: 50%;" draggable="false" crossorigin="anonymous">
-                    <span class="font-cinzel gold-text" style="font-weight: 700; font-size: 1.25rem; letter-spacing: 0.05em; margin-left: 1rem;">MLBB HAYABUSA</span>
+                    <img src="https://i.imghippo.com/files/EePl9866XxI.png" alt="Hayabusa Shura Logo" class="logo-pulse" style="height: 45px; width: auto; border-radius: 50%;" draggable="false" crossorigin="anonymous">
+                    <span class="font-cinzel gold-text" style="font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; margin-left: 0.8rem;">MLBB HAYABUSA</span>
                 </div>
 
                 <!-- Desktop Nav -->
@@ -883,7 +850,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="container content-layer" style="padding-top: 120px; padding-bottom: 2rem;">
+    <main class="container content-layer">
         
         <!-- Premium Profile Header -->
         <header class="profile-container">
@@ -895,7 +862,7 @@
         </header>
 
         <!-- Portal Grid -->
-        <div id="portals-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        <div id="portals-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; max-width: 900px; margin: 0 auto 3rem;">
             <!-- Portal cards rendered by JS -->
         </div>
     </main>
@@ -1170,7 +1137,8 @@
                     portalElement.style.height = '100%';
                     const portalColor = portal.color || '#4a0072';
                     const cardStyle = `color: ${portalColor}; border-color: ${portalColor};`;
-                    const textStyle = `color: ${portalColor}; text-shadow: 0 0 15px ${portalColor};`;
+                    // Updated Glow: Reduced blur radius and used rgba for softness
+                    const textStyle = `color: ${portalColor}; text-shadow: 0 0 8px ${portalColor}aa;`; 
                     let iconClass = portal.icon || 'fas fa-mask';
                     if (!portal.icon || (!portal.icon.startsWith('fa') && !portal.icon.startsWith('http') && !portal.icon.startsWith('data:image'))) iconClass = 'fas fa-mask';
                     const iconHtml = (iconClass.startsWith('data:image') || iconClass.startsWith('http'))
