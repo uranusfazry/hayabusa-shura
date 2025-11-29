@@ -130,11 +130,10 @@
 
         /* Navbar */
         .navbar {
-            background: rgba(11, 14, 49, 0.9); /* Sedikit lebih solid */
+            background: rgba(11, 14, 49, 0.9);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-bottom: 2px solid rgba(255, 93, 216, 0.3);
-            /* Removed colored box-shadow */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
             transition: all 0.3s ease;
         }
@@ -158,7 +157,6 @@
 
         .nav-item:hover span, .nav-item:hover i {
             color: var(--gold);
-            /* Removed text-shadow glow */
         }
 
         .nav-item::after {
@@ -172,7 +170,6 @@
             background: linear-gradient(90deg, var(--lava-orange), var(--gold));
             transition: width 0.3s ease;
             border-radius: 2px;
-            /* Removed box-shadow glow */
         }
 
         .nav-item:hover::after { width: 100%; }
@@ -183,7 +180,6 @@
             position: absolute;
             background: rgba(11, 14, 49, 0.98);
             border: 2px solid var(--gold);
-            /* Removed colored shadow, kept simple shadow */
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             border-radius: 12px;
             margin-top: 12px;
@@ -247,12 +243,10 @@
             align-items: center;
             justify-content: center;
             color: #fff;
-            /* Removed glow shadows */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
         }
 
         .btn-lava:hover {
-            /* Removed intense glow on hover */
             transform: translateY(-3px);
             border-color: #fff;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
@@ -280,28 +274,61 @@
         .btn-secondary:hover {
             background: rgba(0, 200, 224, 0.2);
             border-color: var(--gold);
-            /* Removed glow shadow */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
-        /* Portal Cards */
+        /* Portal Cards - UPDATED FOR HOVER EFFECT */
         .portal-card {
-            background: rgba(23, 5, 30, 0.8);
+            background: rgba(23, 5, 30, 0.9); /* Sedikit lebih gelap agar kontras */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 2px solid;
+            border: 2px solid rgba(255, 255, 255, 0.1); /* Default border transparan/putih tipis */
             border-radius: 16px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            /* Standard shadow only */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            /* Menggunakan variable custom untuk warna tema */
+            color: var(--portal-color); 
         }
 
         .portal-card:hover {
             transform: translateY(-5px);
-            /* Removed color glow, kept shadow */
+            /* Saat hover, border berubah jadi warna tema */
+            border-color: var(--portal-color); 
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Light Mode Portal Card Override - TRANSPARANT SAAT DIAM */
+        body.light-mode .portal-card {
+            background: transparent;
+            backdrop-filter: none;
+            box-shadow: none;
+            border-color: rgba(255, 255, 255, 0.3); /* Border tipis agar area tetap terlihat */
+        }
+
+        /* Light Mode Portal Card Hover - TIDAK TRANSPARAN SAAT DI-SENTUH/HOVER */
+        body.light-mode .portal-card:hover,
+        body.light-mode .portal-card:active {
+            background: rgba(23, 5, 30, 0.95); /* Kembali solid gelap */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            border-color: var(--portal-color);
+        }
+
+        /* Icon dan Judul mengambil warna tema */
+        .portal-card i, .portal-card h3 {
+            color: var(--portal-color);
+            transition: color 0.3s ease;
+        }
+
+        /* Deskripsi dibuat warna Cyan/Teal Cerah seperti gambar referensi */
+        .portal-description {
+            font-size: 0.875rem;
+            color: #00e0b8; /* Cyan cerah */
+            margin-top: 0.5rem;
+            line-height: 1.5;
+            transition: color 0.3s ease;
         }
 
         .delete-btn {
@@ -328,7 +355,6 @@
             color: var(--flame-red);
             background: rgba(0, 0, 0, 0.6);
             transform: scale(1.15);
-            /* Removed glow */
         }
 
         /* Profile/Avatar */
@@ -350,14 +376,12 @@
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid var(--gold); 
-            /* Removed glow box-shadow */
             box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
             position: relative;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .profile:hover {
-            /* Removed glow box-shadow */
             transform: scale(1.05);
             border-color: #fff; 
         }
@@ -370,7 +394,7 @@
             z-index: 1;
         }
 
-        /* Separator - Removed glow */
+        /* Separator */
         .profile-separator {
             width: 60px;
             height: 1px;
@@ -387,7 +411,6 @@
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            /* Removed text-shadow glow */
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             line-height: 1;
         }
@@ -418,7 +441,6 @@
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 2px solid var(--gold);
-            /* Removed glow, standard shadow */
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             border-radius: 16px;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -446,7 +468,6 @@
 
         input:focus, textarea:focus, select:focus {
             border-color: var(--gold);
-            /* Removed glow box-shadow */
             outline: none;
             background: rgba(11, 14, 49, 0.95) !important;
         }
@@ -481,9 +502,7 @@
             background: linear-gradient(180deg, var(--gold), var(--flame-red));
         }
 
-        /* Logo - Removed Pulse/Glow Animation */
         .logo-pulse {
-            /* No animation or drop-shadow */
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
@@ -496,7 +515,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            pointer-events: none; /* Allow clicking through container */
+            pointer-events: none;
         }
 
         .notif-toast {
@@ -508,7 +527,6 @@
             border-left: 4px solid var(--gold);
             border-radius: 8px;
             padding: 16px 20px;
-            /* Removed glow shadow */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: flex-start;
@@ -667,7 +685,6 @@
         #qr-canvas-display {
             border-radius: 12px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
-            /* UPDATED: Mengurangi ukuran display QR agar lebih proporsional seperti form "Tambah Portal" */
             max-width: 260px;
             width: 100%;
             height: auto;
@@ -1022,7 +1039,8 @@
 
             const defaultPortals = [
                 { name: 'Hayabusa Premium Access', url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=Halo', icon: 'fas fa-mask', color: '#ce00a7', description: 'Upgrade sekarang — akses semua website uranus tanpa iklan cuma Rp25K' },
-                { name: 'Buy Hayabusa Shura Skin', url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=BeliSkin', icon: 'fas fa-crosshairs', color: '#4a0072', description: 'Beli kode website MLBB Hayabusa Shura edisi premium seharga Rp100K' }
+                { name: 'Buy Hayabusa Shura Skin', url: 'https://api.whatsapp.com/send/?phone=6287872521809&text=BeliSkin', icon: 'fas fa-crosshairs', color: '#4a0072', description: 'Beli kode website MLBB Hayabusa Shura edisi premium seharga Rp100K' },
+                { name: 'TESTIMONI BY ONE', url: '#', icon: 'fas fa-star', color: '#ff2a6d', description: 'Semua kekalahan dan penderitaan kalian saat by one lawan Master ada di sini.' }
             ];
 
             // --- APP INITIALIZATION ---
@@ -1087,16 +1105,33 @@
                     const portalElement = document.createElement('div');
                     portalElement.style.height = '100%';
                     const portalColor = portal.color || '#4a0072';
-                    const cardStyle = `color: ${portalColor}; border-color: ${portalColor};`;
-                    // REMOVED GLOW TEXT SHADOW
-                    const textStyle = `color: ${portalColor};`;
+                    
+                    // Gunakan CSS Variables untuk warna agar bisa dimanipulasi di hover state
                     let iconClass = portal.icon || 'fas fa-mask';
                     if (!portal.icon || (!portal.icon.startsWith('fa') && !portal.icon.startsWith('http') && !portal.icon.startsWith('data:image'))) iconClass = 'fas fa-mask';
+                    
+                    // Render Icon
                     const iconHtml = (iconClass.startsWith('data:image') || iconClass.startsWith('http'))
-                        ? `<img src="${iconClass}" style="margin: 0 auto 1rem; height: 3rem; width: 3rem; object-fit: contain;" alt="${portal.name} icon" onerror="this.style.display='none'; this.nextSibling.style.display='block';"><i class="fas fa-mask" style="font-size: 3rem; margin-bottom: 1rem; display: none; ${textStyle}"></i>`
-                        : `<i class="${iconClass}" style="font-size: 3rem; margin-bottom: 1rem; ${textStyle}"></i>`;
+                        ? `<img src="${iconClass}" style="margin: 0 auto 1rem; height: 3rem; width: 3rem; object-fit: contain;" alt="${portal.name} icon" onerror="this.style.display='none'; this.nextSibling.style.display='block';"><i class="fas fa-mask" style="font-size: 3rem; margin-bottom: 1rem; display: none;"></i>`
+                        : `<i class="${iconClass}" style="font-size: 3rem; margin-bottom: 1rem;"></i>`;
+                        
                     const descriptionHtml = portal.description ? portal.description : '&nbsp;';
-                    portalElement.innerHTML = `<div class="portal-card" style="${cardStyle} height: 100%;"><a href="${portal.url}" target="_blank" style="display: block; height: 100%; padding: 1.5rem; text-align: center; position: relative; text-decoration: none; color: inherit;"><div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">${iconHtml}<h3 class="font-cinzel" style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; word-break: break-word; font-size: 1.125rem; margin-bottom: 0.5rem; ${textStyle}">${portal.name}</h3><p style="font-size: 0.875rem; color: rgba(0, 200, 224, 0.8); margin-top: 0.5rem; line-height: 1.4;">${descriptionHtml}</p></div><button onclick="event.preventDefault(); event.stopPropagation(); showConfirmationModal('Destroy portal ${portal.name}?', () => deletePortalAction(${index}))" class="delete-btn"><i class="fas fa-times" style="font-size: 0.875rem;"></i></button></a></div>`;
+                    
+                    // Perhatikan penggunaan --portal-color di inline style
+                    portalElement.innerHTML = `
+                    <div class="portal-card" style="--portal-color: ${portalColor}; height: 100%;">
+                        <a href="${portal.url}" target="_blank" style="display: block; height: 100%; padding: 1.5rem; text-align: center; position: relative; text-decoration: none; color: inherit;">
+                            <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                                ${iconHtml}
+                                <h3 class="font-cinzel" style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; word-break: break-word; font-size: 1.125rem; margin-bottom: 0.5rem;">${portal.name}</h3>
+                                <p class="portal-description">${descriptionHtml}</p>
+                            </div>
+                            <button onclick="event.preventDefault(); event.stopPropagation(); showConfirmationModal('Destroy portal ${portal.name}?', () => deletePortalAction(${index}))" class="delete-btn">
+                                <i class="fas fa-times" style="font-size: 0.875rem;"></i>
+                            </button>
+                        </a>
+                    </div>`;
+                    
                     portalsGrid.appendChild(portalElement);
                 });
             }
