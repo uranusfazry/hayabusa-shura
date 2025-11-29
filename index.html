@@ -260,6 +260,32 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
+        /* === PERBAIKAN GRID PORTAL DI SINI === 
+           Agar menjadi 3 kolom secara paksa di Desktop
+        */
+        #portals-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            
+            /* Default Mobile: 1 Kolom */
+            grid-template-columns: 1fr;
+        }
+
+        /* Tablet: 2 Kolom */
+        @media (min-width: 640px) {
+            #portals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Laptop/PC: 3 Kolom (Sesuai Request Anda) */
+        @media (min-width: 1024px) {
+            #portals-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         /* Portal Cards */
         .portal-card {
             background: rgba(23, 5, 30, 0.9);
@@ -272,6 +298,9 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             color: var(--portal-color); 
+            height: 100%; /* Ensure card takes full height */
+            display: flex;
+            flex-direction: column;
         }
 
         .portal-card:hover {
@@ -847,7 +876,7 @@
         </header>
 
         <!-- Portal Grid -->
-        <div id="portals-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        <div id="portals-grid">
             <!-- Portal cards rendered by JS -->
         </div>
     </main>
@@ -1139,6 +1168,13 @@
                     icon: 'fas fa-crosshairs',
                     color: '#4a0072',
                     description: 'Beli kode website MLBB Hayabusa Shura edisi premium seharga Rp100K'
+                },
+                 {
+                    name: 'Uranus Store',
+                    url: '#',
+                    icon: 'fas fa-star',
+                    color: '#00c8e0',
+                    description: 'Kunjungi store resmi kami untuk promo terbaru'
                 }
             ];
 
