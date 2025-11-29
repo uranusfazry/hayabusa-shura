@@ -404,15 +404,33 @@
             box-shadow: 0 0 15px var(--flame-red);
         }
 
-        /* Profile/Avatar */
+        /* Profile/Avatar Updated for Compact Look */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Jarak rapat 10px antara foto dan nama */
+            margin-bottom: 2.5rem; /* Jarak ke konten bawah */
+            position: relative;
+            z-index: 20;
+        }
+
         .profile {
-            margin: 0 auto 2rem;
-            width: 160px;
-            height: 160px;
+            margin: 0; /* Margin dihandle oleh container gap */
+            width: 130px; /* Ukuran mobile (120-150px range) */
+            height: 130px;
             border-radius: 50%;
             overflow: hidden;
-            border: 4px solid var(--gold);
+            border: 2px solid var(--gold); /* Outline tipis */
+            box-shadow: 0 0 20px rgba(0, 200, 224, 0.3); /* Glow halus */
             position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .profile:hover {
+            box-shadow: 0 0 30px rgba(0, 200, 224, 0.6);
+            transform: scale(1.02);
         }
 
         .profile img, .profile video {
@@ -423,32 +441,25 @@
             z-index: 1;
         }
 
-        /* Time Display */
-        .time-container {
-            background: rgba(23, 5, 30, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 30px rgba(0, 200, 224, 0.4), inset 0 0 25px rgba(206, 0, 167, 0.2);
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
+        .hero-title {
+            font-size: 1.5rem; /* Ukuran font mobile proporsional */
+            font-weight: 800; /* Tebal */
+            color: var(--gold);
+            margin: 0;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(0, 200, 224, 0.5); /* Text glow halus */
+            letter-spacing: 0.05em;
+            line-height: 1.2;
         }
 
-        .time-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 200, 224, 0.3), transparent);
-            animation: timeScan 4s ease-in-out infinite;
-        }
-
-        @keyframes timeScan {
-            0%, 100% { left: -100%; }
-            50% { left: 100%; }
+        @media (min-width: 768px) {
+            .profile {
+                width: 150px; /* Ukuran desktop */
+                height: 150px;
+            }
+            .hero-title {
+                font-size: 2rem; /* Ukuran font desktop */
+            }
         }
 
         /* Modals */
@@ -856,27 +867,18 @@
 
     <!-- Main Content -->
     <main class="container content-layer" style="padding-top: 120px; padding-bottom: 2rem;">
-        <header style="text-align: center; margin-bottom: 3rem;">
-            <!-- Profile -->
+        
+        <!-- Compact Profile Header -->
+        <header class="profile-container">
+            <!-- Profile Image -->
             <div class="profile">
                 <video src="https://files.catbox.moe/gs4lq5.mp4" alt="Profile Video" autoplay loop muted playsinline
                 style="object-position: 50% 25%; will-change: transform;"></video>
             </div>
 
-            <!-- Hero Title -->
-            <div style="display: inline-block; margin-bottom: 1.5rem;">
-                <h1 class="font-playfair" data-text="HAYABUSA SHURA" style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; color: var(--gold);">HAYABUSA SHURA</h1>
-            </div>
-            <p class="font-cinzel flame-text" style="font-size: 1.125rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;">MLBB Creator &amp; Web Developer</p>
+            <!-- Name (Hero Title) -->
+            <h1 class="font-playfair hero-title">HAYABUSA SHURA</h1>
         </header>
-
-        <!-- Time Display -->
-        <div style="display: flex; justify-content: center; margin-bottom: 3rem;">
-            <div class="time-container" style="padding: 1.5rem 2rem; text-align: center;">
-                <div id="time" class="font-cinzel gold-text" style="font-size: 2.5rem; font-weight: 700;">00:00:00</div>
-                <div id="date" class="font-cinzel flame-text" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.5rem;">Loading...</div>
-            </div>
-        </div>
 
         <!-- Portal Grid -->
         <div id="portals-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
@@ -1030,8 +1032,6 @@
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-            const timeDisplay = document.getElementById('time');
-            const dateDisplay = document.getElementById('date');
             const importFileInput = document.getElementById('import-file-input');
             const confirmationModal = document.getElementById('confirmation-modal');
             const confirmationMessage = document.getElementById('confirmation-message');
@@ -1107,8 +1107,6 @@
                         window.showNotification('Data Loaded', 'Portal berhasil dimuat dari link.', 'success');
                     } else loadFromStorage();
                 } else loadFromStorage();
-                updateTime();
-                setInterval(updateTime, 1000);
                 setupEventListeners();
                 updateNavDisplay();
             }
