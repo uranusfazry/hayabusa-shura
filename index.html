@@ -277,18 +277,17 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
-        /* Portal Cards - UPDATED FOR GLASSMORPHISM */
+        /* Portal Cards - UPDATED FOR HOVER EFFECT */
         .portal-card {
-            /* Background opacity diturunkan menjadi 0.5 (semi-transparan) agar sesuai gambar */
-            background: rgba(20, 5, 35, 0.5); 
-            backdrop-filter: blur(15px); /* Menambah kekuatan blur agar efek kaca lebih terasa */
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.1); /* Border default */
+            background: rgba(23, 5, 30, 0.9); /* Sedikit lebih gelap agar kontras */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1); /* Default border transparan/putih tipis */
             border-radius: 16px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); /* Shadow untuk kedalaman */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             /* Menggunakan variable custom untuk warna tema */
             color: var(--portal-color); 
         }
@@ -297,25 +296,7 @@
             transform: translateY(-5px);
             /* Saat hover, border berubah jadi warna tema */
             border-color: var(--portal-color); 
-            background: rgba(20, 5, 35, 0.65); /* Sedikit lebih gelap saat hover agar teks terbaca */
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Light Mode Portal Card Override - TRANSPARANT SAAT DIAM */
-        body.light-mode .portal-card {
-            background: transparent;
-            backdrop-filter: none;
-            box-shadow: none;
-            border-color: rgba(255, 255, 255, 0.3); /* Border tipis agar area tetap terlihat */
-        }
-
-        /* Light Mode Portal Card Hover - TIDAK TRANSPARAN SAAT DI-SENTUH/HOVER */
-        body.light-mode .portal-card:hover,
-        body.light-mode .portal-card:active {
-            background: rgba(23, 5, 30, 0.95); /* Kembali solid gelap */
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-            border-color: var(--portal-color);
         }
 
         /* Icon dan Judul mengambil warna tema */
