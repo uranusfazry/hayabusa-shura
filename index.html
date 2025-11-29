@@ -34,6 +34,7 @@
             --ember-glow: #510066;      /* shadowy purple glow */
             --success-green: #00e0b8;   /* Tealish green for success */
             --error-red: #ff3b3b;       /* Bright red for errors */
+            --warning-yellow: #ffd700;  /* Yellow for warning */
         }
 
         /* Reset & Base */
@@ -367,7 +368,7 @@
             .profile-separator { width: 80px; }
         }
 
-        /* Modals & Inputs - OPTIMIZED FOR DESKTOP PROPORTIONS */
+        /* Modals & Inputs - OPTIMIZED FOR MOBILE PROPORTIONS */
         .modal-overlay {
             background: rgba(11, 14, 49, 0.85);
             backdrop-filter: blur(12px);
@@ -910,6 +911,18 @@
             </button>
             <h2 class="font-cinzel modal-title-custom">Smart Link Siap <span style="display:inline-block; margin-left: 0.1em;">🚀</span></h2>
             <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
+
+            <!-- Capacity Indicator -->
+            <div id="capacity-container" style="margin-bottom: 1.5rem; background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: rgba(255,255,255,0.8);">
+                    <span>Kapasitas QR</span>
+                    <span id="capacity-text">0%</span>
+                </div>
+                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                    <div id="capacity-bar" style="width: 0%; height: 100%; background: var(--success-green); transition: width 0.5s ease, background 0.5s ease;"></div>
+                </div>
+                <p id="capacity-detail" style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem; text-align: right;">Menghitung...</p>
+            </div>
             
             <div class="modal-actions">
                 <!-- Link Section with Toggle -->
@@ -1252,6 +1265,29 @@
                             document.getElementById('limit-warning-modal').classList.remove('hidden');
                             document.getElementById('limit-warning-modal').style.display = 'flex';
                             return; // Hentikan proses agar QR tidak digambar
+                        }
+
+                        // --- Capacity Logic ---
+                        const usedLength = finalParam.length;
+                        const percentage = Math.min(100, Math.round((usedLength / MAX_QR_LENGTH) * 100));
+                        const remaining = Math.max(0, MAX_QR_LENGTH - usedLength);
+                        
+                        const capBar = document.getElementById('capacity-bar');
+                        const capText = document.getElementById('capacity-text');
+                        const capDetail = document.getElementById('capacity-detail');
+                        
+                        // Update Width & Text
+                        capBar.style.width = percentage + "%";
+                        capText.textContent = percentage + "%";
+                        capDetail.textContent = `Sisa Karakter: ${remaining}`;
+                        
+                        // Update Color
+                        if (percentage < 70) {
+                            capBar.style.background = "var(--success-green)";
+                        } else if (percentage < 90) {
+                            capBar.style.background = "var(--warning-yellow)";
+                        } else {
+                            capBar.style.background = "var(--error-red)";
                         }
 
                         const finalUrl = `${window.location.origin}${window.location.pathname}?p=${finalParam}`;
