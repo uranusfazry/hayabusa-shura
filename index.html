@@ -836,6 +836,12 @@
                                 <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
                             </button>
 
+                            <!-- NEW SUPPORT SECTION -->
+                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Support</h3>
+                            <button onclick="showHelpModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
+                                <i class="fab fa-firefox-browser" style="margin-right: 0.5rem;"></i>Media Fix (Firefox)
+                            </button>
+
                             <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Purge</h3>
                             <button onclick="showConfirmationModal('Unleash the shadows?', resetAllSettings)" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
                                 <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
@@ -883,6 +889,11 @@
             <!-- NEW MOBILE BUTTON -->
             <button onclick="showWhatsAppModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
                 <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
+            </button>
+
+            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Support</h3>
+            <button onclick="showHelpModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                <i class="fab fa-firefox-browser" style="margin-right: 0.5rem;"></i>Media Fix (Firefox)
             </button>
 
             <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">System</h3>
@@ -998,6 +1009,65 @@
                     <button type="submit" class="btn-lava">Masuk</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
+        <div class="modal-content" style="text-align: center; border-color: var(--success-green);">
+            <div style="font-size: 3rem; color: var(--success-green); margin-bottom: 1rem;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="font-cinzel" style="color: var(--success-green); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">🔓 Akses Diterima!</h2>
+            <p style="margin-bottom: 1rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
+                Sandi benar. Kamu akan diarahkan ke portal...
+            </p>
+            <p id="countdown-text" style="font-size: 0.85rem; color: var(--gold); margin-bottom: 1.5rem; font-style: italic;">
+                Otomatis masuk dalam 5 detik...
+            </p>
+            <div style="display: flex; justify-content: center;">
+                <button id="btn-lanjut" class="btn-lava" style="background: var(--success-green); border-color: var(--success-green); color: #000;">
+                    Lanjut Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal (NEW) -->
+    <div id="help-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
+        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+            <button onclick="document.getElementById('help-modal').style.display = 'none'" class="modal-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="font-cinzel gold-text" style="font-size: 1.2rem !important;"><i class="fab fa-firefox-browser"></i> Firefox Media Fix</h2>
+            <div style="text-align: left; font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.9);">
+                <p style="margin-bottom: 1rem;">Aktifkan dukungan media untuk file host (catbox.moe):</p>
+                <ol style="list-style-type: decimal; padding-left: 1.2rem; space-y-2;">
+                    <li style="margin-bottom: 0.5rem;">Buka tab baru: <code style="color:var(--gold)">about:config</code></li>
+                    <li style="margin-bottom: 0.5rem;">
+                        Cari dan ubah value berikut:
+                        <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 0.25rem; font-size: 0.8rem; color: rgba(200, 200, 200, 0.9);">
+                            <li>media.autoplay.default → <b>0</b></li>
+                            <li>media.autoplay.blocking_policy → <b>0</b></li>
+                            <li>privacy.resistFingerprinting → <b>false</b></li>
+                            <li>network.http.referer.trimmingPolicy → <b>0</b></li>
+                        </ul>
+                    </li>
+                    <li style="margin-bottom: 0.5rem;">
+                        Tambahkan pengecualian situs:<br>
+                        <i>Settings → Privacy & Security → Permissions</i>
+                        <ul style="list-style-type: disc; padding-left: 1rem; font-size: 0.8rem; color: rgba(200, 200, 200, 0.9);">
+                            <li>Izinkan autoplay: <b>https://files.catbox.moe</b></li>
+                            <li>Izinkan mixed content (konten campuran)</li>
+                        </ul>
+                    </li>
+                    <li style="margin-bottom: 0.5rem;">Jika gambar/video ❗ (broken): Klik icon gembok/tanda seru di address bar → <b>"Allow insecure content"</b></li>
+                    <li>Refresh halaman (CTRL+F5)</li>
+                </ol>
+            </div>
+            <div class="form-actions" style="justify-content: center; margin-top: 1.5rem;">
+                <button onclick="document.getElementById('help-modal').style.display = 'none'" class="btn-lava">Mengerti</button>
+            </div>
         </div>
     </div>
 
@@ -1199,6 +1269,8 @@
             let portals = [];
             let onConfirmCallback = null;
             let currentGeneratedUrl = "";
+            let redirectTimer;
+            let countdownInterval;
 
             // --- PROFESSIONAL NOTIFICATION SYSTEM ---
             window.showNotification = function(title, message, type = 'success') {
@@ -1417,16 +1489,53 @@
                 
                 // Simple Base64 check
                 if (btoa(input) === portal.password) {
-                    window.showNotification("🔓 Akses diberikan", "Password benar. Portal dibuka.", "success");
-                    window.open(portal.url, '_blank');
                     closePasswordModal();
+                    window.showNotification("Berhasil!", "Sandi benar. Mengarahkan ke portal...", "success");
+                    showSuccessModal(portal.url);
                 } else {
-                    window.showNotification("❌ Ditolak", "Sandi salah! Coba lagi.", "error");
-                    // Shake animation optional here
+                    window.showNotification("Salah!", "Password tidak cocok. Coba lagi.", "error");
                     const inputField = document.getElementById('unlock-input');
                     inputField.style.borderColor = 'var(--error-red)';
                     setTimeout(() => inputField.style.borderColor = 'rgba(0, 200, 224, 0.4)', 500);
                 }
+            }
+
+            window.showSuccessModal = function(url) {
+                const modal = document.getElementById('success-modal');
+                const countdownText = document.getElementById('countdown-text');
+                const btnLanjut = document.getElementById('btn-lanjut');
+                
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+                
+                let timeLeft = 5;
+                countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
+                
+                // Set target URL globally or via closure
+                const doRedirect = () => {
+                    clearInterval(countdownInterval);
+                    clearTimeout(redirectTimer);
+                    window.open(url, '_blank');
+                    modal.classList.add('hidden');
+                    modal.style.display = 'none';
+                };
+
+                // Clear existing timers if any
+                if (redirectTimer) clearTimeout(redirectTimer);
+                if (countdownInterval) clearInterval(countdownInterval);
+
+                // Auto redirect timer
+                redirectTimer = setTimeout(doRedirect, 5000);
+
+                // Countdown interval
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
+                    if (timeLeft <= 0) clearInterval(countdownInterval);
+                }, 1000);
+
+                // Button click
+                btnLanjut.onclick = doRedirect;
             }
 
             function handlePortalFormSubmit(e) { 
@@ -1913,6 +2022,11 @@
             window.openWaLink = function() {
                 const url = document.getElementById("wa-result-link").value;
                 if(url) window.open(url, '_blank');
+            }
+
+            window.showHelpModal = function() {
+                document.getElementById('help-modal').style.display = 'flex';
+                if (mobileMenu.classList.contains('open')) closeMobileMenu();
             }
 
             initPortalApp();
