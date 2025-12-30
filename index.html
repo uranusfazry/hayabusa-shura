@@ -1344,52 +1344,13 @@
                 // Simple Base64 check
                 if (btoa(input) === portal.password) {
                     closePasswordModal();
-                    window.showNotification("Berhasil!", "Sandi benar. Mengarahkan ke portal...", "success");
-                    showSuccessModal(portal.url);
+                    window.open(portal.url, '_blank');
                 } else {
                     window.showNotification("Salah!", "Password tidak cocok. Coba lagi.", "error");
                     const inputField = document.getElementById('unlock-input');
                     inputField.style.borderColor = 'var(--error-red)';
                     setTimeout(() => inputField.style.borderColor = 'rgba(0, 200, 224, 0.4)', 500);
                 }
-            }
-
-            window.showSuccessModal = function(url) {
-                const modal = document.getElementById('success-modal');
-                const countdownText = document.getElementById('countdown-text');
-                const btnLanjut = document.getElementById('btn-lanjut');
-                
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
-                
-                let timeLeft = 5;
-                countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
-                
-                // Set target URL globally or via closure
-                const doRedirect = () => {
-                    clearInterval(countdownInterval);
-                    clearTimeout(redirectTimer);
-                    window.open(url, '_blank');
-                    modal.classList.add('hidden');
-                    modal.style.display = 'none';
-                };
-
-                // Clear existing timers if any
-                if (redirectTimer) clearTimeout(redirectTimer);
-                if (countdownInterval) clearInterval(countdownInterval);
-
-                // Auto redirect timer
-                redirectTimer = setTimeout(doRedirect, 5000);
-
-                // Countdown interval
-                countdownInterval = setInterval(() => {
-                    timeLeft--;
-                    countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
-                    if (timeLeft <= 0) clearInterval(countdownInterval);
-                }, 1000);
-
-                // Button click
-                btnLanjut.onclick = doRedirect;
             }
 
             function handlePortalFormSubmit(e) { 
