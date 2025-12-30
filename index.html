@@ -1495,8 +1495,8 @@
                 // Simple Base64 check
                 if (btoa(input) === portal.password) {
                     closePasswordModal();
-                    window.showNotification("Berhasil!", "Sandi benar. Mengarahkan ke portal...", "success");
-                    showSuccessModal(portal.url);
+                    // PERUBAHAN: Langsung buka link tanpa notifikasi atau popup modal
+                    window.open(portal.url, '_blank');
                 } else {
                     window.showNotification("Salah!", "Password tidak cocok. Coba lagi.", "error");
                     const inputField = document.getElementById('unlock-input');
