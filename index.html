@@ -1001,27 +1001,6 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="success-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
-        <div class="modal-content" style="text-align: center; border-color: var(--success-green);">
-            <div style="font-size: 3rem; color: var(--success-green); margin-bottom: 1rem;">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h2 class="font-cinzel" style="color: var(--success-green); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">🔓 Akses Diterima!</h2>
-            <p style="margin-bottom: 1rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
-                Sandi benar. Kamu akan diarahkan ke portal...
-            </p>
-            <p id="countdown-text" style="font-size: 0.85rem; color: var(--gold); margin-bottom: 1.5rem; font-style: italic;">
-                Otomatis masuk dalam 5 detik...
-            </p>
-            <div style="display: flex; justify-content: center;">
-                <button id="btn-lanjut" class="btn-lava" style="background: var(--success-green); border-color: var(--success-green); color: #000;">
-                    Lanjut Sekarang
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- WhatsApp Link Modal (IMPROVED) -->
     <div id="whatsapp-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
         <div class="modal-content">
@@ -1220,8 +1199,6 @@
             let portals = [];
             let onConfirmCallback = null;
             let currentGeneratedUrl = "";
-            let redirectTimer;
-            let countdownInterval;
 
             // --- PROFESSIONAL NOTIFICATION SYSTEM ---
             window.showNotification = function(title, message, type = 'success') {
@@ -1440,53 +1417,16 @@
                 
                 // Simple Base64 check
                 if (btoa(input) === portal.password) {
+                    window.showNotification("🔓 Akses diberikan", "Password benar. Portal dibuka.", "success");
+                    window.open(portal.url, '_blank');
                     closePasswordModal();
-                    window.showNotification("Berhasil!", "Sandi benar. Mengarahkan ke portal...", "success");
-                    showSuccessModal(portal.url);
                 } else {
-                    window.showNotification("Salah!", "Password tidak cocok. Coba lagi.", "error");
+                    window.showNotification("❌ Ditolak", "Sandi salah! Coba lagi.", "error");
+                    // Shake animation optional here
                     const inputField = document.getElementById('unlock-input');
                     inputField.style.borderColor = 'var(--error-red)';
                     setTimeout(() => inputField.style.borderColor = 'rgba(0, 200, 224, 0.4)', 500);
                 }
-            }
-
-            window.showSuccessModal = function(url) {
-                const modal = document.getElementById('success-modal');
-                const countdownText = document.getElementById('countdown-text');
-                const btnLanjut = document.getElementById('btn-lanjut');
-                
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
-                
-                let timeLeft = 5;
-                countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
-                
-                // Set target URL globally or via closure
-                const doRedirect = () => {
-                    clearInterval(countdownInterval);
-                    clearTimeout(redirectTimer);
-                    window.open(url, '_blank');
-                    modal.classList.add('hidden');
-                    modal.style.display = 'none';
-                };
-
-                // Clear existing timers if any
-                if (redirectTimer) clearTimeout(redirectTimer);
-                if (countdownInterval) clearInterval(countdownInterval);
-
-                // Auto redirect timer
-                redirectTimer = setTimeout(doRedirect, 5000);
-
-                // Countdown interval
-                countdownInterval = setInterval(() => {
-                    timeLeft--;
-                    countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
-                    if (timeLeft <= 0) clearInterval(countdownInterval);
-                }, 1000);
-
-                // Button click
-                btnLanjut.onclick = doRedirect;
             }
 
             function handlePortalFormSubmit(e) { 
