@@ -143,12 +143,11 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
             
             position: fixed !important;
-            top: 0 !important;
+            top: 0;
             left: 0;
-            right: 0;
             width: 100%;
             z-index: 999999;
-            transform: translateZ(0);
+            transform: translate3d(0,0,0);
             will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
@@ -2024,33 +2023,25 @@
     </script>
 
     <script>
-        // === ANTI ADDRESS BAR CHROME / SAFARI JUMPING SCRIPT ===
-        (function() {
+        (function(){
             const navbar = document.querySelector('.navbar');
-            
-            function fixNavbar() {
-                const vv = window.visualViewport;
-                if (!vv) return;
-                
-                // Kunci posisi persis di ujung atas viewport visual pengguna
-                navbar.style.top = vv.offsetTop + 'px';
+
+            function updateNavbar(){
+                if(!window.visualViewport)
+                    return;
+
+                navbar.style.top = window.visualViewport.offsetTop + 'px';
             }
 
-            fixNavbar();
+            updateNavbar();
 
             if (window.visualViewport) {
-                window.visualViewport.addEventListener('resize', fixNavbar);
-                window.visualViewport.addEventListener('scroll', fixNavbar);
+                window.visualViewport.addEventListener('resize', updateNavbar);
+                window.visualViewport.addEventListener('scroll', updateNavbar);
             }
 
-            window.addEventListener('orientationchange', fixNavbar);
+            window.addEventListener('orientationchange', updateNavbar);
         })();
-
-        // === FORCE REFRESH SAAT SCROLL (HARDWARE ACCELERATION) ===
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if(navbar) navbar.style.transform = 'translateZ(0)';
-        }, { passive: true });
     </script>
 </body>
 </html>
