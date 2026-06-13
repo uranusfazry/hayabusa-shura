@@ -124,9 +124,9 @@
         .gold-text { color: var(--gold); }
         .lava-text { color: var(--gold); }
 
-        /* === 3. RUANG UNTUK NAVBAR STICKY === */
+        /* === 3. RUANG UNTUK NAVBAR === */
         main { 
-            padding-top: 30px; 
+            padding-top: 110px; 
             padding-bottom: 40px;
             display: flex;
             flex-direction: column;
@@ -134,7 +134,7 @@
             flex-grow: 1;
         }
 
-        /* === 4. NAVBAR STICKY STABIL === */
+        /* === 4. NAVBAR STABIL ANTI BROWSER JUMPING === */
         .navbar {
             background: rgba(11, 14, 49, 0.9);
             backdrop-filter: blur(15px);
@@ -142,15 +142,17 @@
             border-bottom: 2px solid rgba(255, 93, 216, 0.3);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
             
-            position: sticky;
-            top: 0;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0;
+            right: 0;
             width: 100%;
-            z-index: 99999;
-            transform: none !important;
-            transition: none !important;
-            will-change: auto;
+            z-index: 999999;
+            transform: translateZ(0);
+            will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+            padding-top: env(safe-area-inset-top);
         }
 
         .navbar .container > div {
@@ -581,7 +583,7 @@
         /* === 5. NOTIFIKASI OFFSET YANG BENAR === */
         .notif-container {
             position: fixed; 
-            top: 95px; 
+            top: calc(90px + env(safe-area-inset-top)); 
             right: 20px; 
             z-index: 100000;
             display: flex; 
@@ -592,7 +594,7 @@
 
         @media (orientation: landscape) {
             .notif-container {
-                top: 105px;
+                top: calc(105px + env(safe-area-inset-top));
                 right: 20px;
             }
         }
@@ -683,7 +685,7 @@
             .notif-container { 
                 left: 50%;
                 right: auto;
-                top: 95px;
+                top: calc(95px + env(safe-area-inset-top));
                 bottom: auto;
                 transform: translateX(-50%);
                 width: 100%;
@@ -2017,21 +2019,38 @@
                 }
             });
 
-            // --- AUTO OFFSET NAVBAR TOAST ---
-            function updateToastPosition() {
-                const navbar = document.querySelector(".navbar");
-                const toast = document.querySelector(".notif-container");
-                if (!navbar || !toast) return;
-
-                const navbarHeight = navbar.offsetHeight;
-                toast.style.top = `${navbarHeight + 15}px`;
-            }
-
-            window.addEventListener("resize", updateToastPosition);
-            updateToastPosition();
-
             initPortalApp();
         });
+    </script>
+
+    <script>
+        // === ANTI ADDRESS BAR CHROME / SAFARI JUMPING SCRIPT ===
+        (function() {
+            const navbar = document.querySelector('.navbar');
+            
+            function fixNavbar() {
+                const vv = window.visualViewport;
+                if (!vv) return;
+                
+                // Kunci posisi persis di ujung atas viewport visual pengguna
+                navbar.style.top = vv.offsetTop + 'px';
+            }
+
+            fixNavbar();
+
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', fixNavbar);
+                window.visualViewport.addEventListener('scroll', fixNavbar);
+            }
+
+            window.addEventListener('orientationchange', fixNavbar);
+        })();
+
+        // === FORCE REFRESH SAAT SCROLL (HARDWARE ACCELERATION) ===
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if(navbar) navbar.style.transform = 'translateZ(0)';
+        }, { passive: true });
     </script>
 </body>
 </html>
