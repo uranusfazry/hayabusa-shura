@@ -37,6 +37,7 @@
             --success-green: #00e0b8;   /* Tealish green for success */
             --error-red: #ff3b3b;       /* Bright red for errors */
             --warning-yellow: #ffd700;  /* Yellow for warning */
+            --app-height: 100vh;        /* Default fallback */
         }
 
         /* Reset & Base */
@@ -47,9 +48,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html {
+        /* === PERBAIKAN VIEWPORT (NATIVE APP FEEL) === */
+        html, body {
+            width: 100%;
             height: 100%;
-            overflow-x: hidden;
+            overflow: hidden;
             overscroll-behavior: none;
         }
 
@@ -57,15 +60,20 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(180deg, var(--dark-stone) 0%, var(--deep-magma) 100%);
             color: #fff;
-            min-height: 100vh; /* Fallback browser lama */
-            min-height: 100dvh; /* Fallback mobile modern (Dynamic Viewport) */
-            min-height: calc(var(--vh, 1vh) * 100); /* Anti Layout Jump */
-            overflow-x: hidden;
+            height: var(--app-height); /* Mengikuti tinggi JS */
             position: relative;
-            display: flex;
-            flex-direction: column;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+
+        #app {
+            position: fixed;
+            inset: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Background Effects */
@@ -219,8 +227,8 @@
             background: linear-gradient(135deg, var(--lava-orange), var(--flame-red));
             border: 2px solid var(--gold);
             border-radius: 8px;
-            padding: 0.5rem 1.2rem; /* Reduced padding */
-            font-size: 0.8rem; /* Smaller Font */
+            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -252,8 +260,8 @@
             background: rgba(0, 200, 224, 0.1);
             border: 2px solid rgba(0, 200, 224, 0.4);
             border-radius: 8px;
-            padding: 0.5rem 1.2rem; /* Reduced Padding */
-            font-size: 0.8rem; /* Smaller Font */
+            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -267,7 +275,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
-        /* === PERBAIKAN GRID PORTAL DI SINI === */
+        /* Grid Portal */
         #portals-grid {
             display: grid;
             gap: 1.5rem;
@@ -417,7 +425,7 @@
             .profile-separator { width: 80px; }
         }
 
-        /* Modals & Inputs - OPTIMIZED FOR MOBILE PROPORTIONS */
+        /* Modals & Inputs */
         .modal-overlay {
             background: rgba(11, 14, 49, 0.85);
             backdrop-filter: blur(12px);
@@ -468,7 +476,6 @@
             to { transform: translateY(0) scale(1); opacity: 1; }
         }
 
-        /* Form Hierarchy & Proportions */
         .modal-content h2 {
             font-size: 1.25rem !important; 
             margin-bottom: 1.25rem !important;
@@ -538,7 +545,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Scrollbar (Disembunyikan agar terasa seperti Native App) */
+        /* Scrollbar */
         ::-webkit-scrollbar { 
             display: none; 
             width: 0;
@@ -546,8 +553,8 @@
         }
         
         html {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         .logo-pulse { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
@@ -562,7 +569,7 @@
             transition: all 0.5s ease-in-out;
         }
 
-        /* === SISTEM NOTIFIKASI PROFESIONAL BARU === */
+        /* Notifikasi */
         .notif-container {
             position: fixed; 
             top: 20px; 
@@ -730,7 +737,7 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        /* Reveal Buttons for Hidden Content */
+        /* Reveal Buttons */
         .reveal-btn {
             width: 100%; padding: 0.75rem 1.25rem; 
             background: rgba(11, 14, 49, 0.6); 
@@ -755,7 +762,6 @@
 
         .reveal-btn:active { transform: translateY(0); }
            
-        /* Modal Typography Hierarchy (Shared) */
         .modal-title-custom {
             font-size: 1.25rem; 
             margin-bottom: 0.75rem; 
@@ -778,7 +784,6 @@
             margin-top: 1rem; 
         }
 
-        /* Badge Style */
         .shortener-badge {
             background: rgba(0, 200, 224, 0.1);
             border: 1px solid var(--gold);
@@ -788,7 +793,6 @@
             display: inline-block; margin: 0 4px;
         }
 
-        /* Mobile Optimization */
         @media (max-width: 480px) {
             .modal-content {
                 padding: 1.5rem 1.25rem !important; 
@@ -799,11 +803,6 @@
             .modal-desc-custom { font-size: 0.8rem; margin-bottom: 1.25rem; }
             .reveal-btn { padding: 0.7rem 1rem; font-size: 0.8rem; }
             .btn-lava, .btn-secondary { padding: 0.5rem 1rem; font-size: 0.75rem; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         /* === TIKTOK SWIPE / FOCUS MODE === */
@@ -847,15 +846,8 @@
             pointer-events: none;
         }
 
-        html.focus-mode,
-        body.focus-mode {
+        body.focus-mode #app {
             overflow: hidden !important;
-        }
-
-        body.focus-mode {
-            position: fixed;
-            width: 100%;
-            height: 100%;
         }
 
         body.focus-mode #bg-container {
@@ -878,335 +870,340 @@
 </head>
 <body>
 
-    <!-- Background -->
-    <div id="bg-container">
-        <picture>
-            <source media="(orientation: portrait)" srcset="https://files.catbox.moe/o20nyy.webp">
-            <source media="(orientation: landscape)" srcset="https://files.catbox.moe/fexa8f.webp">
-            <img id="bg-image" class="bg-media" src="https://files.catbox.moe/fexa8f.webp" alt="Hayabusa Shura Background" crossorigin="anonymous">
-        </picture>
-    </div>
-    <canvas id="particle-canvas"></canvas>
+    <!-- BUNGKUS SELURUH KONTEN DI DALAM DIV APP FIXED -->
+    <div id="app">
+        
+        <!-- Background -->
+        <div id="bg-container">
+            <picture>
+                <source media="(orientation: portrait)" srcset="https://files.catbox.moe/o20nyy.webp">
+                <source media="(orientation: landscape)" srcset="https://files.catbox.moe/fexa8f.webp">
+                <img id="bg-image" class="bg-media" src="https://files.catbox.moe/fexa8f.webp" alt="Hayabusa Shura Background" crossorigin="anonymous">
+            </picture>
+        </div>
+        <canvas id="particle-canvas"></canvas>
 
-    <!-- Notification Container -->
-    <div id="notif-container" class="notif-container"></div>
+        <!-- Notification Container -->
+        <div id="notif-container" class="notif-container"></div>
 
-    <!-- Navbar -->
-    <nav class="navbar fixed content-layer">
-        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <!-- Logo -->
-                <div id="logo-container" style="display: flex; align-items: center; cursor: pointer; user-select: none;">
-                    <img src="https://files.catbox.moe/oyk6sx.png" alt="Hayabusa Shura Logo" class="logo-pulse" style="height: 50px; width: auto; border-radius: 50%;" draggable="false" crossorigin="anonymous">
-                    <span class="font-cinzel gold-text" style="font-weight: 700; font-size: 1.25rem; letter-spacing: 0.05em; margin-left: 1rem;">MLBB HAYABUSA</span>
-                </div>
+        <!-- Navbar -->
+        <nav class="navbar fixed content-layer">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <!-- Logo -->
+                    <div id="logo-container" style="display: flex; align-items: center; cursor: pointer; user-select: none;">
+                        <img src="https://files.catbox.moe/oyk6sx.png" alt="Hayabusa Shura Logo" class="logo-pulse" style="height: 50px; width: auto; border-radius: 50%;" draggable="false" crossorigin="anonymous">
+                        <span class="font-cinzel gold-text" style="font-weight: 700; font-size: 1.25rem; letter-spacing: 0.05em; margin-left: 1rem;">MLBB HAYABUSA</span>
+                    </div>
 
-                <!-- Desktop Nav -->
-                <div style="display: none;" class="desktop-nav">
-                    <div class="nav-item relative group" style="display: inline-block; position: relative;">
-                        <button class="flame-text" style="display: flex; align-items: center; gap: 0.5rem; background: none; border: none; cursor: pointer; font-family: 'Cinzel', serif; font-size: 0.875rem; text-transform: uppercase;">
+                    <!-- Desktop Nav -->
+                    <div style="display: none;" class="desktop-nav">
+                        <div class="nav-item relative group" style="display: inline-block; position: relative;">
+                            <button class="flame-text" style="display: flex; align-items: center; gap: 0.5rem; background: none; border: none; cursor: pointer; font-family: 'Cinzel', serif; font-size: 0.875rem; text-transform: uppercase;">
+                                <i class="fas fa-moon"></i>
+                                <span>Forge</span>
+                                <i class="fas fa-chevron-down" style="font-size: 0.75rem; transition: transform 0.3s;"></i>
+                            </button>
+                            <div class="dropdown" style="position: absolute; right: 0; width: 320px; padding: 1.5rem; margin-top: 0.75rem;">
+                                <h3 class="font-cinzel" style="font-size: 0.875rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Craft Portal</h3>
+                                <button onclick="showAddLinkModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                                    <i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Tambahkan Portal
+                                </button>
+
+                                <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Data Vault</h3>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                                    <button onclick="importData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
+                                    <button onclick="backupData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
+                                </div>
+                                
+                                <button onclick="generateSmartLink()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-top: 0.75rem;">
+                                    <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
+                                </button>
+                                
+                                <!-- NEW DESKTOP BUTTON -->
+                                <button onclick="showWhatsAppModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-top: 0.75rem;">
+                                    <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
+                                </button>
+
+                                <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Purge</h3>
+                                <button onclick="showConfirmationModal('Yakin ingin mereset semua data?', resetAllSettings)" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
+                                    <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="mobile-nav-toggle">
+                        <button id="mobile-menu-button" class="flame-text" style="background: none; border: none; font-size: 2rem; cursor: pointer; outline: none;">
                             <i class="fas fa-moon"></i>
-                            <span>Forge</span>
-                            <i class="fas fa-chevron-down" style="font-size: 0.75rem; transition: transform 0.3s;"></i>
                         </button>
-                        <div class="dropdown" style="position: absolute; right: 0; width: 320px; padding: 1.5rem; margin-top: 0.75rem;">
-                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Craft Portal</h3>
-                            <button onclick="showAddLinkModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
-                                <i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Tambahkan Portal
-                            </button>
-
-                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Data Vault</h3>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
-                                <button onclick="importData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
-                                <button onclick="backupData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
-                            </div>
-                            
-                            <button onclick="generateSmartLink()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-top: 0.75rem;">
-                                <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
-                            </button>
-                            
-                            <!-- NEW DESKTOP BUTTON -->
-                            <button onclick="showWhatsAppModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-top: 0.75rem;">
-                                <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
-                            </button>
-
-                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Purge</h3>
-                            <button onclick="showConfirmationModal('Yakin ingin mereset semua data?', resetAllSettings)" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
-                                <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="mobile-nav-toggle">
-                    <button id="mobile-menu-button" class="flame-text" style="background: none; border: none; font-size: 2rem; cursor: pointer; outline: none;">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden" onclick="closeMobileMenu()"></div>
-    <div id="mobile-menu">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid rgba(0, 200, 224, 0.3);">
-            <span class="font-cinzel" style="font-size: 1.125rem; color: var(--gold);">CRAFT</span>
-            <button onclick="closeMobileMenu()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gold);">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <div style="flex-grow: 1; overflow-y: auto;">
-            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Portal</h3>
-            <button onclick="showAddLinkModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
-                <i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Tambah Portal
-            </button>
-
-            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Data</h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 0.75rem;">
-                <button onclick="importData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
-                <button onclick="backupData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
-            </div>
-            
-            <button onclick="generateSmartLink(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
-                <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
-            </button>
-
-            <button onclick="showWhatsAppModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
-                <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
-            </button>
-
-            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">System</h3>
-            <button onclick="showConfirmationModal('Yakin ingin mereset semua data?', resetAllSettings); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
-                <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
-            </button>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="container content-layer" style="padding-top: 110px; padding-bottom: 2rem;">
-        <header class="profile-container">
-            <div class="profile">
-                <video src="https://files.catbox.moe/gs4lq5.mp4" alt="Profile Video" autoplay loop muted playsinline
-                style="object-position: 50% 25%; will-change: transform;"></video>
-            </div>
-        </header>
-
-        <div id="portals-grid"></div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="content-layer" style="text-align: center; color: #fff;">
-        <p class="font-cinzel" style="font-size: 0.875rem; opacity: 0.85;">© 2026 Created by SHURA | All Rights Reserved</p>
-        <p class="gold-text font-cinzel" style="font-size: 0.75rem; margin-top: 0.5rem;">Forged by Uranus Support Technology</p>
-    </footer>
-
-    <!-- Add Portal Modal -->
-    <div id="add-portal-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 50;">
-        <div class="modal-content">
-            <button onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="modal-close-btn">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 class="font-cinzel gold-text">Craft New Portal</h2>
-            <form id="portal-form">
-                <div>
-                    <label for="portal-name" class="font-cinzel gold-text">Portal Name</label>
-                    <input type="text" id="portal-name" placeholder="Enter portal name" required>
-                </div>
-                <div>
-                    <label for="portal-url" class="font-cinzel gold-text">Destination URL</label>
-                    <input type="url" id="portal-url" placeholder="https://your-link.com" required>
-                </div>
-                <div>
-                    <label for="portal-password" class="font-cinzel gold-text"><i class="fas fa-lock" style="margin-right: 4px;"></i> Protect with Password (Optional)</label>
-                    <input type="password" id="portal-password" placeholder="Leave empty for public access">
-                </div>
-                <div>
-                    <label for="portal-icon" class="font-cinzel gold-text">Portal Icon</label>
-                    <select id="portal-icon" style="appearance: none;">
-                        <option value="fas fa-mask">🎭 Mask</option>
-                        <option value="fas fa-crosshairs">🎯 Target</option>
-                        <option value="fas fa-dragon">🐉 Dragon</option>
-                        <option value="fas fa-fan">🌀 Fan</option>
-                        <option value="fas fa-star">⭐ Star</option>
-                        <option value="fas fa-heart">❤️ Heart</option>
-                        <option value="fas fa-bolt">⚡ Bolt</option>
-                        <option value="fab fa-whatsapp">💬 WhatsApp</option>
-                        <option value="fab fa-youtube">▶️ YouTube</option>
-                        <option value="fab fa-instagram">📸 Instagram</option>
-                        <option value="fab fa-tiktok">🎵 TikTok</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="portal-description" class="font-cinzel gold-text">Description</label>
-                    <textarea id="portal-description" rows="2" placeholder="Brief description..." style="resize: vertical;"></textarea>
-                </div>
-                <div>
-                    <label class="font-cinzel gold-text">Portal Theme</label>
-                    <div style="display: flex; justify-content: space-around; padding-top: 0.5rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
-                            <input type="radio" name="portal-color" value="#4a0072" style="width: 1rem; height: 1rem; accent-color: var(--lava-orange);" checked>
-                            <span class="font-cinzel" style="font-weight: 700; color: var(--lava-orange); font-size: 0.8rem;">Purple</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
-                            <input type="radio" name="portal-color" value="#ce00a7" style="width: 1rem; height: 1rem; accent-color: var(--flame-red);">
-                            <span class="font-cinzel" style="font-weight: 700; color: var(--flame-red); font-size: 0.8rem;">Magenta</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
-                            <input type="radio" name="portal-color" value="#00c8e0" style="width: 1rem; height: 1rem; accent-color: var(--gold);">
-                            <span class="font-cinzel" style="font-weight: 700; color: var(--gold); font-size: 0.8rem;">Teal</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="button" onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="btn-secondary">Cancel</button>
-                    <button type="submit" class="btn-lava">Craft</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Password Unlock Modal -->
-    <div id="password-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
-        <div class="modal-content" style="text-align: center;">
-            <div style="font-size: 2.5rem; color: var(--gold); margin-bottom: 0.5rem;">
-                <i class="fas fa-lock"></i>
-            </div>
-            <h2 class="font-cinzel gold-text">Portal Locked</h2>
-            <p class="modal-desc-custom" style="margin-bottom: 1rem;">Portal ini dilindungi sandi. Masukkan password untuk melanjutkan.</p>
-            
-            <form onsubmit="event.preventDefault(); submitPassword();">
-                <input type="password" id="unlock-input" placeholder="Masukkan password..." style="text-align: center; margin-bottom: 1.5rem;" required>
-                <div class="form-actions" style="justify-content: center;">
-                    <button type="button" onclick="closePasswordModal()" class="btn-secondary">Batal</button>
-                    <button type="submit" class="btn-lava">Masuk</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- WhatsApp Link Modal -->
-    <div id="whatsapp-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
-        <div class="modal-content">
-            <button onclick="document.getElementById('whatsapp-link-modal').style.display = 'none'" class="modal-close-btn">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 class="font-cinzel gold-text">Generate WhatsApp Link</h2>
-            <form id="wa-form" onsubmit="event.preventDefault(); generateWhatsAppLink();">
-                <div>
-                    <label class="font-cinzel gold-text">Nomor WhatsApp</label>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <select id="wa-country-code" style="width: 35%; min-width: 100px; background: rgba(11, 14, 49, 0.9); border: 2px solid rgba(0, 200, 224, 0.4); color: white; border-radius: 6px; padding: 0.5rem;"></select>
-                        <input type="tel" id="wa-number" placeholder="8123456789" style="flex-grow: 1;" required>
-                    </div>
-                    <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 4px; font-style: italic;">*Otomatis menghapus angka 0 di depan.</p>
-                </div>
-                <div>
-                    <label for="wa-message" class="font-cinzel gold-text">Pesan</label>
-                    <textarea id="wa-message" rows="3" placeholder="Halo, saya ingin memesan..." style="resize: vertical;"></textarea>
-                </div>
-                <div class="form-actions" style="margin-top: 1rem;">
-                    <button type="submit" class="btn-lava" style="width: 100%;">🚀 Generate Link</button>
-                </div>
-            </form>
-            <div id="wa-result-container" class="hidden-content" style="margin-top: 1.5rem; border-top: 1px solid rgba(0, 200, 224, 0.3); padding-top: 1rem;">
-                <label class="font-cinzel gold-text" style="font-size: 0.8rem;">Link Result</label>
-                <input type="text" id="wa-result-link" readonly style="background: rgba(0, 0, 0, 0.3); color: var(--gold); border: 1px solid var(--gold); margin-bottom: 0.75rem;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                    <button onclick="copyWaLink()" class="btn-secondary" style="font-size: 0.75rem; padding: 0.5rem;"><i class="fas fa-copy"></i> Copy Link</button>
-                    <button onclick="openWaLink()" class="btn-lava" style="font-size: 0.75rem; padding: 0.5rem;"><i class="fab fa-whatsapp"></i> Buka WA</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Smart Link Modal -->
-    <div id="smart-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
-        <div class="modal-content">
-            <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" class="modal-close-btn">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 class="font-cinzel modal-title-custom">Smart Link Siap <span style="display:inline-block; margin-left: 0.1em;">🚀</span></h2>
-            <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
-
-            <div id="capacity-container" style="margin-bottom: 2.5rem; background: rgba(0,0,0,0.25); padding: 1.25rem 1.5rem; border-radius: 12px; border: 1px solid rgba(0, 200, 224, 0.15);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                    <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.05em;">Kapasitas Data</span>
-                    <span id="capacity-text" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: rgba(255,255,255,0.9);">0%</span>
-                </div>
-                <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
-                    <div id="capacity-bar" style="width: 0%; height: 100%; background: var(--success-green); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.6s ease; border-radius: 4px;"></div>
-                </div>
-                <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
-                    <span id="capacity-detail" style="font-size: 0.75rem; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif; letter-spacing: 0.02em;">Menghitung...</span>
-                </div>
-            </div>
-            
-            <div class="modal-actions">
-                <div style="width: 100%;">
-                    <button id="btn-show-link" onclick="revealLink()" class="reveal-btn">
-                        <i class="fas fa-eye"></i> Tampilkan Link
-                    </button>
-                    <div id="link-content" class="hidden-content">
-                        <input type="text" id="generated-smart-link" readonly style="background: rgba(0, 0, 0, 0.3); cursor: text; border: 1px solid var(--gold);">
-                        <div style="display: flex; justify-content: center; margin-top: 1rem;">
-                            <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fas fa-copy"></i> Copy Smart Link</button>
-                        </div>
-                    </div>
-                </div>
-                <div style="width: 100%;">
-                    <button id="btn-show-qr" onclick="revealQR()" class="reveal-btn">
-                        <i class="fas fa-qrcode"></i> Tampilkan QR Code
-                    </button>
-                    <div id="qr-content" class="hidden-content">
-                        <div id="qr-wrapper">
-                            <div class="qr-frame">
-                                <canvas id="qr-canvas-display"></canvas>
-                            </div>
-                            <button onclick="downloadHighResQR()" class="btn-download-4k">
-                                <i class="fas fa-download"></i> Unduh QR 4K
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </nav>
 
-    <!-- Limit Warning Modal -->
-    <div id="limit-warning-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
-        <div class="modal-content" style="text-align: center;">
-            <div style="font-size: 3rem; color: var(--gold); margin-bottom: 1rem;">
-                <i class="fas fa-exclamation-triangle"></i>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden" onclick="closeMobileMenu()"></div>
+        <div id="mobile-menu">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid rgba(0, 200, 224, 0.3);">
+                <span class="font-cinzel" style="font-size: 1.125rem; color: var(--gold);">CRAFT</span>
+                <button onclick="closeMobileMenu()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gold);">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <h2 class="font-cinzel flame-text" style="font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">Kapasitas Maksimal ⚠️</h2>
-            <p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
-                Data portal Anda (Judul, Deskripsi, Link) telah mencapai batas ukuran optimal untuk QR Code.
-                <br><br>
-                <strong class="gold-text" style="text-transform: uppercase; letter-spacing: 0.05em;">Solusi Profesional:</strong><br>
-                Mohon persingkat <b>Judul & Deskripsi</b>, atau gunakan <b>URL Shortener</b> untuk link yang panjang.
-            </p>
-            <div style="display: flex; justify-content: center;">
-                <button onclick="document.getElementById('limit-warning-modal').style.display='none'" class="btn-lava">
-                    Mengerti & Perbaiki
+
+            <div style="flex-grow: 1; overflow-y: auto;">
+                <h3 class="font-cinzel" style="font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Portal</h3>
+                <button onclick="showAddLinkModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                    <i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Tambah Portal
+                </button>
+
+                <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Data</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 0.75rem;">
+                    <button onclick="importData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
+                    <button onclick="backupData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
+                </div>
+                
+                <button onclick="generateSmartLink(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                    <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
+                </button>
+
+                <button onclick="showWhatsAppModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                    <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
+                </button>
+
+                <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">System</h3>
+                <button onclick="showConfirmationModal('Yakin ingin mereset semua data?', resetAllSettings); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                    <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
                 </button>
             </div>
         </div>
-    </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmation-modal" class="fixed inset-0 flex items-center justify-center hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
-        <div class="modal-content" style="text-align: center;">
-            <h2 class="font-cinzel flame-text" style="font-size: 1.25rem; margin-bottom: 1rem; font-weight: 700;">Konfirmasi Tindakan</h2>
-            <p id="confirmation-message" style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.9);">Apakah Anda yakin?</p>
-            <div style="display: flex; justify-content: center; gap: 1rem;">
-                <button id="confirm-cancel-btn" class="btn-secondary">Batal</button>
-                <button id="confirm-ok-btn" class="btn-lava">Konfirmasi</button>
+        <!-- Main Content -->
+        <main class="container content-layer" style="padding-top: 110px; padding-bottom: 2rem;">
+            <header class="profile-container">
+                <div class="profile">
+                    <video src="https://files.catbox.moe/gs4lq5.mp4" alt="Profile Video" autoplay loop muted playsinline
+                    style="object-position: 50% 25%; will-change: transform;"></video>
+                </div>
+            </header>
+
+            <div id="portals-grid"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="content-layer" style="text-align: center; color: #fff;">
+            <p class="font-cinzel" style="font-size: 0.875rem; opacity: 0.85;">© 2026 Created by SHURA | All Rights Reserved</p>
+            <p class="gold-text font-cinzel" style="font-size: 0.75rem; margin-top: 0.5rem;">Forged by Uranus Support Technology</p>
+        </footer>
+
+        <!-- Add Portal Modal -->
+        <div id="add-portal-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 50;">
+            <div class="modal-content">
+                <button onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="font-cinzel gold-text">Craft New Portal</h2>
+                <form id="portal-form">
+                    <div>
+                        <label for="portal-name" class="font-cinzel gold-text">Portal Name</label>
+                        <input type="text" id="portal-name" placeholder="Enter portal name" required>
+                    </div>
+                    <div>
+                        <label for="portal-url" class="font-cinzel gold-text">Destination URL</label>
+                        <input type="url" id="portal-url" placeholder="https://your-link.com" required>
+                    </div>
+                    <div>
+                        <label for="portal-password" class="font-cinzel gold-text"><i class="fas fa-lock" style="margin-right: 4px;"></i> Protect with Password (Optional)</label>
+                        <input type="password" id="portal-password" placeholder="Leave empty for public access">
+                    </div>
+                    <div>
+                        <label for="portal-icon" class="font-cinzel gold-text">Portal Icon</label>
+                        <select id="portal-icon" style="appearance: none;">
+                            <option value="fas fa-mask">🎭 Mask</option>
+                            <option value="fas fa-crosshairs">🎯 Target</option>
+                            <option value="fas fa-dragon">🐉 Dragon</option>
+                            <option value="fas fa-fan">🌀 Fan</option>
+                            <option value="fas fa-star">⭐ Star</option>
+                            <option value="fas fa-heart">❤️ Heart</option>
+                            <option value="fas fa-bolt">⚡ Bolt</option>
+                            <option value="fab fa-whatsapp">💬 WhatsApp</option>
+                            <option value="fab fa-youtube">▶️ YouTube</option>
+                            <option value="fab fa-instagram">📸 Instagram</option>
+                            <option value="fab fa-tiktok">🎵 TikTok</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="portal-description" class="font-cinzel gold-text">Description</label>
+                        <textarea id="portal-description" rows="2" placeholder="Brief description..." style="resize: vertical;"></textarea>
+                    </div>
+                    <div>
+                        <label class="font-cinzel gold-text">Portal Theme</label>
+                        <div style="display: flex; justify-content: space-around; padding-top: 0.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
+                                <input type="radio" name="portal-color" value="#4a0072" style="width: 1rem; height: 1rem; accent-color: var(--lava-orange);" checked>
+                                <span class="font-cinzel" style="font-weight: 700; color: var(--lava-orange); font-size: 0.8rem;">Purple</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
+                                <input type="radio" name="portal-color" value="#ce00a7" style="width: 1rem; height: 1rem; accent-color: var(--flame-red);">
+                                <span class="font-cinzel" style="font-weight: 700; color: var(--flame-red); font-size: 0.8rem;">Magenta</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
+                                <input type="radio" name="portal-color" value="#00c8e0" style="width: 1rem; height: 1rem; accent-color: var(--gold);">
+                                <span class="font-cinzel" style="font-weight: 700; color: var(--gold); font-size: 0.8rem;">Teal</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="btn-secondary">Cancel</button>
+                        <button type="submit" class="btn-lava">Craft</button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
+
+        <!-- Password Unlock Modal -->
+        <div id="password-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
+            <div class="modal-content" style="text-align: center;">
+                <div style="font-size: 2.5rem; color: var(--gold); margin-bottom: 0.5rem;">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2 class="font-cinzel gold-text">Portal Locked</h2>
+                <p class="modal-desc-custom" style="margin-bottom: 1rem;">Portal ini dilindungi sandi. Masukkan password untuk melanjutkan.</p>
+                
+                <form onsubmit="event.preventDefault(); submitPassword();">
+                    <input type="password" id="unlock-input" placeholder="Masukkan password..." style="text-align: center; margin-bottom: 1.5rem;" required>
+                    <div class="form-actions" style="justify-content: center;">
+                        <button type="button" onclick="closePasswordModal()" class="btn-secondary">Batal</button>
+                        <button type="submit" class="btn-lava">Masuk</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- WhatsApp Link Modal -->
+        <div id="whatsapp-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
+            <div class="modal-content">
+                <button onclick="document.getElementById('whatsapp-link-modal').style.display = 'none'" class="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="font-cinzel gold-text">Generate WhatsApp Link</h2>
+                <form id="wa-form" onsubmit="event.preventDefault(); generateWhatsAppLink();">
+                    <div>
+                        <label class="font-cinzel gold-text">Nomor WhatsApp</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <select id="wa-country-code" style="width: 35%; min-width: 100px; background: rgba(11, 14, 49, 0.9); border: 2px solid rgba(0, 200, 224, 0.4); color: white; border-radius: 6px; padding: 0.5rem;"></select>
+                            <input type="tel" id="wa-number" placeholder="8123456789" style="flex-grow: 1;" required>
+                        </div>
+                        <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 4px; font-style: italic;">*Otomatis menghapus angka 0 di depan.</p>
+                    </div>
+                    <div>
+                        <label for="wa-message" class="font-cinzel gold-text">Pesan</label>
+                        <textarea id="wa-message" rows="3" placeholder="Halo, saya ingin memesan..." style="resize: vertical;"></textarea>
+                    </div>
+                    <div class="form-actions" style="margin-top: 1rem;">
+                        <button type="submit" class="btn-lava" style="width: 100%;">🚀 Generate Link</button>
+                    </div>
+                </form>
+                <div id="wa-result-container" class="hidden-content" style="margin-top: 1.5rem; border-top: 1px solid rgba(0, 200, 224, 0.3); padding-top: 1rem;">
+                    <label class="font-cinzel gold-text" style="font-size: 0.8rem;">Link Result</label>
+                    <input type="text" id="wa-result-link" readonly style="background: rgba(0, 0, 0, 0.3); color: var(--gold); border: 1px solid var(--gold); margin-bottom: 0.75rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <button onclick="copyWaLink()" class="btn-secondary" style="font-size: 0.75rem; padding: 0.5rem;"><i class="fas fa-copy"></i> Copy Link</button>
+                        <button onclick="openWaLink()" class="btn-lava" style="font-size: 0.75rem; padding: 0.5rem;"><i class="fab fa-whatsapp"></i> Buka WA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Link Modal -->
+        <div id="smart-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
+            <div class="modal-content">
+                <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" class="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="font-cinzel modal-title-custom">Smart Link Siap <span style="display:inline-block; margin-left: 0.1em;">🚀</span></h2>
+                <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
+
+                <div id="capacity-container" style="margin-bottom: 2.5rem; background: rgba(0,0,0,0.25); padding: 1.25rem 1.5rem; border-radius: 12px; border: 1px solid rgba(0, 200, 224, 0.15);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.05em;">Kapasitas Data</span>
+                        <span id="capacity-text" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: rgba(255,255,255,0.9);">0%</span>
+                    </div>
+                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
+                        <div id="capacity-bar" style="width: 0%; height: 100%; background: var(--success-green); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.6s ease; border-radius: 4px;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
+                        <span id="capacity-detail" style="font-size: 0.75rem; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif; letter-spacing: 0.02em;">Menghitung...</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <div style="width: 100%;">
+                        <button id="btn-show-link" onclick="revealLink()" class="reveal-btn">
+                            <i class="fas fa-eye"></i> Tampilkan Link
+                        </button>
+                        <div id="link-content" class="hidden-content">
+                            <input type="text" id="generated-smart-link" readonly style="background: rgba(0, 0, 0, 0.3); cursor: text; border: 1px solid var(--gold);">
+                            <div style="display: flex; justify-content: center; margin-top: 1rem;">
+                                <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fas fa-copy"></i> Copy Smart Link</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;">
+                        <button id="btn-show-qr" onclick="revealQR()" class="reveal-btn">
+                            <i class="fas fa-qrcode"></i> Tampilkan QR Code
+                        </button>
+                        <div id="qr-content" class="hidden-content">
+                            <div id="qr-wrapper">
+                                <div class="qr-frame">
+                                    <canvas id="qr-canvas-display"></canvas>
+                                </div>
+                                <button onclick="downloadHighResQR()" class="btn-download-4k">
+                                    <i class="fas fa-download"></i> Unduh QR 4K
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Limit Warning Modal -->
+        <div id="limit-warning-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
+            <div class="modal-content" style="text-align: center;">
+                <div style="font-size: 3rem; color: var(--gold); margin-bottom: 1rem;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="font-cinzel flame-text" style="font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">Kapasitas Maksimal ⚠️</h2>
+                <p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
+                    Data portal Anda (Judul, Deskripsi, Link) telah mencapai batas ukuran optimal untuk QR Code.
+                    <br><br>
+                    <strong class="gold-text" style="text-transform: uppercase; letter-spacing: 0.05em;">Solusi Profesional:</strong><br>
+                    Mohon persingkat <b>Judul & Deskripsi</b>, atau gunakan <b>URL Shortener</b> untuk link yang panjang.
+                </p>
+                <div style="display: flex; justify-content: center;">
+                    <button onclick="document.getElementById('limit-warning-modal').style.display='none'" class="btn-lava">
+                        Mengerti & Perbaiki
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirmation-modal" class="fixed inset-0 flex items-center justify-center hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
+            <div class="modal-content" style="text-align: center;">
+                <h2 class="font-cinzel flame-text" style="font-size: 1.25rem; margin-bottom: 1rem; font-weight: 700;">Konfirmasi Tindakan</h2>
+                <p id="confirmation-message" style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.9);">Apakah Anda yakin?</p>
+                <div style="display: flex; justify-content: center; gap: 1rem;">
+                    <button id="confirm-cancel-btn" class="btn-secondary">Batal</button>
+                    <button id="confirm-ok-btn" class="btn-lava">Konfirmasi</button>
+                </div>
+            </div>
+        </div>
+        
+    </div> <!-- END BUNGKUSAN APP FIXED -->
 
     <input type="file" id="import-file-input" class="hidden" style="display: none;" accept=".zip,.txt,application/json">
 
@@ -1246,12 +1243,11 @@
                 const icons = { success: '✓', warning: '⚠', error: '✕', info: 'ℹ' };
                 const iconChar = icons[type] || 'ℹ';
 
-                // SISTEM ANTI SPAM (Cek apakah pesan sama persis sudah ada)
+                // SISTEM ANTI SPAM
                 if (activeToasts.has(message)) {
                     const existingData = activeToasts.get(message);
                     existingData.count += 1;
                     
-                    // Update jumlah "(3x)" pada UI
                     let countSpan = existingData.element.querySelector('.notif-count');
                     if (!countSpan) {
                         const titleEl = existingData.element.querySelector('.notif-title');
@@ -1264,19 +1260,16 @@
                     }
                     countSpan.textContent = `(${existingData.count}x)`;
                     
-                    // Reset timer & animasi bar
                     clearTimeout(existingData.timer);
                     const progress = existingData.element.querySelector('.notif-progress');
                     progress.style.animation = 'none';
-                    progress.offsetHeight; // trigger reflow
+                    progress.offsetHeight; 
                     progress.style.animation = `progressLinear ${duration}ms linear forwards`;
 
-                    // Reset timeout auto-close
                     existingData.timer = setTimeout(() => {
                         removeToast(existingData.element, message);
                     }, duration);
 
-                    // Efek mental halus (Bounce) untuk memberi tahu ada update
                     existingData.element.style.transform = 'scale(1.05)';
                     setTimeout(() => {
                         existingData.element.style.transform = '';
@@ -1294,7 +1287,6 @@
                     }
                 }
 
-                // Membuat elemen Toast baru
                 const toast = document.createElement('div');
                 toast.className = `notif-toast ${type}`;
                 toast.setAttribute('data-message', message);
@@ -1310,17 +1302,14 @@
 
                 notifContainer.appendChild(toast);
                 
-                // Animasi Masuk (Tunggu frame render siap)
                 requestAnimationFrame(() => {
                     toast.classList.add('show');
                 });
 
-                // Set Auto Close Timer
                 const timer = setTimeout(() => {
                     removeToast(toast, message);
                 }, duration);
 
-                // Daftarkan ke Map memori aktif
                 activeToasts.set(message, { element: toast, count: 1, timer: timer });
             };
 
@@ -1951,29 +1940,33 @@
                 if(url) window.open(url, '_blank');
             }
 
-            // --- TIKTOK SWIPE / FOCUS MODE LOGIC ---
+            // --- TIKTOK SWIPE / FOCUS MODE LOGIC (DIPERBARUI) ---
             let startX = 0;
             let touchStart = 0;
             let savedScrollY = 0;
 
             function enableFocusMode() {
                 if (document.body.classList.contains("focus-mode")) return; 
-                savedScrollY = window.scrollY;
+                
+                const appWrapper = document.getElementById('app');
+                savedScrollY = appWrapper.scrollTop; // Simpan scroll dari DIV APP
 
                 document.body.classList.add("focus-mode");
                 document.documentElement.classList.add("focus-mode");
-
-                document.body.style.top = `-${savedScrollY}px`;
+                
+                // Content diam di tempat karena overflow:hidden pada #app dikendalikan CSS
             }
 
             function disableFocusMode() {
                 if (!document.body.classList.contains("focus-mode")) return; 
+                
+                const appWrapper = document.getElementById('app');
+
                 document.body.classList.remove("focus-mode");
                 document.documentElement.classList.remove("focus-mode");
 
-                document.body.style.top = "";
-
-                window.scrollTo(0, savedScrollY);
+                // Kembalikan ke posisi scroll sebelumnya
+                appWrapper.scrollTop = savedScrollY;
             }
 
             document.addEventListener("mousedown", (e) => {
@@ -1982,12 +1975,8 @@
 
             document.addEventListener("mouseup", (e) => {
                 const diff = e.clientX - startX;
-                if (diff > 100) {
-                    enableFocusMode();
-                }
-                if (diff < -100) {
-                    disableFocusMode();
-                }
+                if (diff > 100) enableFocusMode();
+                if (diff < -100) disableFocusMode();
             });
 
             document.addEventListener("touchstart", (e) => {
@@ -1997,12 +1986,8 @@
             document.addEventListener("touchend", (e) => {
                 const touchEnd = e.changedTouches[0].clientX;
                 const diff = touchEnd - touchStart;
-                if (diff > 100) {
-                    enableFocusMode();
-                }
-                if (diff < -100) {
-                    disableFocusMode();
-                }
+                if (diff > 100) enableFocusMode();
+                if (diff < -100) disableFocusMode();
             });
 
             initPortalApp();
@@ -2010,18 +1995,18 @@
     </script>
 
     <script>
-        // Anti Layout Jumping Script
-        function setViewportHeight() {
+        // === VIEWPORT FIX JS (UPDATE) ===
+        function updateViewport(){
             document.documentElement.style.setProperty(
-                '--vh',
-                `${window.innerHeight * 0.01}px`
+                '--app-height',
+                `${window.innerHeight}px`
             );
         }
 
-        setViewportHeight();
+        updateViewport();
 
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', setViewportHeight);
+        window.addEventListener('resize', updateViewport);
+        window.addEventListener('orientationchange', updateViewport);
     </script>
 </body>
 </html>
