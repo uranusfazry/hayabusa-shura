@@ -82,19 +82,7 @@
             transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
         }
 
-        #bg-video { opacity: 1; z-index: 1; }
-        #bg-image { opacity: 0; z-index: 0; }
-
-        @media (min-width: 1024px) {
-            .bg-media {
-                width: 100vh;
-                height: 100vw;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) rotate(-90deg);
-            }
-        }
+        #bg-image { opacity: 1; z-index: 0; }
 
         #particle-canvas {
             position: fixed;
@@ -665,7 +653,6 @@
 
         /* Light Mode Override */
         body.light-mode #bg-image { opacity: 1 !important; filter: saturate(1.15); }
-        body.light-mode #bg-video { opacity: 0.35; z-index: 1; }
 
         /* QR Wrapper & Frame */
         #qr-wrapper {
@@ -789,10 +776,11 @@
 
     <!-- Background -->
     <div id="bg-container">
-        <video id="bg-video" class="bg-media" autoplay muted playsinline>
-            <source src="https://files.catbox.moe/gpwsaa.mp4" type="video/mp4">
-        </video>
-        <img id="bg-image" class="bg-media" src="https://files.catbox.moe/66jg0v.jpg" alt="Hayabusa Shura Background" crossorigin="anonymous">
+        <picture>
+            <source media="(orientation: portrait)" srcset="https://files.catbox.moe/o20nyy.webp">
+            <source media="(orientation: landscape)" srcset="https://files.catbox.moe/fexa8f.webp">
+            <img id="bg-image" class="bg-media" src="https://files.catbox.moe/fexa8f.webp" alt="Hayabusa Shura Background" crossorigin="anonymous">
+        </picture>
     </div>
     <canvas id="particle-canvas"></canvas>
 
@@ -1226,37 +1214,6 @@
             // --- KONFIGURASI BATAS DATA ---
             const MAX_QR_LENGTH = 2900; 
 
-            // --- VIDEO BACKGROUND LOGIC ---
-            let isVideoFinished = false;
-            const bgVideo = document.getElementById('bg-video');
-            const bgImage = document.getElementById('bg-image');
-
-            if (bgVideo && bgImage) {
-                const handleVideoEnd = () => {
-                    bgVideo.style.opacity = '0';
-                    if (!document.body.classList.contains('light-mode')) {
-                        bgImage.style.opacity = '0.45';
-                    }
-                    isVideoFinished = true;
-                };
-
-                const handleVideoError = (e) => {
-                    console.error("Video background failed:", e);
-                    handleVideoEnd();
-                };
-                
-                bgVideo.addEventListener('ended', handleVideoEnd);
-                bgVideo.addEventListener('error', handleVideoError);
-
-                const playPromise = bgVideo.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.warn("Autoplay blocked:", error);
-                        handleVideoEnd();
-                    });
-                }
-            }
-
             // --- DOM ELEMENTS ---
             const logoContainer = document.getElementById('logo-container');
             const portalsGrid = document.getElementById('portals-grid');
@@ -1384,9 +1341,7 @@
 
             function setupEventListeners() {
                 logoContainer.addEventListener('click', () => {
-                    if (!isVideoFinished) return;
                     document.body.classList.toggle('light-mode');
-                    if (!document.body.classList.contains('light-mode') && bgVideo.style.opacity === '0') bgImage.style.opacity = '0.45';
                     const mode = document.body.classList.contains('light-mode') ? 'Light Mode' : 'Shura Mode';
                     window.showNotification('Theme Changed', `Mode tampilan diubah ke ${mode}.`, 'success');
                 });
