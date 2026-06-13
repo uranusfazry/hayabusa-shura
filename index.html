@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Links | Uranus</title>
+    <title>MLBB Portal | Hayabusa Shura by Uranusfazry</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2728.png">
+      <!-- Favicon 😈 (versi PNG, pasti muncul) -->
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f608.png">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -20,25 +20,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
     <style>
-        /* Import Fonts - Inter only */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        /* Import Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
 
+        /* Color Variables re-themed for Hayabusa Shura */
         :root {
-            --primary: #2563EB;
-            --primary-hover: #1D4ED8;
-            --primary-light: #EFF6FF;
-            --ink: #0F172A;
-            --muted: #64748B;
-            --muted-light: #94A3B8;
-            --border: #E5E7EB;
-            --surface: #FFFFFF;
-            --bg-top: #FFFFFF;
-            --bg-bottom: #F8FAFC;
-            --success-green: #16A34A;
-            --error-red: #DC2626;
-            --warning-yellow: #D97706;
+            --flame-red: #ce00a7;       /* vibrant magenta */
+            --lava-orange: #4a0072;     /* deep royal purple */
+            --gold: #00c8e0;            /* cool teal accent */
+            --dark-stone: #0b0e31;      /* midnight indigo */
+            --deep-magma: #17051e;      /* dark violet */
+            --bright-gold: #ff5dd8;     /* neon pink highlight */
+            --ember-glow: #510066;      /* shadowy purple glow */
+            --success-green: #00e0b8;   /* Tealish green for success */
+            --error-red: #ff3b3b;       /* Bright red for errors */
+            --warning-yellow: #ffd700;  /* Yellow for warning */
         }
 
+        /* Reset & Base */
         * {
             margin: 0;
             padding: 0;
@@ -46,12 +47,10 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html { -webkit-text-size-adjust: 100%; }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
-            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, var(--dark-stone) 0%, var(--deep-magma) 100%);
+            color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -61,7 +60,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Soft radial light effects (replaces video/image background) */
+        /* Background Effects */
         #bg-container {
             position: fixed;
             top: 0;
@@ -70,35 +69,42 @@
             height: 100%;
             z-index: 0;
             overflow: hidden;
+        }
+
+        .bg-media {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3) saturate(1.5) hue-rotate(10deg);
+            transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+        }
+
+        #bg-video { opacity: 1; z-index: 1; }
+        #bg-image { opacity: 0; z-index: 0; }
+
+        @media (min-width: 1024px) {
+            .bg-media {
+                width: 100vh;
+                height: 100vw;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-90deg);
+            }
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
         }
-
-        #bg-container::before {
-            content: '';
-            position: absolute;
-            top: -10%;
-            left: -10%;
-            width: 60%;
-            height: 60%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0) 70%);
-            filter: blur(40px);
-        }
-
-        #bg-container::after {
-            content: '';
-            position: absolute;
-            bottom: -15%;
-            right: -10%;
-            width: 65%;
-            height: 65%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.06) 0%, rgba(37, 99, 235, 0) 70%);
-            filter: blur(50px);
-        }
-
-        /* Hidden media elements - kept for JS compatibility but not displayed */
-        #bg-video, #bg-image { display: none; }
-
-        #particle-canvas { display: none; }
 
         .content-layer {
             position: relative;
@@ -107,559 +113,352 @@
 
         main.content-layer { flex-grow: 1; }
 
-        /* Container */
-        .container {
-            max-width: 620px;
-            margin: 0 auto;
-            padding: 0 24px;
-            width: 100%;
-        }
+        /* Typography */
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        .flame-text { color: var(--flame-red); }
+        .gold-text { color: var(--gold); }
+        .lava-text { color: var(--gold); }
 
         /* Navbar */
         .navbar {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--border);
+            background: rgba(11, 14, 49, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 2px solid rgba(255, 93, 216, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
             transition: all 0.3s ease;
         }
 
         .navbar .container > div {
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            height: 70px;
+            transition: height 0.3s ease;
         }
 
-        /* Navbar logo */
-        #logo-container img {
-            height: 32px;
-            width: 32px;
-            border-radius: 50%;
-            object-fit: cover;
+        @media (min-width: 768px) {
+            .navbar .container > div { height: 90px; }
         }
 
-        #logo-container span {
-            display: none; /* minimal navbar: hide wordmark */
+        .nav-item {
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
         }
 
-        /* Forge gear button */
-        .forge-trigger {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            color: var(--muted);
-            font-size: 1.1rem;
-            transition: all 0.2s ease;
+        .nav-item:hover span, .nav-item:hover i { color: var(--gold); }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--lava-orange), var(--gold));
+            transition: width 0.3s ease;
+            border-radius: 2px;
         }
 
-        .forge-trigger:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
+        .nav-item:hover::after { width: 100%; }
 
-        .forge-trigger span,
-        .forge-trigger .fa-chevron-down {
-            display: none;
-        }
-
-        /* Dropdown - Apple Settings / Notion style */
+        /* Dropdown */
         .dropdown {
             display: none;
             position: absolute;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 60px rgba(0,0,0,.08);
-            border-radius: 24px;
+            background: rgba(11, 14, 49, 0.98);
+            border: 2px solid var(--gold);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
             margin-top: 12px;
-            padding: 20px;
-            animation: dropFadeIn 0.25s ease;
+            animation: dropFadeIn 0.3s ease;
         }
 
         @keyframes dropFadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .group:hover .dropdown { display: block; }
 
-        .dropdown h3 {
-            font-size: 0.75rem !important;
-            font-weight: 700 !important;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--muted-light) !important;
-            margin-bottom: 10px !important;
-            margin-top: 18px !important;
-            font-family: 'Inter', sans-serif !important;
-        }
-
-        .dropdown h3:first-child { margin-top: 0 !important; }
-
-        /* Forge menu items -> Apple/Notion style rows */
-        .menu-row {
-            height: 52px;
-            width: 100%;
-            border-radius: 16px;
-            background: transparent;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 14px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--ink);
-            cursor: pointer;
-            transition: background 0.2s ease;
-            text-transform: none;
-            letter-spacing: normal;
-        }
-
-        .menu-row:hover { background: var(--bg-bottom); }
-
-        .menu-row i {
-            width: 20px;
-            text-align: center;
-            color: var(--primary);
-            font-size: 1rem;
-        }
-
-        .menu-row.danger i, .menu-row.danger { color: var(--error-red); }
-        .menu-row.danger:hover { background: #FEF2F2; }
-
-        .menu-grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
         /* Mobile Menu */
         #mobile-menu-overlay {
             position: fixed; inset: 0;
-            background: rgba(15, 23, 42, 0.35);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(11, 14, 49, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 55;
             transition: opacity 0.3s ease;
         }
 
         #mobile-menu {
             position: fixed; top: 0; right: 0;
-            height: 100%; width: 85%; max-width: 360px;
-            background: var(--surface);
+            height: 100%; width: 80%; max-width: 320px;
+            background: rgba(11, 14, 49, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 2px solid var(--gold);
             z-index: 60;
             transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 28px 20px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 2rem 1.5rem;
             display: flex; flex-direction: column;
-            box-shadow: -20px 0 60px rgba(0,0,0,.1);
         }
 
         #mobile-menu.open { transform: translateX(0); }
 
-        #mobile-menu > div:first-child {
-            display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 16px; border-bottom: 1px solid var(--border);
-            margin-bottom: 4px;
-        }
-
-        #mobile-menu > div:first-child span {
-            font-family: 'Inter', sans-serif !important;
-            font-weight: 700 !important;
-            font-size: 1.05rem !important;
-            color: var(--ink) !important;
-            text-transform: none !important;
-        }
-
-        #mobile-menu > div:first-child button {
-            color: var(--muted) !important;
-            font-size: 1.25rem !important;
-        }
-
         /* Buttons */
-        .btn-primary {
-            font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            border: none;
-            border-radius: 16px;
-            padding: 0 1.5rem;
-            height: 52px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            letter-spacing: normal;
-            text-transform: none;
-            transition: all 0.2s ease;
+        .btn-lava {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, var(--lava-orange), var(--flame-red));
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 0.5rem 1.2rem; /* Reduced padding */
+            font-size: 0.8rem; /* Smaller Font */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
         }
 
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
+        .btn-lava:hover {
+            transform: translateY(-3px);
+            border-color: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
-        .btn-primary:active {
-            transform: translateY(0) scale(0.98);
+        .btn-lava:active {
+            transform: translateY(0) scale(0.97);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             transition-duration: 0.1s;
         }
 
         .btn-secondary {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-bottom);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 0 1.25rem;
-            height: 48px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: normal;
-            text-transform: none;
-            transition: all 0.2s ease;
-            color: var(--ink);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            font-family: 'Cinzel', serif;
+            background: rgba(0, 200, 224, 0.1);
+            border: 2px solid rgba(0, 200, 224, 0.4);
+            border-radius: 8px;
+            padding: 0.5rem 1.2rem; /* Reduced Padding */
+            font-size: 0.8rem; /* Smaller Font */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            color: var(--gold);
         }
 
         .btn-secondary:hover {
-            background: #F1F5F9;
-            border-color: #CBD5E1;
+            background: rgba(0, 200, 224, 0.2);
+            border-color: var(--gold);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
-        /* Aliases for old class names used inline in markup (kept for compatibility) */
-        .btn-lava { font-family: 'Inter', sans-serif; background: var(--primary); border: none; border-radius: 16px; padding: 0 1.5rem; height: 52px; font-size: 0.95rem; font-weight: 600; text-transform: none; letter-spacing: normal; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; }
-        .btn-lava:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        .btn-lava:active { transform: translateY(0) scale(0.98); }
-
-        .font-cinzel, .font-playfair { font-family: 'Inter', sans-serif; }
-        .flame-text { color: var(--error-red); }
-        .gold-text { color: var(--primary); }
-        .lava-text { color: var(--primary); }
-
-        /* CTA pill buttons */
-        .cta-row {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .cta-pill {
-            border-radius: 999px;
-            height: 42px;
-            padding: 0 1.5rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--ink);
-            text-decoration: none;
-        }
-
-        .cta-pill:hover {
-            background: var(--bg-bottom);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(0,0,0,.06);
-        }
-
-        .cta-pill.primary {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
-        .cta-pill.primary:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Portal grid -> single column linktree list */
+        /* === PERBAIKAN GRID PORTAL DI SINI === 
+            Agar menjadi 3 kolom secara paksa di Desktop
+        */
         #portals-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
+            display: grid;
+            gap: 1.5rem;
             margin-bottom: 3rem;
-            margin-top: 2.5rem;
+             
+            /* Default Mobile: 1 Kolom */
+            grid-template-columns: 1fr;
         }
 
-        /* Portal Cards -> Linktree Pro rows */
+        /* Tablet: 2 Kolom */
+        @media (min-width: 640px) {
+            #portals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Laptop/PC: 3 Kolom (Sesuai Request Anda) */
+        @media (min-width: 1024px) {
+            #portals-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Portal Cards */
         .portal-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            transition: all 0.25s ease;
+            background: rgba(23, 5, 30, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            height: 78px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            color: var(--portal-color); 
+            height: 100%; /* Ensure card takes full height */
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             cursor: pointer;
-            color: var(--ink);
         }
 
         .portal-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0,0,0,.08);
-            border-color: var(--border);
+            transform: translateY(-5px);
+            border-color: var(--portal-color); 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
         }
 
-        .portal-card > div {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            justify-content: flex-start !important;
-            height: 100% !important;
-            width: 100%;
-            padding: 0 20px !important;
-            text-align: left !important;
-            gap: 16px;
-        }
-
-        .portal-card > div > div {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            justify-content: flex-start !important;
-            height: auto !important;
-            flex-grow: 1;
-            min-width: 0;
-            gap: 16px;
-            text-align: left;
-        }
-
-        /* Icon bubble */
-        .portal-card i:not(.delete-btn i):not(.lock-indicator i) {
-            font-size: 1.25rem !important;
-            margin-bottom: 0 !important;
-            color: var(--primary) !important;
-            width: 48px;
-            height: 48px;
-            min-width: 48px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .portal-card img {
-            width: 48px !important;
-            height: 48px !important;
-            min-width: 48px;
-            border-radius: 50% !important;
-            background: var(--primary-light);
-            margin: 0 !important;
-            object-fit: cover !important;
-        }
-
-        /* Title + description block */
-        .portal-card h3 {
-            font-size: 17px !important;
-            font-weight: 700 !important;
-            color: var(--ink) !important;
-            text-transform: none !important;
-            letter-spacing: normal !important;
-            margin-bottom: 2px !important;
-            line-height: 1.3;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .portal-card i, .portal-card h3 {
+            color: var(--portal-color);
+            transition: color 0.3s ease;
         }
 
         .portal-description {
-            font-size: 13px !important;
-            color: var(--muted) !important;
-            margin-top: 0 !important;
-            line-height: 1.4;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Chevron arrow added after content via ::after on card */
-        .portal-card::after {
-            content: '\f054'; /* fa-chevron-right */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            color: var(--ink);
-            opacity: 0.3;
-            font-size: 0.9rem;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
+            font-size: 0.875rem;
+            color: #00e0b8;
+            margin-top: 0.5rem;
+            line-height: 1.5;
+            transition: color 0.3s ease;
         }
 
         .delete-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            color: var(--muted-light);
-            background: var(--surface);
-            border: 1px solid var(--border);
+            top: 12px;
+            right: 12px;
+            color: rgba(206, 0, 167, 0.7);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             z-index: 20;
-            opacity: 0;
+            opacity: 0.7;
+            border: 1px solid rgba(206, 0, 167, 0.5);
         }
 
         .portal-card:hover .delete-btn { opacity: 1; }
-        .portal-card::after { z-index: 5; }
-        .portal-card:hover::after { opacity: 0.15; }
 
         .delete-btn:hover {
-            color: var(--error-red);
-            border-color: var(--error-red);
-            transform: scale(1.1);
+            color: var(--flame-red);
+            background: rgba(0, 0, 0, 0.6);
+            transform: scale(1.15);
         }
 
         /* Lock Indicator */
         .lock-indicator {
             position: absolute;
-            top: 10px;
-            right: 44px;
-            color: var(--primary);
-            background: var(--primary-light);
+            top: 12px;
+            left: 12px;
+            color: var(--gold);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 20;
-            font-size: 0.75rem;
-            border: none;
+            border: 1px solid var(--gold);
+            font-size: 0.9rem;
         }
 
-        /* Profile/Avatar header */
+        /* Profile/Avatar */
         .profile-container {
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            gap: 16px; margin-bottom: 0.5rem;
+            gap: 12px; margin-bottom: 3rem;
             position: relative; z-index: 20;
-            text-align: center;
         }
 
         .profile {
             margin: 0; width: 140px; height: 140px;
             border-radius: 50%; overflow: hidden;
-            border: 4px solid #fff;
-            box-shadow: 0 12px 40px rgba(0,0,0,.12);
+            border: 3px solid var(--gold); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .profile:hover {
-            transform: scale(1.03);
+            transform: scale(1.05);
+            border-color: #fff; 
         }
 
         .profile img, .profile video {
             width: 100%; height: 100%;
             object-fit: cover;
-            object-position: 50% 25%;
             position: relative; z-index: 1;
         }
 
-        .profile-separator { display: none; }
+        .profile-separator {
+            width: 60px; height: 1px;
+            background: var(--gold); opacity: 0.5;
+            border-radius: 1px;
+        }
 
         .hero-title {
-            font-size: 38px !important;
-            font-weight: 800 !important;
-            color: var(--ink) !important;
-            margin: 4px 0 0 0 !important;
-            text-align: center; text-transform: none !important;
-            letter-spacing: -0.02em !important;
-            text-shadow: none !important;
-            line-height: 1.15;
-            font-family: 'Inter', sans-serif !important;
-        }
-
-        .hero-tagline {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: 0.02em;
-            margin-top: 2px;
-        }
-
-        .hero-bio {
-            font-size: 16px;
-            color: var(--muted);
-            text-align: center;
-            max-width: 420px;
-            margin: 10px auto 0;
-            line-height: 1.6;
+            font-size: 1.35rem; font-weight: 800;
+            color: var(--gold); margin: 0;
+            text-align: center; text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            line-height: 1;
         }
 
         @media (min-width: 768px) {
-            .profile { width: 140px; height: 140px; }
-            .hero-title { font-size: 38px; }
+            .profile { width: 180px; height: 180px; }
+            .hero-title { font-size: 1.75rem; }
+            .profile-separator { width: 80px; }
         }
 
-        /* Modals — Apple Sheet Style */
+        /* Modals & Inputs - OPTIMIZED FOR MOBILE PROPORTIONS */
         .modal-overlay {
-            background: rgba(15, 23, 42, 0.45);
+            background: rgba(11, 14, 49, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            animation: modalFadeIn 0.25s ease;
+            animation: modalFadeIn 0.3s ease;
         }
 
+        /* Adjusted Modal Content: Slimmer and tighter padding */
         .modal-content {
-            background: var(--surface);
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            border: none;
-            box-shadow: 0 30px 80px rgba(0,0,0,.12);
-            border-radius: 28px;
-            animation: modalSlideIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 32px !important;
-            max-width: 400px !important;
+            background: rgba(23, 5, 30, 0.98);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 2px solid var(--gold);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border-radius: 16px;
+            animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Reduced padding and width for a sleeker look */
+            padding: 2rem !important; 
+            max-width: 360px !important; /* Even narrower for better mobile fit */
             width: 90%;
             margin: 0 auto;
         }
 
         .modal-close-btn {
             position: absolute;
-            top: 1.25rem; right: 1.25rem;
-            font-size: 1rem;
-            background: var(--bg-bottom); border: none;
+            top: 0.8rem; right: 0.8rem;
+            font-size: 1.1rem; /* Smaller close icon */
+            background: none; border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--muted);
-            padding: 0; width: 32px; height: 32px;
-            border-radius: 50%;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 0; width: 24px; height: 24px;
             display: flex; align-items: center; justify-content: center;
         }
 
         .modal-close-btn:hover {
-            background: #F1F5F9;
-            color: var(--ink);
+            transform: scale(1.1);
+            color: var(--flame-red);
+            text-shadow: 0 0 10px rgba(206, 0, 167, 0.6);
+            opacity: 1;
         }
 
         @keyframes modalFadeIn {
@@ -668,175 +467,173 @@
         }
 
         @keyframes modalSlideIn {
-            from { transform: translateY(30px) scale(0.97); opacity: 0; }
+            from { transform: translateY(-40px) scale(0.9); opacity: 0; }
             to { transform: translateY(0) scale(1); opacity: 1; }
         }
 
+        /* Form Hierarchy & Proportions */
+           
+        /* Modal Title - Prominent but not huge */
         .modal-content h2 {
-            font-size: 1.4rem !important;
-            margin-bottom: 1.5rem !important;
-            font-weight: 800 !important;
-            color: var(--ink) !important;
-            text-transform: none !important;
-            letter-spacing: normal !important;
-            font-family: 'Inter', sans-serif !important;
+            font-size: 1.25rem !important; /* Smaller title */
+            margin-bottom: 1.25rem !important;
+            font-weight: 700;
         }
 
+        /* Labels - Smaller, concise */
         label.gold-text {
-            font-size: 0.8rem !important;
-            margin-bottom: 6px !important;
-            font-weight: 600 !important;
-            opacity: 1;
-            text-transform: none !important;
-            letter-spacing: normal !important;
-            color: var(--ink) !important;
-            display: block;
+            font-size: 0.7rem !important; /* Smaller Label */
+            margin-bottom: 0.25rem !important;
+            font-weight: 600;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        /* Inputs */
+        /* Inputs - Slimmer height, centered feel */
         input, textarea, select {
-            background: var(--bg-bottom) !important;
-            border: 1px solid var(--border);
-            transition: all 0.2s ease;
-            border-radius: 14px;
-            color: var(--ink);
+            background: rgba(11, 14, 49, 0.9) !important;
+            border: 2px solid rgba(0, 200, 224, 0.4);
+            transition: all 0.3s ease;
+            border-radius: 6px; 
+            color: #fff;
             font-family: 'Inter', sans-serif;
-            padding: 0 1rem !important;
-            height: 52px;
-            font-size: 0.95rem !important;
+            padding: 0.5rem 0.75rem !important; /* Very Compact Padding */
+            font-size: 0.85rem !important; /* Smaller Font */
             width: 100%;
         }
 
-        textarea {
-            height: auto;
-            padding: 0.85rem 1rem !important;
-            min-height: 80px;
-        }
-
         input:focus, textarea:focus, select:focus {
-            border-color: var(--primary);
+            border-color: var(--gold);
             outline: none;
-            background: var(--surface) !important;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+            background: rgba(11, 14, 49, 0.95) !important;
         }
 
+        /* Smart Link Input Specifics - Center Text */
         #generated-smart-link {
             text-align: center;
             font-weight: 600;
             letter-spacing: 0.02em;
-            color: var(--primary);
+            color: var(--gold);
         }
 
         select option {
-            background: var(--surface);
-            color: var(--ink);
+            background: var(--dark-stone);
+            color: #fff;
             padding: 8px;
         }
 
+        /* Placeholder - Subtle hierarchy */
         ::placeholder {
-            color: var(--muted-light);
+            color: rgba(0, 200, 224, 0.5);
             opacity: 1;
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* Smaller placeholder */
         }
 
+        /* Input Group Spacing - Tighter */
         #portal-form > div {
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem; 
         }
 
+        /* Form Buttons - Proportional & Clean */
         .form-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
+            gap: 0.75rem; /* Clean spacing */
+            margin-top: 1.25rem;
         }
 
         .modal-content code {
-            background: var(--bg-bottom);
-            color: var(--primary);
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--gold);
             padding: 3px 6px;
-            border-radius: 6px;
+            border-radius: 4px;
             font-family: 'Inter', sans-serif;
-            border: 1px solid var(--border);
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-bottom); }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(11, 14, 49, 0.6); }
         ::-webkit-scrollbar-thumb {
-            background: var(--muted-light);
+            background: linear-gradient(180deg, var(--lava-orange), var(--gold));
             border-radius: 6px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--muted);
+            background: linear-gradient(180deg, var(--gold), var(--flame-red));
         }
 
-        .logo-pulse { filter: none; }
+        .logo-pulse { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 
+        /* Animation Class for Hiding Capacity */
         .hide-capacity {
             opacity: 0;
             max-height: 0;
-            margin-bottom: 0 !important;
+            margin-bottom: 0 !important; /* Override inline styles */
             padding: 0 !important;
             border: none !important;
             overflow: hidden;
             transition: all 0.5s ease-in-out;
         }
 
-        /* === NOTIFICATION SYSTEM — Vercel/Stripe/Linear style === */
+        /* === PROFESSIONAL NOTIFICATION SYSTEM === */
         .notif-container {
             position: fixed; top: 20px; right: 20px; z-index: 9999;
-            display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+            display: flex; flex-direction: column; gap: 15px; pointer-events: none;
         }
 
         .notif-toast {
             min-width: 320px; max-width: 400px;
-            background: var(--ink);
-            border-left: none;
-            border-radius: 12px;
-            padding: 14px 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.18);
-            display: flex; align-items: flex-start; gap: 12px;
+            background: rgba(11, 14, 49, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-left: 4px solid var(--gold);
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            display: flex; align-items: flex-start; gap: 15px;
             transform: translateX(120%);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             pointer-events: auto; position: relative; overflow: hidden;
         }
 
         .notif-toast.show { transform: translateX(0); }
-        .notif-toast.success .notif-icon { color: #4ADE80; background: rgba(74, 222, 128, 0.12); }
-        .notif-toast.error .notif-icon { color: #F87171; background: rgba(248, 113, 113, 0.12); }
+        .notif-toast.success { border-color: var(--success-green); }
+        .notif-toast.success .notif-icon { color: var(--success-green); background: rgba(0, 224, 184, 0.1); }
+        .notif-toast.error { border-color: var(--error-red); }
+        .notif-toast.error .notif-icon { color: var(--error-red); background: rgba(255, 59, 59, 0.1); }
 
         .notif-icon {
-            width: 28px; height: 28px; border-radius: 50%;
+            width: 32px; height: 32px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 13px; flex-shrink: 0;
+            font-size: 16px; flex-shrink: 0;
         }
 
         .notif-content { flex-grow: 1; }
         .notif-title {
-            font-family: 'Inter', sans-serif; font-weight: 600;
-            font-size: 0.85rem; color: #fff; margin-bottom: 2px;
-            letter-spacing: normal;
+            font-family: 'Cinzel', serif; font-weight: 700;
+            font-size: 0.95rem; color: #fff; margin-bottom: 4px;
+            letter-spacing: 0.03em;
         }
         .notif-message {
-            font-family: 'Inter', sans-serif; font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6); line-height: 1.4;
+            font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8); line-height: 1.4;
         }
         .notif-close {
-            background: none; border: none; color: rgba(255, 255, 255, 0.4);
-            cursor: pointer; font-size: 1rem; padding: 0;
-            transition: color 0.2s; margin-top: 1px;
+            background: none; border: none; color: rgba(255, 255, 255, 0.5);
+            cursor: pointer; font-size: 1.1rem; padding: 0;
+            transition: color 0.3s; margin-top: 2px;
         }
         .notif-close:hover { color: #fff; }
 
         .notif-progress {
-            position: absolute; bottom: 0; left: 0; height: 2px;
-            background: rgba(255,255,255,0.2);
+            position: absolute; bottom: 0; left: 0; height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--flame-red));
             width: 100%; transform-origin: left;
             animation: progressLinear 4s linear forwards;
         }
 
-        .notif-toast.success .notif-progress { background: #4ADE80; }
-        .notif-toast.error .notif-progress { background: #F87171; }
+        .notif-toast.success .notif-progress { background: var(--success-green); }
+        .notif-toast.error .notif-progress { background: var(--error-red); }
 
         @keyframes progressLinear {
             from { width: 100%; }
@@ -844,43 +641,35 @@
         }
 
         @media (max-width: 768px) {
-            .notif-container { top: auto; bottom: 24px; right: 0; left: 0; align-items: center; }
+            .notif-container { top: auto; bottom: 30px; right: 0; left: 0; align-items: center; }
             .notif-toast { transform: translateY(100px); min-width: 90%; max-width: 90%; }
             .notif-toast.show { transform: translateY(0); }
         }
 
         /* Footer */
         footer {
-            background: transparent;
-            border-top: none;
-            margin-top: auto; height: auto;
+            background: rgba(11, 14, 49, 0.9);
+            border-top: 2px solid rgba(0, 200, 224, 0.3);
+            margin-top: auto; height: 70px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            padding: 2rem 1rem 2.5rem;
-            box-shadow: none;
+            padding: 0 1rem;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
         }
 
-        footer p:first-child {
-            font-size: 13px !important;
-            color: var(--muted-light) !important;
-            font-family: 'Inter', sans-serif !important;
-            font-weight: 500;
-        }
+        footer p:first-child { font-size: 14px; }
 
-        footer p:last-child {
-            font-size: 13px !important;
-            color: var(--muted-light) !important;
-            font-family: 'Inter', sans-serif !important;
-            margin-top: 4px !important;
-            text-transform: none !important;
-            letter-spacing: normal !important;
-        }
-
+        /* Utility Classes */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
         .hidden { display: none; }
+
+        /* Light Mode Override */
+        body.light-mode #bg-image { opacity: 1 !important; filter: saturate(1.15); }
+        body.light-mode #bg-video { opacity: 0.35; z-index: 1; }
 
         /* QR Wrapper & Frame */
         #qr-wrapper {
-            margin-top: 1.5rem;
+            margin-top: 1.5rem; /* Increased separation for visual rhythm */
             text-align: center;
             display: flex; flex-direction: column; align-items: center;
             transition: all 0.5s ease;
@@ -892,107 +681,102 @@
         }
 
         #qr-canvas-display {
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0,0,0,.1);
-            max-width: 200px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); 
+            max-width: 200px; /* Reduced size for better mobile proportion */
             width: 100%; height: auto;
-            border: 1px solid var(--border);
         }
 
+        /* 4K Download Button */
         .btn-download-4k {
-            background: var(--primary); border: none; color: #fff;
-            padding: 0.75rem 1.25rem;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            margin-top: 1.25rem;
-            cursor: pointer; transition: all 0.2s;
+            background: #ffffff; border: none; color: #000;
+            padding: 0.6rem 1rem; /* More compact */
+            border-radius: 20px;
+            font-size: 0.75rem; /* Smaller text */
+            margin-top: 1.25rem; /* Better spacing from QR */
+            cursor: pointer; transition: all 0.3s;
             display: inline-flex; align-items: center; gap: 0.5rem;
-            font-family: 'Inter', sans-serif; font-weight: 600;
-            text-transform: none; letter-spacing: normal;
-            box-shadow: 0 8px 20px rgba(37,99,235,0.2);
+            font-family: 'Inter', sans-serif; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .btn-download-4k:hover {
-            background: var(--primary-hover); transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(37,99,235,0.28);
+            background: #f0f0f0; transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        /* Reveal Buttons */
+        /* Reveal Buttons for Hidden Content */
         .reveal-btn {
-            width: 100%; padding: 0.9rem 1.25rem;
-            background: var(--bg-bottom);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            color: var(--ink);
-            font-family: 'Inter', sans-serif; font-size: 0.9rem;
-            font-weight: 600; cursor: pointer;
-            transition: all 0.2s ease;
+            width: 100%; padding: 0.75rem 1.25rem; /* Slightly reduced */
+            background: rgba(11, 14, 49, 0.6); 
+            border: 2px solid var(--gold); 
+            border-radius: 10px; 
+            color: var(--gold);
+            font-family: 'Cinzel', serif; font-size: 0.85rem; 
+            font-weight: 700; cursor: pointer;
+            transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center;
             gap: 10px; margin-bottom: 0;
-            text-transform: none; letter-spacing: normal;
+            text-transform: uppercase; letter-spacing: 0.05em; 
             position: relative; overflow: hidden;
         }
 
         .reveal-btn:hover {
-            background: var(--primary-light);
-            border-color: var(--primary);
-            transform: translateY(-1px);
-            box-shadow: none;
-            text-shadow: none;
-            color: var(--primary);
+            background: rgba(0, 200, 224, 0.15);
+            border-color: #fff; transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 200, 224, 0.3);
+            text-shadow: 0 0 8px rgba(0, 200, 224, 0.8);
         }
 
         .reveal-btn:active { transform: translateY(0); }
-
+           
+        /* Modal Typography Hierarchy (Shared) */
         .modal-title-custom {
-            font-size: 1.4rem;
-            margin-bottom: 0.75rem;
-            text-transform: none; letter-spacing: normal;
-            font-weight: 800; color: var(--ink);
-            font-family: 'Inter', sans-serif;
+            font-size: 1.25rem; /* Adjusted for mobile balance */
+            margin-bottom: 0.75rem; 
+            text-transform: uppercase; letter-spacing: 0.05em;
+            font-weight: 700; color: var(--gold);
         }
 
         .modal-desc-custom {
-            margin-bottom: 1.5rem; font-size: 0.9rem;
-            color: var(--muted); line-height: 1.5;
+            margin-bottom: 1.5rem; font-size: 0.85rem; /* Readable but secondary */
+            color: rgba(0, 200, 224, 0.85); line-height: 1.5;
         }
 
         .modal-actions {
-            display: flex; flex-direction: column;
-            gap: 1.5rem;
+            display: flex; flex-direction: column; 
+            gap: 1.5rem; /* INCREASED GAP for better block separation (24px) */
         }
 
         .hidden-content {
-            display: none; animation: fadeIn 0.4s ease;
-            margin-top: 1rem;
+            display: none; animation: fadeIn 0.5s ease;
+            margin-top: 1rem; /* Consistent spacing (16px) */
         }
 
         /* Badge Style */
         .shortener-badge {
-            background: var(--primary-light);
-            border: 1px solid #BFDBFE;
-            border-radius: 8px; padding: 6px 10px;
+            background: rgba(0, 200, 224, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: 4px; padding: 4px 8px;
             font-family: 'Inter', sans-serif; font-weight: 600;
-            color: var(--primary); font-size: 0.8rem;
+            color: #fff; font-size: 0.85rem;
             display: inline-block; margin: 0 4px;
         }
 
         /* Mobile Optimization */
         @media (max-width: 480px) {
             .modal-content {
-                padding: 1.5rem 1.25rem !important;
-                width: 90%;
-                border-radius: 24px;
+                padding: 1.5rem 1.25rem !important; /* Tighter padding for mobile screens */
+                width: 88%;
             }
-            .modal-title-custom { font-size: 1.2rem; margin-bottom: 0.5rem; }
+            .modal-title-custom { font-size: 1.15rem; margin-bottom: 0.5rem; }
             .modal-close-btn { right: 0.75rem; top: 0.75rem; }
-            .modal-desc-custom { font-size: 0.85rem; margin-bottom: 1.25rem; }
-
-            .reveal-btn { padding: 0.85rem 1rem; font-size: 0.85rem; }
-            .btn-lava, .btn-secondary, .btn-primary { padding: 0 1rem; font-size: 0.85rem; }
-
-            .hero-title { font-size: 30px !important; }
-            .profile { width: 110px; height: 110px; }
+            .modal-desc-custom { font-size: 0.8rem; margin-bottom: 1.25rem; }
+             
+            /* Ensure buttons don't feel too cramped */
+            .reveal-btn { padding: 0.7rem 1rem; font-size: 0.8rem; }
+            .btn-lava, .btn-secondary { padding: 0.5rem 1rem; font-size: 0.75rem; }
         }
 
         @keyframes fadeIn {
@@ -1008,7 +792,7 @@
         <video id="bg-video" class="bg-media" autoplay muted playsinline>
             <source src="https://files.catbox.moe/gpwsaa.mp4" type="video/mp4">
         </video>
-        <img id="bg-image" class="bg-media" src="https://files.catbox.moe/66jg0v.jpg" alt="Background" crossorigin="anonymous">
+        <img id="bg-image" class="bg-media" src="https://files.catbox.moe/66jg0v.jpg" alt="Hayabusa Shura Background" crossorigin="anonymous">
     </div>
     <canvas id="particle-canvas"></canvas>
 
@@ -1017,54 +801,62 @@
 
     <!-- Navbar -->
     <nav class="navbar fixed top-0 left-0 right-0 z-50 content-layer" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50;">
-        <div class="container" style="max-width: 620px; margin: 0 auto; padding: 0 24px;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <!-- Logo -->
                 <div id="logo-container" style="display: flex; align-items: center; cursor: pointer; user-select: none;">
-                    <img src="https://files.catbox.moe/oyk6sx.png" alt="Logo" class="logo-pulse" draggable="false" crossorigin="anonymous">
-                    <span class="font-cinzel gold-text">MLBB HAYABUSA</span>
+                    <img src="https://files.catbox.moe/oyk6sx.png" alt="Hayabusa Shura Logo" class="logo-pulse" style="height: 50px; width: auto; border-radius: 50%;" draggable="false" crossorigin="anonymous">
+                    <span class="font-cinzel gold-text" style="font-weight: 700; font-size: 1.25rem; letter-spacing: 0.05em; margin-left: 1rem;">MLBB HAYABUSA</span>
                 </div>
 
-                <!-- Forge / Settings -->
-                <div style="display: flex; align-items: center;" class="desktop-nav">
+                <!-- Desktop Nav -->
+                <div style="display: none;" class="desktop-nav">
                     <div class="nav-item relative group" style="display: inline-block; position: relative;">
-                        <button class="forge-trigger flame-text" title="Settings">
-                            <i class="fas fa-gear"></i>
+                        <button class="flame-text" style="display: flex; align-items: center; gap: 0.5rem; background: none; border: none; cursor: pointer; font-family: 'Cinzel', serif; font-size: 0.875rem; text-transform: uppercase;">
+                            <i class="fas fa-moon"></i>
                             <span>Forge</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-down" style="font-size: 0.75rem; transition: transform 0.3s;"></i>
                         </button>
-                        <div class="dropdown" style="right: 0; width: 300px;">
-                            <h3>Tambah Link</h3>
-                            <button onclick="showAddLinkModal()" class="menu-row">
-                                <i class="fas fa-plus"></i> Tambahkan Portal
+                        <div class="dropdown" style="position: absolute; right: 0; width: 320px; padding: 1.5rem; margin-top: 0.75rem;">
+                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Craft Portal</h3>
+                            <button onclick="showAddLinkModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                                <i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Tambahkan Portal
                             </button>
 
-                            <h3>Data</h3>
-                            <div class="menu-grid-2">
-                                <button onclick="importData()" class="menu-row"><i class="fas fa-upload"></i> Import</button>
-                                <button onclick="backupData()" class="menu-row"><i class="fas fa-download"></i> Backup</button>
+                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Data Vault</h3>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                                <button onclick="importData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
+                                <button onclick="backupData()" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
                             </div>
-
-                            <h3>Share</h3>
-                            <button onclick="generateSmartLink()" class="menu-row">
-                                <i class="fas fa-link"></i> Generate Smart Link
+                            
+                            <button onclick="generateSmartLink()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-top: 0.75rem;">
+                                <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
                             </button>
-                            <button onclick="showWhatsAppModal()" class="menu-row">
-                                <i class="fab fa-whatsapp"></i> Generate WhatsApp Link
+                            
+                            <!-- NEW DESKTOP BUTTON -->
+                            <button onclick="showWhatsAppModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-top: 0.75rem;">
+                                <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
                             </button>
 
-                            <h3>System</h3>
-                            <button onclick="showConfirmationModal('Reset semua data?', resetAllSettings)" class="menu-row danger">
-                                <i class="fas fa-trash-can"></i> Reset Semua
+                            <!-- NEW SUPPORT SECTION (HIDDEN)
+                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Support</h3>
+                            <button onclick="showHelpModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
+                                <i class="fab fa-firefox-browser" style="margin-right: 0.5rem;"></i>Media Fix (Firefox)
+                            </button>
+                            -->
+
+                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Purge</h3>
+                            <button onclick="showConfirmationModal('Unleash the shadows?', resetAllSettings)" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
+                                <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <div class="mobile-nav-toggle" style="display: none;">
-                    <button id="mobile-menu-button" class="forge-trigger flame-text" style="font-size: 1.1rem;">
-                        <i class="fas fa-gear"></i>
+                <div class="mobile-nav-toggle">
+                    <button id="mobile-menu-button" class="flame-text" style="background: none; border: none; font-size: 2rem; cursor: pointer; outline: none;">
+                        <i class="fas fa-moon"></i>
                     </button>
                 </div>
             </div>
@@ -1074,68 +866,70 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden" onclick="closeMobileMenu()"></div>
     <div id="mobile-menu">
-        <div>
-            <span>Settings</span>
-            <button onclick="closeMobileMenu()">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid rgba(0, 200, 224, 0.3);">
+            <span class="font-cinzel" style="font-size: 1.125rem; color: var(--gold);">CRAFT</span>
+            <button onclick="closeMobileMenu()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gold);">
                 <i class="fas fa-times"></i>
             </button>
         </div>
 
-        <div style="flex-grow: 1; overflow-y: auto; margin-top: 8px;">
-            <h3 style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color: var(--muted-light); margin: 16px 0 8px;">Tambah Link</h3>
-            <button onclick="showAddLinkModal(); closeMobileMenu();" class="menu-row">
-                <i class="fas fa-plus"></i> Tambah Portal
+        <div style="flex-grow: 1; overflow-y: auto;">
+            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Portal</h3>
+            <button onclick="showAddLinkModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                <i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Tambah Portal
             </button>
 
-            <h3 style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color: var(--muted-light); margin: 16px 0 8px;">Data</h3>
-            <div class="menu-grid-2" style="margin-bottom: 4px;">
-                <button onclick="importData(); closeMobileMenu();" class="menu-row"><i class="fas fa-upload"></i> Import</button>
-                <button onclick="backupData(); closeMobileMenu();" class="menu-row"><i class="fas fa-download"></i> Backup</button>
+            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Data</h3>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 0.75rem;">
+                <button onclick="importData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-upload" style="margin-right: 0.25rem;"></i>Import</button>
+                <button onclick="backupData(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.5rem 1rem;"><i class="fas fa-download" style="margin-right: 0.25rem;"></i>Backup</button>
             </div>
-
-            <h3 style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color: var(--muted-light); margin: 16px 0 8px;">Share</h3>
-            <button onclick="generateSmartLink(); closeMobileMenu();" class="menu-row">
-                <i class="fas fa-link"></i> Generate Smart Link
-            </button>
-            <button onclick="showWhatsAppModal(); closeMobileMenu();" class="menu-row">
-                <i class="fab fa-whatsapp"></i> Generate WhatsApp Link
+            
+            <button onclick="generateSmartLink(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
             </button>
 
-            <h3 style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color: var(--muted-light); margin: 16px 0 8px;">System</h3>
-            <button onclick="showConfirmationModal('Reset semua data?', resetAllSettings); closeMobileMenu();" class="menu-row danger">
-                <i class="fas fa-trash-can"></i> Reset Semua
+            <!-- NEW MOBILE BUTTON -->
+            <button onclick="showWhatsAppModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
+            </button>
+
+            <!-- SUPPORT SECTION HIDDEN
+            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Support</h3>
+            <button onclick="showHelpModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                <i class="fab fa-firefox-browser" style="margin-right: 0.5rem;"></i>Media Fix (Firefox)
+            </button>
+            -->
+
+            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">System</h3>
+            <button onclick="showConfirmationModal('Unleash reset?', resetAllSettings); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+                <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
             </button>
         </div>
     </div>
 
     <!-- Main Content -->
-    <main class="container content-layer" style="padding-top: 110px; padding-bottom: 2rem; max-width: 620px; margin: 0 auto; padding-left: 24px; padding-right: 24px;">
-
+    <main class="container content-layer" style="padding-top: 120px; padding-bottom: 2rem;">
+        
         <!-- Premium Profile Header -->
         <header class="profile-container">
+            <!-- Profile Image (Focal Point) -->
             <div class="profile">
-                <video src="https://files.catbox.moe/gs4lq5.mp4" alt="Profile Video" autoplay loop muted playsinline></video>
-            </div>
-            <h1 class="hero-title">Hayabusa Shura</h1>
-            <p class="hero-tagline">Official Links</p>
-            <p class="hero-bio">Akses cepat ke semua link penting saya — store, kontak, dan konten eksklusif dalam satu tempat.</p>
-
-            <div class="cta-row">
-                <button onclick="showWhatsAppModal()" class="cta-pill primary"><i class="fab fa-whatsapp"></i> Contact</button>
-                <a href="https://trakteer.id/uranusfazry/shop" target="_blank" class="cta-pill"><i class="fas fa-bag-shopping"></i> Store</a>
+                <video src="https://files.catbox.moe/gs4lq5.mp4" alt="Profile Video" autoplay loop muted playsinline
+                style="object-position: 50% 25%; will-change: transform;"></video>
             </div>
         </header>
 
-        <!-- Portal List -->
+        <!-- Portal Grid -->
         <div id="portals-grid">
             <!-- Portal cards rendered by JS -->
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="content-layer" style="text-align: center;">
-        <p class="font-cinzel">© 2026 Uranus Technology</p>
-        <p class="gold-text font-cinzel">All Rights Reserved</p>
+    <footer class="content-layer" style="text-align: center; color: #fff;">
+        <p class="font-cinzel" style="font-size: 0.875rem; opacity: 0.85;">© 2026 Created by SHURA | All Rights Reserved</p>
+        <p class="gold-text font-cinzel" style="font-size: 0.75rem; margin-top: 0.5rem;">Forged by Uranus Support Technology</p>
     </footer>
 
     <!-- Add Portal Modal -->
@@ -1144,23 +938,23 @@
             <button onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="modal-close-btn">
                 <i class="fas fa-times"></i>
             </button>
-            <h2 class="font-cinzel gold-text">Tambah Link Baru</h2>
+            <h2 class="font-cinzel gold-text">Craft New Portal</h2>
             <form id="portal-form">
                 <div>
-                    <label for="portal-name" class="font-cinzel gold-text">Nama Link</label>
-                    <input type="text" id="portal-name" placeholder="Masukkan nama link" required>
+                    <label for="portal-name" class="font-cinzel gold-text">Portal Name</label>
+                    <input type="text" id="portal-name" placeholder="Enter portal name" required>
                 </div>
                 <div>
-                    <label for="portal-url" class="font-cinzel gold-text">URL Tujuan</label>
+                    <label for="portal-url" class="font-cinzel gold-text">Destination URL</label>
                     <input type="url" id="portal-url" placeholder="https://your-link.com" required>
                 </div>
                 <!-- Password Protection Field -->
                 <div>
-                    <label for="portal-password" class="font-cinzel gold-text"><i class="fas fa-lock" style="margin-right: 4px;"></i> Lindungi dengan Password (Opsional)</label>
-                    <input type="password" id="portal-password" placeholder="Biarkan kosong untuk akses publik">
+                    <label for="portal-password" class="font-cinzel gold-text"><i class="fas fa-lock" style="margin-right: 4px;"></i> Protect with Password (Optional)</label>
+                    <input type="password" id="portal-password" placeholder="Leave empty for public access">
                 </div>
                 <div>
-                    <label for="portal-icon" class="font-cinzel gold-text">Icon</label>
+                    <label for="portal-icon" class="font-cinzel gold-text">Portal Icon</label>
                     <select id="portal-icon" style="appearance: none;">
                         <option value="fas fa-mask">🎭 Mask</option>
                         <option value="fas fa-crosshairs">🎯 Target</option>
@@ -1176,43 +970,43 @@
                     </select>
                 </div>
                 <div>
-                    <label for="portal-description" class="font-cinzel gold-text">Deskripsi</label>
-                    <textarea id="portal-description" rows="2" placeholder="Deskripsi singkat..." style="resize: vertical;"></textarea>
+                    <label for="portal-description" class="font-cinzel gold-text">Description</label>
+                    <textarea id="portal-description" rows="2" placeholder="Brief description..." style="resize: vertical;"></textarea>
                 </div>
                 <div>
-                    <label class="font-cinzel gold-text">Warna Tema</label>
+                    <label class="font-cinzel gold-text">Portal Theme</label>
                     <div style="display: flex; justify-content: space-around; padding-top: 0.5rem;">
                         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
-                            <input type="radio" name="portal-color" value="#4a0072" style="width: 1rem; height: 1rem; accent-color: var(--primary); height: auto;" checked>
-                            <span class="font-cinzel" style="font-weight: 700; color: var(--ink); font-size: 0.8rem;">Default</span>
+                            <input type="radio" name="portal-color" value="#4a0072" style="width: 1rem; height: 1rem; accent-color: var(--lava-orange);" checked>
+                            <span class="font-cinzel" style="font-weight: 700; color: var(--lava-orange); font-size: 0.8rem;">Purple</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
-                            <input type="radio" name="portal-color" value="#ce00a7" style="width: 1rem; height: 1rem; accent-color: var(--primary); height: auto;">
-                            <span class="font-cinzel" style="font-weight: 700; color: var(--ink); font-size: 0.8rem;">Default</span>
+                            <input type="radio" name="portal-color" value="#ce00a7" style="width: 1rem; height: 1rem; accent-color: var(--flame-red);">
+                            <span class="font-cinzel" style="font-weight: 700; color: var(--flame-red); font-size: 0.8rem;">Magenta</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; transition: all 0.3s;">
-                            <input type="radio" name="portal-color" value="#00c8e0" style="width: 1rem; height: 1rem; accent-color: var(--primary); height: auto;">
-                            <span class="font-cinzel" style="font-weight: 700; color: var(--ink); font-size: 0.8rem;">Default</span>
+                            <input type="radio" name="portal-color" value="#00c8e0" style="width: 1rem; height: 1rem; accent-color: var(--gold);">
+                            <span class="font-cinzel" style="font-weight: 700; color: var(--gold); font-size: 0.8rem;">Teal</span>
                         </label>
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button type="button" onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="btn-secondary">Batal</button>
-                    <button type="submit" class="btn-lava">Tambahkan</button>
+                    <button type="button" onclick="document.getElementById('add-portal-modal').style.display = 'none'" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-lava">Craft</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Password Unlock Modal -->
+    <!-- Password Unlock Modal (New) -->
     <div id="password-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
         <div class="modal-content" style="text-align: center;">
-            <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">
+            <div style="font-size: 2.5rem; color: var(--gold); margin-bottom: 0.5rem;">
                 <i class="fas fa-lock"></i>
             </div>
-            <h2 class="font-cinzel gold-text">Link Terkunci</h2>
-            <p class="modal-desc-custom" style="margin-bottom: 1rem;">Link ini dilindungi sandi. Masukkan password untuk melanjutkan.</p>
-
+            <h2 class="font-cinzel gold-text">Portal Locked</h2>
+            <p class="modal-desc-custom" style="margin-bottom: 1rem;">Portal ini dilindungi sandi. Masukkan password untuk melanjutkan.</p>
+            
             <form onsubmit="event.preventDefault(); submitPassword();">
                 <input type="password" id="unlock-input" placeholder="Masukkan password..." style="text-align: center; margin-bottom: 1.5rem;" required>
                 <div class="form-actions" style="justify-content: center;">
@@ -1229,35 +1023,35 @@
             <div style="font-size: 3rem; color: var(--success-green); margin-bottom: 1rem;">
                 <i class="fas fa-check-circle"></i>
             </div>
-            <h2 class="font-cinzel" style="color: var(--success-green); font-size: 1.3rem; margin-bottom: 1rem; font-weight: 800; font-family:'Inter',sans-serif;">Akses Diterima</h2>
-            <p style="margin-bottom: 1rem; font-size: 0.95rem; color: var(--muted); line-height: 1.6;">
-                Sandi benar. Kamu akan diarahkan ke link...
+            <h2 class="font-cinzel" style="color: var(--success-green); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">🔓 Akses Diterima!</h2>
+            <p style="margin-bottom: 1rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
+                Sandi benar. Kamu akan diarahkan ke portal...
             </p>
-            <p id="countdown-text" style="font-size: 0.85rem; color: var(--primary); margin-bottom: 1.5rem; font-style: normal;">
+            <p id="countdown-text" style="font-size: 0.85rem; color: var(--gold); margin-bottom: 1.5rem; font-style: italic;">
                 Otomatis masuk dalam 5 detik...
             </p>
             <div style="display: flex; justify-content: center;">
-                <button id="btn-lanjut" class="btn-lava" style="background: var(--success-green); border-color: var(--success-green); color: #fff;">
+                <button id="btn-lanjut" class="btn-lava" style="background: var(--success-green); border-color: var(--success-green); color: #000;">
                     Lanjut Sekarang
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Help Modal -->
+    <!-- Help Modal (NEW) -->
     <div id="help-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
         <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
             <button onclick="document.getElementById('help-modal').style.display = 'none'" class="modal-close-btn">
                 <i class="fas fa-times"></i>
             </button>
             <h2 class="font-cinzel gold-text" style="font-size: 1.2rem !important;"><i class="fab fa-firefox-browser"></i> Firefox Media Fix</h2>
-            <div style="text-align: left; font-size: 0.85rem; line-height: 1.6; color: var(--muted);">
+            <div style="text-align: left; font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.9);">
                 <p style="margin-bottom: 1rem;">Aktifkan dukungan media untuk file host (catbox.moe):</p>
-                <ol style="list-style-type: decimal; padding-left: 1.2rem;">
-                    <li style="margin-bottom: 0.5rem;">Buka tab baru: <code>about:config</code></li>
+                <ol style="list-style-type: decimal; padding-left: 1.2rem; space-y-2;">
+                    <li style="margin-bottom: 0.5rem;">Buka tab baru: <code style="color:var(--gold)">about:config</code></li>
                     <li style="margin-bottom: 0.5rem;">
                         Cari dan ubah value berikut:
-                        <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 0.25rem; font-size: 0.8rem;">
+                        <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 0.25rem; font-size: 0.8rem; color: rgba(200, 200, 200, 0.9);">
                             <li>media.autoplay.default → <b>0</b></li>
                             <li>media.autoplay.blocking_policy → <b>0</b></li>
                             <li>privacy.resistFingerprinting → <b>false</b></li>
@@ -1267,7 +1061,7 @@
                     <li style="margin-bottom: 0.5rem;">
                         Tambahkan pengecualian situs:<br>
                         <i>Settings → Privacy & Security → Permissions</i>
-                        <ul style="list-style-type: disc; padding-left: 1rem; font-size: 0.8rem;">
+                        <ul style="list-style-type: disc; padding-left: 1rem; font-size: 0.8rem; color: rgba(200, 200, 200, 0.9);">
                             <li>Izinkan autoplay: <b>https://files.catbox.moe</b></li>
                             <li>Izinkan mixed content (konten campuran)</li>
                         </ul>
@@ -1282,7 +1076,7 @@
         </div>
     </div>
 
-    <!-- WhatsApp Link Modal -->
+    <!-- WhatsApp Link Modal (IMPROVED) -->
     <div id="whatsapp-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
         <div class="modal-content">
             <button onclick="document.getElementById('whatsapp-link-modal').style.display = 'none'" class="modal-close-btn">
@@ -1292,30 +1086,31 @@
             <form id="wa-form" onsubmit="event.preventDefault(); generateWhatsAppLink();">
                 <div>
                     <label class="font-cinzel gold-text">Nomor WhatsApp</label>
+                    <!-- Input Group: Country Code + Number -->
                     <div style="display: flex; gap: 0.5rem;">
-                        <select id="wa-country-code" style="width: 38%; min-width: 100px;">
+                        <select id="wa-country-code" style="width: 35%; min-width: 100px; background: rgba(11, 14, 49, 0.9); border: 2px solid rgba(0, 200, 224, 0.4); color: white; border-radius: 6px; padding: 0.5rem;">
                             <!-- Populated via JS -->
                         </select>
                         <input type="tel" id="wa-number" placeholder="8123456789" style="flex-grow: 1;" required>
                     </div>
-                    <p style="font-size: 0.7rem; color: var(--muted-light); margin-top: 6px; font-style: normal;">*Otomatis menghapus angka 0 di depan.</p>
+                    <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 4px; font-style: italic;">*Otomatis menghapus angka 0 di depan.</p>
                 </div>
                 <div>
                     <label for="wa-message" class="font-cinzel gold-text">Pesan</label>
                     <textarea id="wa-message" rows="3" placeholder="Halo, saya ingin memesan..." style="resize: vertical;"></textarea>
                 </div>
                 <div class="form-actions" style="margin-top: 1rem;">
-                    <button type="submit" class="btn-lava" style="width: 100%;"><i class="fas fa-bolt"></i> Generate Link</button>
+                    <button type="submit" class="btn-lava" style="width: 100%;">🚀 Generate Link</button>
                 </div>
             </form>
 
             <!-- Result Section -->
-            <div id="wa-result-container" class="hidden-content" style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+            <div id="wa-result-container" class="hidden-content" style="margin-top: 1.5rem; border-top: 1px solid rgba(0, 200, 224, 0.3); padding-top: 1rem;">
                 <label class="font-cinzel gold-text" style="font-size: 0.8rem;">Link Result</label>
-                <input type="text" id="wa-result-link" readonly style="color: var(--primary); border: 1px solid var(--border); margin-bottom: 0.75rem;">
+                <input type="text" id="wa-result-link" readonly style="background: rgba(0, 0, 0, 0.3); color: var(--gold); border: 1px solid var(--gold); margin-bottom: 0.75rem;">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                    <button onclick="copyWaLink()" class="btn-secondary" style="font-size: 0.85rem;"><i class="fas fa-copy"></i> Copy Link</button>
-                    <button onclick="openWaLink()" class="btn-lava" style="font-size: 0.85rem;"><i class="fab fa-whatsapp"></i> Buka WA</button>
+                    <button onclick="copyWaLink()" class="btn-secondary" style="font-size: 0.75rem; padding: 0.5rem;"><i class="fas fa-copy"></i> Copy Link</button>
+                    <button onclick="openWaLink()" class="btn-lava" style="font-size: 0.75rem; padding: 0.5rem;"><i class="fab fa-whatsapp"></i> Buka WA</button>
                 </div>
             </div>
         </div>
@@ -1327,25 +1122,28 @@
             <button onclick="document.getElementById('smart-link-modal').style.display = 'none'" class="modal-close-btn">
                 <i class="fas fa-times"></i>
             </button>
-            <h2 class="font-cinzel modal-title-custom">Smart Link Siap</h2>
-            <p class="modal-desc-custom">Link ini sudah berisi semua link kamu. Klik tombol di bawah untuk menampilkan.</p>
+            <h2 class="font-cinzel modal-title-custom">Smart Link Siap <span style="display:inline-block; margin-left: 0.1em;">🚀</span></h2>
+            <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
 
-            <!-- Capacity Indicator -->
-            <div id="capacity-container" style="margin-bottom: 2.5rem; background: var(--bg-bottom); padding: 1.25rem 1.5rem; border-radius: 16px; border: 1px solid var(--border);">
+            <!-- Capacity Indicator (Refined Spacing & Alignment) -->
+            <div id="capacity-container" style="margin-bottom: 2.5rem; background: rgba(0,0,0,0.25); padding: 1.25rem 1.5rem; border-radius: 12px; border: 1px solid rgba(0, 200, 224, 0.15);">
+                <!-- Header: Label & Percentage aligned to baseline -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                    <span style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--ink); letter-spacing: normal;">Kapasitas Data</span>
-                    <span id="capacity-text" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--muted);">0%</span>
+                    <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.05em;">Kapasitas Data</span>
+                    <span id="capacity-text" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: rgba(255,255,255,0.9);">0%</span>
                 </div>
-
-                <div style="width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
+                
+                <!-- Progress Bar with rounded corners -->
+                <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
                     <div id="capacity-bar" style="width: 0%; height: 100%; background: var(--success-green); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.6s ease; border-radius: 4px;"></div>
                 </div>
-
+                
+                <!-- Detail Text with spacing -->
                 <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
-                    <span id="capacity-detail" style="font-size: 0.75rem; color: var(--muted-light); font-family: 'Inter', sans-serif; letter-spacing: normal;">Menghitung...</span>
+                    <span id="capacity-detail" style="font-size: 0.75rem; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif; letter-spacing: 0.02em;">Menghitung...</span>
                 </div>
             </div>
-
+            
             <div class="modal-actions">
                 <!-- Link Section with Toggle -->
                 <div style="width: 100%;">
@@ -1353,24 +1151,26 @@
                         <i class="fas fa-eye"></i> Tampilkan Link
                     </button>
                     <div id="link-content" class="hidden-content">
-                        <input type="text" id="generated-smart-link" readonly style="cursor: text; border: 1px solid var(--border);">
+                        <input type="text" id="generated-smart-link" readonly style="background: rgba(0, 0, 0, 0.3); cursor: text; border: 1px solid var(--gold);">
                         <div style="display: flex; justify-content: center; margin-top: 1rem;">
                             <button onclick="copySmartLink()" class="btn-lava" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fas fa-copy"></i> Copy Smart Link</button>
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- QR Section with Toggle -->
                 <div style="width: 100%;">
                     <button id="btn-show-qr" onclick="revealQR()" class="reveal-btn">
                         <i class="fas fa-qrcode"></i> Tampilkan QR Code
                     </button>
-
+                    
                     <div id="qr-content" class="hidden-content">
+                        <!-- QR Code Auto Share & Download -->
                         <div id="qr-wrapper">
                             <div class="qr-frame">
                                 <canvas id="qr-canvas-display"></canvas>
                             </div>
+                            <!-- 4K Download Button -->
                             <button onclick="downloadHighResQR()" class="btn-download-4k">
                                 <i class="fas fa-download"></i> Unduh QR 4K
                             </button>
@@ -1384,14 +1184,14 @@
     <!-- Limit Warning Modal -->
     <div id="limit-warning-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
         <div class="modal-content" style="text-align: center;">
-            <div style="font-size: 3rem; color: var(--warning-yellow); margin-bottom: 1rem;">
+            <div style="font-size: 3rem; color: var(--gold); margin-bottom: 1rem;">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <h2 class="font-cinzel flame-text" style="font-size: 1.3rem; margin-bottom: 1rem; font-weight: 800; font-family:'Inter',sans-serif; color: var(--ink);">Kapasitas Maksimal</h2>
-            <p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--muted); line-height: 1.6;">
-                Data link Anda (Judul, Deskripsi, Link) telah mencapai batas ukuran optimal untuk QR Code.
+            <h2 class="font-cinzel flame-text" style="font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">Kapasitas Maksimal ⚠️</h2>
+            <p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
+                Data portal Anda (Judul, Deskripsi, Link) telah mencapai batas ukuran optimal untuk QR Code.
                 <br><br>
-                <strong class="gold-text" style="text-transform: none; letter-spacing: normal;">Solusi:</strong><br>
+                <strong class="gold-text" style="text-transform: uppercase; letter-spacing: 0.05em;">Solusi Profesional:</strong><br>
                 Mohon persingkat <b>Judul & Deskripsi</b>, atau gunakan <b>URL Shortener</b> untuk link yang panjang agar QR Code tetap bisa dipindai dengan cepat.
             </p>
             <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
@@ -1410,8 +1210,8 @@
     <!-- Confirmation Modal -->
     <div id="confirmation-modal" class="fixed inset-0 flex items-center justify-center hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
         <div class="modal-content" style="text-align: center;">
-            <h2 class="font-cinzel flame-text" style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 800; font-family:'Inter',sans-serif; color: var(--ink);">Konfirmasi</h2>
-            <p id="confirmation-message" style="margin-bottom: 1.5rem; font-size: 1rem; color: var(--muted);">Are you sure?</p>
+            <h2 class="font-cinzel flame-text" style="font-size: 1.25rem; margin-bottom: 1rem; font-weight: 700;">Confirm Action</h2>
+            <p id="confirmation-message" style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.9);">Are you sure?</p>
             <div style="display: flex; justify-content: center; gap: 1rem;">
                 <button id="confirm-cancel-btn" class="btn-secondary">Cancel</button>
                 <button id="confirm-ok-btn" class="btn-lava">Confirm</button>
@@ -1517,6 +1317,7 @@
                 detokenize(str) { [...TOKEN_MAP].reverse().forEach(([from, to]) => { str = str.split(to).join(from); }); return str; },
                 serialize(portals) { 
                     return portals.map(p => { 
+                        // Added field for password (index 5)
                         return [p.name, p.url, p.icon, p.color, p.description || "", p.password || ""].join(SEP_FIELD); 
                     }).join(SEP_ITEM); 
                 },
@@ -1524,6 +1325,7 @@
                     if (!str) return []; 
                     return str.split(SEP_ITEM).map(itemStr => { 
                         const parts = itemStr.split(SEP_FIELD); 
+                        // Deserialize password from index 5
                         return { name: parts[0], url: parts[1], icon: parts[2], color: parts[3], description: parts[4] || "", password: parts[5] || null }; 
                     }); 
                 },
@@ -1600,7 +1402,7 @@
             function updateNavDisplay() {
                 const desktopNav = document.querySelector('.desktop-nav');
                 const mobileToggle = document.querySelector('.mobile-nav-toggle');
-                if (window.innerWidth >= 768) { if (desktopNav) desktopNav.style.display = 'flex'; if (mobileToggle) mobileToggle.style.display = 'none'; }
+                if (window.innerWidth >= 768) { if (desktopNav) desktopNav.style.display = 'block'; if (mobileToggle) mobileToggle.style.display = 'none'; }
                 else { if (desktopNav) desktopNav.style.display = 'none'; if (mobileToggle) mobileToggle.style.display = 'block'; }
             }
 
@@ -1625,8 +1427,8 @@
                     if (!portal.icon || (!portal.icon.startsWith('fa') && !portal.icon.startsWith('http') && !portal.icon.startsWith('data:image'))) iconClass = 'fas fa-mask';
                     
                     const iconHtml = (iconClass.startsWith('data:image') || iconClass.startsWith('http'))
-                        ? `<img src="${iconClass}" alt="${portal.name} icon" onerror="this.style.display='none'; this.nextSibling.style.display='flex';"><i class="fas fa-mask" style="display: none;"></i>`
-                        : `<i class="${iconClass}"></i>`;
+                        ? `<img src="${iconClass}" style="margin: 0 auto 1rem; height: 3rem; width: 3rem; object-fit: contain;" alt="${portal.name} icon" onerror="this.style.display='none'; this.nextSibling.style.display='block';"><i class="fas fa-mask" style="font-size: 3rem; margin-bottom: 1rem; display: none;"></i>`
+                        : `<i class="${iconClass}" style="font-size: 3rem; margin-bottom: 1rem;"></i>`;
                         
                     const descriptionHtml = portal.description ? portal.description : '&nbsp;';
                     const lockIconHtml = isLocked ? `<div class="lock-indicator"><i class="fas fa-lock"></i></div>` : '';
@@ -1640,11 +1442,11 @@
                         <div style="display: block; height: 100%; padding: 1.5rem; text-align: center; position: relative; text-decoration: none; color: inherit;">
                             <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
                                 ${iconHtml}
-                                <h3 class="font-cinzel" style="font-weight: 700; word-break: break-word;">${portal.name}</h3>
+                                <h3 class="font-cinzel" style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; word-break: break-word; font-size: 1.125rem; margin-bottom: 0.5rem;">${portal.name}</h3>
                                 <p class="portal-description">${descriptionHtml}</p>
                             </div>
-                            <button onclick="event.stopPropagation(); showConfirmationModal('Hapus link ${portal.name}?', () => deletePortalAction(${index}))" class="delete-btn">
-                                <i class="fas fa-times" style="font-size: 0.75rem;"></i>
+                            <button onclick="event.stopPropagation(); showConfirmationModal('Destroy portal ${portal.name}?', () => deletePortalAction(${index}))" class="delete-btn">
+                                <i class="fas fa-times" style="font-size: 0.875rem;"></i>
                             </button>
                         </div>
                     </div>`;
@@ -1699,7 +1501,7 @@
                     window.showNotification("Salah!", "Password tidak cocok. Coba lagi.", "error");
                     const inputField = document.getElementById('unlock-input');
                     inputField.style.borderColor = 'var(--error-red)';
-                    setTimeout(() => inputField.style.borderColor = 'var(--border)', 500);
+                    setTimeout(() => inputField.style.borderColor = 'rgba(0, 200, 224, 0.4)', 500);
                 }
             }
 
@@ -1763,10 +1565,10 @@
                 document.getElementById('add-portal-modal').classList.add('hidden'); 
                 document.getElementById('add-portal-modal').style.display = 'none'; 
                 resetPortalForm(); 
-                window.showNotification('Success', 'Link baru berhasil ditambahkan!', 'success'); 
+                window.showNotification('Success', 'Portal baru berhasil ditempa!', 'success'); 
             }
 
-            window.deletePortalAction = function(index) { portals.splice(index, 1); savePortals(); renderPortals(); window.showNotification('Deleted', 'Link berhasil dihapus.', 'success'); }
+            window.deletePortalAction = function(index) { portals.splice(index, 1); savePortals(); renderPortals(); window.showNotification('Deleted', 'Portal berhasil dihapus.', 'success'); }
             function resetPortalForm() { portalForm.reset(); }
             function savePortals() { localStorage.setItem('portals', JSON.stringify(portals)); }
             window.showAddLinkModal = function() { document.getElementById('add-portal-modal').classList.remove('hidden'); document.getElementById('add-portal-modal').style.display = 'flex'; resetPortalForm(); if (mobileMenu.classList.contains('open')) closeMobileMenu(); }
@@ -1790,7 +1592,7 @@
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 if (!portalData || JSON.parse(portalData).length === 0) {
-                    window.showNotification('Error', 'Tidak ada link untuk di-generate.', 'error');
+                    window.showNotification('Error', 'Tidak ada portal untuk di-generate.', 'error');
                     return;
                 }
 
@@ -1945,7 +1747,7 @@
                         try {
                             const dataUrl = targetCanvas.toDataURL('image/png');
                             const link = document.createElement('a');
-                            link.download = 'Premium_Links_QR.png';
+                            link.download = 'Hayabusa_Shura_Portal_QR.png';
                             link.href = dataUrl;
                             link.click();
                             window.showNotification('Success', 'Download dimulai!', 'success');
@@ -1972,7 +1774,7 @@
                 
                 const textY = textStartY + (textSpaceHeight * 0.4);
                 
-                ctx.fillText("SCAN UNTUK MASUK", canvasWidth / 2, textY);
+                ctx.fillText("SCAN UNTUK MASUK KE PORTAL SHURA", canvasWidth / 2, textY);
             }
 
             window.downloadHighResQR = function() {
@@ -2035,7 +1837,7 @@
                 event.target.value = '';
             }
 
-            /* --- WHATSAPP GENERATOR LOGIC --- */
+            /* --- WHATSAPP GENERATOR LOGIC (IMPROVED) --- */
             
             // 1. DATA NEGARA (DIKELOMPOKKAN PER BENUA)
             const countryGroups = [
@@ -2120,19 +1922,27 @@
                 }
             ];
 
-            // 2. POPULATE DROPDOWN
+            // 2. POPULATE DROPDOWN (UPDATED WITH OPTGROUP)
             function populateCountries() {
                 const select = document.getElementById('wa-country-code');
                 select.innerHTML = ''; // Clear existing
                 
                 countryGroups.forEach(group => {
+                    // Buat Label Group (Misal: ASIA)
                     const optgroup = document.createElement('optgroup');
                     optgroup.label = group.region;
+                    optgroup.style.color = "var(--gold)"; 
+                    optgroup.style.fontFamily = "'Cinzel', serif";
+                    optgroup.style.fontWeight = "bold";
+                    optgroup.style.backgroundColor = "rgba(11, 14, 49, 0.95)";
 
+                    // Isi negara di dalam group tersebut
                     group.countries.forEach(c => {
                         const option = document.createElement('option');
                         option.value = c.code;
                         option.textContent = `+${c.code} (${c.name})`;
+                        option.style.color = "#fff"; // Reset warna item agar putih
+                        option.style.fontFamily = "'Inter', sans-serif";
                         optgroup.appendChild(option);
                     });
                     
