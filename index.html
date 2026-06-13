@@ -74,8 +74,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: hidden;
             -webkit-overflow-scrolling: touch; /* Momentum scrolling iOS */
             display: flex;
             flex-direction: column;
@@ -128,7 +127,13 @@
         .lava-text { color: var(--gold); }
 
         /* === 3. RUANG UNTUK NAVBAR === */
-        main { padding-top: 110px; }
+        main { 
+            padding-top: 110px; 
+            min-height: calc(100vh - 140px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
         /* === 4. NAVBAR SUPER STABIL === */
         .navbar {
@@ -285,7 +290,7 @@
         /* Grid Portal */
         #portals-grid {
             display: grid;
-            gap: 1.5rem;
+            gap: 16px;
             margin-bottom: 3rem;
             grid-template-columns: 1fr;
         }
@@ -694,11 +699,16 @@
         footer {
             background: rgba(11, 14, 49, 0.9);
             border-top: 2px solid rgba(0, 200, 224, 0.3);
-            margin-top: auto; height: 70px;
+            height: 70px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             padding: 0 1rem;
             box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
         }
 
         footer p:first-child { font-size: 14px; }
