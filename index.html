@@ -783,6 +783,40 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* === TIKTOK SWIPE / FOCUS MODE === */
+        .navbar,
+        #portals-grid,
+        footer {
+            transition: opacity 0.45s ease, transform 0.45s ease !important;
+        }
+
+        body.focus-mode .navbar {
+            opacity: 0;
+            transform: translateY(-100%) !important;
+            pointer-events: none;
+        }
+
+        body.focus-mode #portals-grid {
+            opacity: 0;
+            transform: translateX(100px);
+            pointer-events: none;
+        }
+
+        body.focus-mode footer {
+            opacity: 0;
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+
+        .profile-container {
+            position: relative;
+            z-index: 999;
+        }
+
+        #bg-image {
+            transform: none !important;
+        }
     </style>
 </head>
 <body>
@@ -2019,6 +2053,39 @@
                 document.getElementById('help-modal').style.display = 'flex';
                 if (mobileMenu.classList.contains('open')) closeMobileMenu();
             }
+
+            // --- TIKTOK SWIPE / FOCUS MODE LOGIC ---
+            let startX = 0;
+            let touchStart = 0;
+
+            document.addEventListener("mousedown", (e) => {
+                startX = e.clientX;
+            });
+
+            document.addEventListener("mouseup", (e) => {
+                const diff = e.clientX - startX;
+                if (diff > 100) {
+                    document.body.classList.add("focus-mode");
+                }
+                if (diff < -100) {
+                    document.body.classList.remove("focus-mode");
+                }
+            });
+
+            document.addEventListener("touchstart", (e) => {
+                touchStart = e.touches[0].clientX;
+            });
+
+            document.addEventListener("touchend", (e) => {
+                const touchEnd = e.changedTouches[0].clientX;
+                const diff = touchEnd - touchStart;
+                if (diff > 100) {
+                    document.body.classList.add("focus-mode");
+                }
+                if (diff < -100) {
+                    document.body.classList.remove("focus-mode");
+                }
+            });
 
             initPortalApp();
         });
