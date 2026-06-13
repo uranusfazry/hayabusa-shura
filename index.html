@@ -267,26 +267,20 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
-        /* === PERBAIKAN GRID PORTAL DI SINI === 
-            Agar menjadi 3 kolom secara paksa di Desktop
-        */
+        /* === PERBAIKAN GRID PORTAL DI SINI === */
         #portals-grid {
             display: grid;
             gap: 1.5rem;
             margin-bottom: 3rem;
-             
-            /* Default Mobile: 1 Kolom */
             grid-template-columns: 1fr;
         }
 
-        /* Tablet: 2 Kolom */
         @media (min-width: 640px) {
             #portals-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        /* Laptop/PC: 3 Kolom (Sesuai Request Anda) */
         @media (min-width: 1024px) {
             #portals-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -305,7 +299,7 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             color: var(--portal-color); 
-            height: 100%; /* Ensure card takes full height */
+            height: 100%;
             display: flex;
             flex-direction: column;
             cursor: pointer;
@@ -431,7 +425,6 @@
             animation: modalFadeIn 0.3s ease;
         }
 
-        /* Adjusted Modal Content: Slimmer and tighter padding */
         .modal-content {
             background: rgba(23, 5, 30, 0.98);
             backdrop-filter: blur(25px);
@@ -440,9 +433,8 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             border-radius: 16px;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* Reduced padding and width for a sleeker look */
             padding: 2rem !important; 
-            max-width: 360px !important; /* Even narrower for better mobile fit */
+            max-width: 360px !important; 
             width: 90%;
             margin: 0 auto;
         }
@@ -450,7 +442,7 @@
         .modal-close-btn {
             position: absolute;
             top: 0.8rem; right: 0.8rem;
-            font-size: 1.1rem; /* Smaller close icon */
+            font-size: 1.1rem; 
             background: none; border: none;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -477,17 +469,14 @@
         }
 
         /* Form Hierarchy & Proportions */
-           
-        /* Modal Title - Prominent but not huge */
         .modal-content h2 {
-            font-size: 1.25rem !important; /* Smaller title */
+            font-size: 1.25rem !important; 
             margin-bottom: 1.25rem !important;
             font-weight: 700;
         }
 
-        /* Labels - Smaller, concise */
         label.gold-text {
-            font-size: 0.7rem !important; /* Smaller Label */
+            font-size: 0.7rem !important; 
             margin-bottom: 0.25rem !important;
             font-weight: 600;
             opacity: 0.9;
@@ -495,7 +484,6 @@
             letter-spacing: 0.05em;
         }
 
-        /* Inputs - Slimmer height, centered feel */
         input, textarea, select {
             background: rgba(11, 14, 49, 0.9) !important;
             border: 2px solid rgba(0, 200, 224, 0.4);
@@ -503,8 +491,8 @@
             border-radius: 6px; 
             color: #fff;
             font-family: 'Inter', sans-serif;
-            padding: 0.5rem 0.75rem !important; /* Very Compact Padding */
-            font-size: 0.85rem !important; /* Smaller Font */
+            padding: 0.5rem 0.75rem !important; 
+            font-size: 0.85rem !important; 
             width: 100%;
         }
 
@@ -514,7 +502,6 @@
             background: rgba(11, 14, 49, 0.95) !important;
         }
 
-        /* Smart Link Input Specifics - Center Text */
         #generated-smart-link {
             text-align: center;
             font-weight: 600;
@@ -528,23 +515,18 @@
             padding: 8px;
         }
 
-        /* Placeholder - Subtle hierarchy */
         ::placeholder {
             color: rgba(0, 200, 224, 0.5);
             opacity: 1;
-            font-size: 0.8rem; /* Smaller placeholder */
+            font-size: 0.8rem; 
         }
 
-        /* Input Group Spacing - Tighter */
-        #portal-form > div {
-            margin-bottom: 0.75rem; 
-        }
+        #portal-form > div { margin-bottom: 0.75rem; }
 
-        /* Form Buttons - Proportional & Clean */
         .form-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 0.75rem; /* Clean spacing */
+            gap: 0.75rem; 
             margin-top: 1.25rem;
         }
 
@@ -556,99 +538,137 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(11, 14, 49, 0.6); }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--lava-orange), var(--gold));
-            border-radius: 6px;
+        /* Scrollbar (Disembunyikan agar terasa seperti Native App) */
+        ::-webkit-scrollbar { 
+            display: none; 
+            width: 0;
+            background: transparent;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, var(--gold), var(--flame-red));
+        
+        html {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
 
         .logo-pulse { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 
-        /* Animation Class for Hiding Capacity */
         .hide-capacity {
             opacity: 0;
             max-height: 0;
-            margin-bottom: 0 !important; /* Override inline styles */
+            margin-bottom: 0 !important; 
             padding: 0 !important;
             border: none !important;
             overflow: hidden;
             transition: all 0.5s ease-in-out;
         }
 
-        /* === PROFESSIONAL NOTIFICATION SYSTEM === */
+        /* === SISTEM NOTIFIKASI PROFESIONAL BARU === */
         .notif-container {
-            position: fixed; top: 20px; right: 20px; z-index: 9999;
-            display: flex; flex-direction: column; gap: 15px; pointer-events: none;
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 9999;
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            pointer-events: none;
         }
 
         .notif-toast {
-            min-width: 320px; max-width: 400px;
-            background: rgba(11, 14, 49, 0.95);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-left: 4px solid var(--gold);
-            border-radius: 8px;
-            padding: 16px 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            display: flex; align-items: flex-start; gap: 15px;
-            transform: translateX(120%);
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            pointer-events: auto; position: relative; overflow: hidden;
+            background: rgba(15, 15, 25, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            padding: 14px 18px;
+            display: flex; 
+            align-items: center; 
+            gap: 14px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: auto; 
+            position: relative; 
+            overflow: hidden;
+            min-width: 280px;
         }
 
-        .notif-toast.show { transform: translateX(0); }
-        .notif-toast.success { border-color: var(--success-green); }
-        .notif-toast.success .notif-icon { color: var(--success-green); background: rgba(0, 224, 184, 0.1); }
-        .notif-toast.error { border-color: var(--error-red); }
-        .notif-toast.error .notif-icon { color: var(--error-red); background: rgba(255, 59, 59, 0.1); }
+        .notif-toast.success .notif-icon { color: var(--success-green); }
+        .notif-toast.error .notif-icon { color: var(--error-red); }
+        .notif-toast.warning .notif-icon { color: var(--warning-yellow); }
+        .notif-toast.info .notif-icon { color: var(--gold); }
+
+        .notif-toast.show { 
+            transform: translateY(0); 
+            opacity: 1; 
+        }
 
         .notif-icon {
-            width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; flex-shrink: 0;
+            width: 28px; 
+            height: 28px; 
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 16px; 
+            font-weight: bold;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .notif-content { flex-grow: 1; }
+        
         .notif-title {
-            font-family: 'Cinzel', serif; font-weight: 700;
-            font-size: 0.95rem; color: #fff; margin-bottom: 4px;
-            letter-spacing: 0.03em;
+            font-family: 'Inter', sans-serif; 
+            font-weight: 700;
+            font-size: 0.9rem; 
+            color: #fff; 
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
         }
+        
         .notif-message {
-            font-family: 'Inter', sans-serif; font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.8); line-height: 1.4;
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7); 
+            line-height: 1.3;
         }
-        .notif-close {
-            background: none; border: none; color: rgba(255, 255, 255, 0.5);
-            cursor: pointer; font-size: 1.1rem; padding: 0;
-            transition: color 0.3s; margin-top: 2px;
-        }
-        .notif-close:hover { color: #fff; }
 
         .notif-progress {
-            position: absolute; bottom: 0; left: 0; height: 3px;
-            background: linear-gradient(90deg, var(--gold), var(--flame-red));
-            width: 100%; transform-origin: left;
-            animation: progressLinear 4s linear forwards;
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            height: 2px;
+            width: 100%; 
+            transform-origin: left;
         }
 
         .notif-toast.success .notif-progress { background: var(--success-green); }
         .notif-toast.error .notif-progress { background: var(--error-red); }
+        .notif-toast.warning .notif-progress { background: var(--warning-yellow); }
+        .notif-toast.info .notif-progress { background: var(--gold); }
 
         @keyframes progressLinear {
-            from { width: 100%; }
-            to { width: 0%; }
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
         }
 
         @media (max-width: 768px) {
-            .notif-container { top: auto; bottom: 30px; right: 0; left: 0; align-items: center; }
-            .notif-toast { transform: translateY(100px); min-width: 90%; max-width: 90%; }
-            .notif-toast.show { transform: translateY(0); }
+            .notif-container { 
+                top: auto; 
+                bottom: 20px; 
+                right: auto; 
+                left: 50%; 
+                transform: translateX(-50%);
+                align-items: center; 
+            }
+            .notif-toast { 
+                width: 90vw; 
+                max-width: 340px; 
+                min-width: 300px;
+            }
         }
 
         /* Footer */
@@ -673,7 +693,7 @@
 
         /* QR Wrapper & Frame */
         #qr-wrapper {
-            margin-top: 1.5rem; /* Increased separation for visual rhythm */
+            margin-top: 1.5rem; 
             text-align: center;
             display: flex; flex-direction: column; align-items: center;
             transition: all 0.5s ease;
@@ -687,17 +707,17 @@
         #qr-canvas-display {
             border-radius: 12px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); 
-            max-width: 200px; /* Reduced size for better mobile proportion */
+            max-width: 200px; 
             width: 100%; height: auto;
         }
 
         /* 4K Download Button */
         .btn-download-4k {
             background: #ffffff; border: none; color: #000;
-            padding: 0.6rem 1rem; /* More compact */
+            padding: 0.6rem 1rem; 
             border-radius: 20px;
-            font-size: 0.75rem; /* Smaller text */
-            margin-top: 1.25rem; /* Better spacing from QR */
+            font-size: 0.75rem; 
+            margin-top: 1.25rem; 
             cursor: pointer; transition: all 0.3s;
             display: inline-flex; align-items: center; gap: 0.5rem;
             font-family: 'Inter', sans-serif; font-weight: 700;
@@ -712,7 +732,7 @@
 
         /* Reveal Buttons for Hidden Content */
         .reveal-btn {
-            width: 100%; padding: 0.75rem 1.25rem; /* Slightly reduced */
+            width: 100%; padding: 0.75rem 1.25rem; 
             background: rgba(11, 14, 49, 0.6); 
             border: 2px solid var(--gold); 
             border-radius: 10px; 
@@ -737,25 +757,25 @@
            
         /* Modal Typography Hierarchy (Shared) */
         .modal-title-custom {
-            font-size: 1.25rem; /* Adjusted for mobile balance */
+            font-size: 1.25rem; 
             margin-bottom: 0.75rem; 
             text-transform: uppercase; letter-spacing: 0.05em;
             font-weight: 700; color: var(--gold);
         }
 
         .modal-desc-custom {
-            margin-bottom: 1.5rem; font-size: 0.85rem; /* Readable but secondary */
+            margin-bottom: 1.5rem; font-size: 0.85rem; 
             color: rgba(0, 200, 224, 0.85); line-height: 1.5;
         }
 
         .modal-actions {
             display: flex; flex-direction: column; 
-            gap: 1.5rem; /* INCREASED GAP for better block separation (24px) */
+            gap: 1.5rem; 
         }
 
         .hidden-content {
             display: none; animation: fadeIn 0.5s ease;
-            margin-top: 1rem; /* Consistent spacing (16px) */
+            margin-top: 1rem; 
         }
 
         /* Badge Style */
@@ -771,14 +791,12 @@
         /* Mobile Optimization */
         @media (max-width: 480px) {
             .modal-content {
-                padding: 1.5rem 1.25rem !important; /* Tighter padding for mobile screens */
+                padding: 1.5rem 1.25rem !important; 
                 width: 88%;
             }
             .modal-title-custom { font-size: 1.15rem; margin-bottom: 0.5rem; }
             .modal-close-btn { right: 0.75rem; top: 0.75rem; }
             .modal-desc-custom { font-size: 0.8rem; margin-bottom: 1.25rem; }
-             
-            /* Ensure buttons don't feel too cramped */
             .reveal-btn { padding: 0.7rem 1rem; font-size: 0.8rem; }
             .btn-lava, .btn-secondary { padding: 0.5rem 1rem; font-size: 0.75rem; }
         }
@@ -912,15 +930,8 @@
                                 <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
                             </button>
 
-                            <!-- NEW SUPPORT SECTION (HIDDEN)
-                            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Support</h3>
-                            <button onclick="showHelpModal()" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
-                                <i class="fab fa-firefox-browser" style="margin-right: 0.5rem;"></i>Media Fix (Firefox)
-                            </button>
-                            -->
-
                             <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Purge</h3>
-                            <button onclick="showConfirmationModal('Unleash the shadows?', resetAllSettings)" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
+                            <button onclick="showConfirmationModal('Yakin ingin mereset semua data?', resetAllSettings)" class="btn-secondary" style="width: 100%; font-size: 0.875rem;">
                                 <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
                             </button>
                         </div>
@@ -963,20 +974,12 @@
                 <i class="fas fa-link" style="margin-right: 0.5rem;"></i>Generate Smart Link
             </button>
 
-            <!-- NEW MOBILE BUTTON -->
             <button onclick="showWhatsAppModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
                 <i class="fab fa-whatsapp" style="margin-right: 0.5rem;"></i>Generate WhatsApp Link
             </button>
 
-            <!-- SUPPORT SECTION HIDDEN
-            <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">Support</h3>
-            <button onclick="showHelpModal(); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
-                <i class="fab fa-firefox-browser" style="margin-right: 0.5rem;"></i>Media Fix (Firefox)
-            </button>
-            -->
-
             <h3 class="font-cinzel" style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold);">System</h3>
-            <button onclick="showConfirmationModal('Unleash reset?', resetAllSettings); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
+            <button onclick="showConfirmationModal('Yakin ingin mereset semua data?', resetAllSettings); closeMobileMenu();" class="btn-secondary" style="width: 100%; font-size: 0.875rem; margin-bottom: 1rem;">
                 <i class="fas fa-skull-crossbones" style="margin-right: 0.5rem;"></i>Reset Semua
             </button>
         </div>
@@ -984,20 +987,14 @@
 
     <!-- Main Content -->
     <main class="container content-layer" style="padding-top: 110px; padding-bottom: 2rem;">
-        
-        <!-- Premium Profile Header -->
         <header class="profile-container">
-            <!-- Profile Image (Focal Point) -->
             <div class="profile">
                 <video src="https://files.catbox.moe/gs4lq5.mp4" alt="Profile Video" autoplay loop muted playsinline
                 style="object-position: 50% 25%; will-change: transform;"></video>
             </div>
         </header>
 
-        <!-- Portal Grid -->
-        <div id="portals-grid">
-            <!-- Portal cards rendered by JS -->
-        </div>
+        <div id="portals-grid"></div>
     </main>
 
     <!-- Footer -->
@@ -1022,7 +1019,6 @@
                     <label for="portal-url" class="font-cinzel gold-text">Destination URL</label>
                     <input type="url" id="portal-url" placeholder="https://your-link.com" required>
                 </div>
-                <!-- Password Protection Field -->
                 <div>
                     <label for="portal-password" class="font-cinzel gold-text"><i class="fas fa-lock" style="margin-right: 4px;"></i> Protect with Password (Optional)</label>
                     <input type="password" id="portal-password" placeholder="Leave empty for public access">
@@ -1072,7 +1068,7 @@
         </div>
     </div>
 
-    <!-- Password Unlock Modal (New) -->
+    <!-- Password Unlock Modal -->
     <div id="password-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
         <div class="modal-content" style="text-align: center;">
             <div style="font-size: 2.5rem; color: var(--gold); margin-bottom: 0.5rem;">
@@ -1091,66 +1087,7 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="success-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
-        <div class="modal-content" style="text-align: center; border-color: var(--success-green);">
-            <div style="font-size: 3rem; color: var(--success-green); margin-bottom: 1rem;">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h2 class="font-cinzel" style="color: var(--success-green); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">🔓 Akses Diterima!</h2>
-            <p style="margin-bottom: 1rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
-                Sandi benar. Kamu akan diarahkan ke portal...
-            </p>
-            <p id="countdown-text" style="font-size: 0.85rem; color: var(--gold); margin-bottom: 1.5rem; font-style: italic;">
-                Otomatis masuk dalam 5 detik...
-            </p>
-            <div style="display: flex; justify-content: center;">
-                <button id="btn-lanjut" class="btn-lava" style="background: var(--success-green); border-color: var(--success-green); color: #000;">
-                    Lanjut Sekarang
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Help Modal (NEW) -->
-    <div id="help-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
-        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
-            <button onclick="document.getElementById('help-modal').style.display = 'none'" class="modal-close-btn">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 class="font-cinzel gold-text" style="font-size: 1.2rem !important;"><i class="fab fa-firefox-browser"></i> Firefox Media Fix</h2>
-            <div style="text-align: left; font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.9);">
-                <p style="margin-bottom: 1rem;">Aktifkan dukungan media untuk file host (catbox.moe):</p>
-                <ol style="list-style-type: decimal; padding-left: 1.2rem; space-y-2;">
-                    <li style="margin-bottom: 0.5rem;">Buka tab baru: <code style="color:var(--gold)">about:config</code></li>
-                    <li style="margin-bottom: 0.5rem;">
-                        Cari dan ubah value berikut:
-                        <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 0.25rem; font-size: 0.8rem; color: rgba(200, 200, 200, 0.9);">
-                            <li>media.autoplay.default → <b>0</b></li>
-                            <li>media.autoplay.blocking_policy → <b>0</b></li>
-                            <li>privacy.resistFingerprinting → <b>false</b></li>
-                            <li>network.http.referer.trimmingPolicy → <b>0</b></li>
-                        </ul>
-                    </li>
-                    <li style="margin-bottom: 0.5rem;">
-                        Tambahkan pengecualian situs:<br>
-                        <i>Settings → Privacy & Security → Permissions</i>
-                        <ul style="list-style-type: disc; padding-left: 1rem; font-size: 0.8rem; color: rgba(200, 200, 200, 0.9);">
-                            <li>Izinkan autoplay: <b>https://files.catbox.moe</b></li>
-                            <li>Izinkan mixed content (konten campuran)</li>
-                        </ul>
-                    </li>
-                    <li style="margin-bottom: 0.5rem;">Jika gambar/video ❗ (broken): Klik icon gembok/tanda seru di address bar → <b>"Allow insecure content"</b></li>
-                    <li>Refresh halaman (CTRL+F5)</li>
-                </ol>
-            </div>
-            <div class="form-actions" style="justify-content: center; margin-top: 1.5rem;">
-                <button onclick="document.getElementById('help-modal').style.display = 'none'" class="btn-lava">Mengerti</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- WhatsApp Link Modal (IMPROVED) -->
+    <!-- WhatsApp Link Modal -->
     <div id="whatsapp-link-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 55;">
         <div class="modal-content">
             <button onclick="document.getElementById('whatsapp-link-modal').style.display = 'none'" class="modal-close-btn">
@@ -1160,11 +1097,8 @@
             <form id="wa-form" onsubmit="event.preventDefault(); generateWhatsAppLink();">
                 <div>
                     <label class="font-cinzel gold-text">Nomor WhatsApp</label>
-                    <!-- Input Group: Country Code + Number -->
                     <div style="display: flex; gap: 0.5rem;">
-                        <select id="wa-country-code" style="width: 35%; min-width: 100px; background: rgba(11, 14, 49, 0.9); border: 2px solid rgba(0, 200, 224, 0.4); color: white; border-radius: 6px; padding: 0.5rem;">
-                            <!-- Populated via JS -->
-                        </select>
+                        <select id="wa-country-code" style="width: 35%; min-width: 100px; background: rgba(11, 14, 49, 0.9); border: 2px solid rgba(0, 200, 224, 0.4); color: white; border-radius: 6px; padding: 0.5rem;"></select>
                         <input type="tel" id="wa-number" placeholder="8123456789" style="flex-grow: 1;" required>
                     </div>
                     <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 4px; font-style: italic;">*Otomatis menghapus angka 0 di depan.</p>
@@ -1177,8 +1111,6 @@
                     <button type="submit" class="btn-lava" style="width: 100%;">🚀 Generate Link</button>
                 </div>
             </form>
-
-            <!-- Result Section -->
             <div id="wa-result-container" class="hidden-content" style="margin-top: 1.5rem; border-top: 1px solid rgba(0, 200, 224, 0.3); padding-top: 1rem;">
                 <label class="font-cinzel gold-text" style="font-size: 0.8rem;">Link Result</label>
                 <input type="text" id="wa-result-link" readonly style="background: rgba(0, 0, 0, 0.3); color: var(--gold); border: 1px solid var(--gold); margin-bottom: 0.75rem;">
@@ -1199,27 +1131,20 @@
             <h2 class="font-cinzel modal-title-custom">Smart Link Siap <span style="display:inline-block; margin-left: 0.1em;">🚀</span></h2>
             <p class="modal-desc-custom">Link ini sudah berisi semua portal kamu. Klik tombol di bawah untuk menampilkan.</p>
 
-            <!-- Capacity Indicator (Refined Spacing & Alignment) -->
             <div id="capacity-container" style="margin-bottom: 2.5rem; background: rgba(0,0,0,0.25); padding: 1.25rem 1.5rem; border-radius: 12px; border: 1px solid rgba(0, 200, 224, 0.15);">
-                <!-- Header: Label & Percentage aligned to baseline -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                     <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.05em;">Kapasitas Data</span>
                     <span id="capacity-text" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: rgba(255,255,255,0.9);">0%</span>
                 </div>
-                
-                <!-- Progress Bar with rounded corners -->
                 <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
                     <div id="capacity-bar" style="width: 0%; height: 100%; background: var(--success-green); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.6s ease; border-radius: 4px;"></div>
                 </div>
-                
-                <!-- Detail Text with spacing -->
                 <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
                     <span id="capacity-detail" style="font-size: 0.75rem; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif; letter-spacing: 0.02em;">Menghitung...</span>
                 </div>
             </div>
             
             <div class="modal-actions">
-                <!-- Link Section with Toggle -->
                 <div style="width: 100%;">
                     <button id="btn-show-link" onclick="revealLink()" class="reveal-btn">
                         <i class="fas fa-eye"></i> Tampilkan Link
@@ -1231,20 +1156,15 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- QR Section with Toggle -->
                 <div style="width: 100%;">
                     <button id="btn-show-qr" onclick="revealQR()" class="reveal-btn">
                         <i class="fas fa-qrcode"></i> Tampilkan QR Code
                     </button>
-                    
                     <div id="qr-content" class="hidden-content">
-                        <!-- QR Code Auto Share & Download -->
                         <div id="qr-wrapper">
                             <div class="qr-frame">
                                 <canvas id="qr-canvas-display"></canvas>
                             </div>
-                            <!-- 4K Download Button -->
                             <button onclick="downloadHighResQR()" class="btn-download-4k">
                                 <i class="fas fa-download"></i> Unduh QR 4K
                             </button>
@@ -1266,13 +1186,8 @@
                 Data portal Anda (Judul, Deskripsi, Link) telah mencapai batas ukuran optimal untuk QR Code.
                 <br><br>
                 <strong class="gold-text" style="text-transform: uppercase; letter-spacing: 0.05em;">Solusi Profesional:</strong><br>
-                Mohon persingkat <b>Judul & Deskripsi</b>, atau gunakan <b>URL Shortener</b> untuk link yang panjang agar QR Code tetap bisa dipindai dengan cepat.
+                Mohon persingkat <b>Judul & Deskripsi</b>, atau gunakan <b>URL Shortener</b> untuk link yang panjang.
             </p>
-            <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
-                <span class="shortener-badge">bit.ly</span>
-                <span class="shortener-badge">s.id</span>
-                <span class="shortener-badge">tinyurl.com</span>
-            </div>
             <div style="display: flex; justify-content: center;">
                 <button onclick="document.getElementById('limit-warning-modal').style.display='none'" class="btn-lava">
                     Mengerti & Perbaiki
@@ -1284,11 +1199,11 @@
     <!-- Confirmation Modal -->
     <div id="confirmation-modal" class="fixed inset-0 flex items-center justify-center hidden modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: center; z-index: 60;">
         <div class="modal-content" style="text-align: center;">
-            <h2 class="font-cinzel flame-text" style="font-size: 1.25rem; margin-bottom: 1rem; font-weight: 700;">Confirm Action</h2>
-            <p id="confirmation-message" style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.9);">Are you sure?</p>
+            <h2 class="font-cinzel flame-text" style="font-size: 1.25rem; margin-bottom: 1rem; font-weight: 700;">Konfirmasi Tindakan</h2>
+            <p id="confirmation-message" style="margin-bottom: 1.5rem; font-size: 1rem; color: rgba(0, 200, 224, 0.9);">Apakah Anda yakin?</p>
             <div style="display: flex; justify-content: center; gap: 1rem;">
-                <button id="confirm-cancel-btn" class="btn-secondary">Cancel</button>
-                <button id="confirm-ok-btn" class="btn-lava">Confirm</button>
+                <button id="confirm-cancel-btn" class="btn-secondary">Batal</button>
+                <button id="confirm-ok-btn" class="btn-lava">Konfirmasi</button>
             </div>
         </div>
     </div>
@@ -1297,10 +1212,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- KONFIGURASI BATAS DATA ---
             const MAX_QR_LENGTH = 2900; 
 
-            // --- DOM ELEMENTS ---
             const logoContainer = document.getElementById('logo-container');
             const portalsGrid = document.getElementById('portals-grid');
             const portalForm = document.getElementById('portal-form');
@@ -1312,46 +1225,115 @@
             const confirmationMessage = document.getElementById('confirmation-message');
             const confirmOkBtn = document.getElementById('confirm-ok-btn');
             const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
-            const notifContainer = document.getElementById('notif-container');
 
             let portals = [];
             let onConfirmCallback = null;
             let currentGeneratedUrl = "";
-            let redirectTimer;
-            let countdownInterval;
 
-            // --- PROFESSIONAL NOTIFICATION SYSTEM ---
+            /* ==========================================
+             * SISTEM NOTIFIKASI PROFESIONAL (UPDATE)
+             * ========================================== */
+            const activeToasts = new Map(); // Untuk sistem anti-spam
+
             window.showNotification = function(title, message, type = 'success') {
+                const notifContainer = document.getElementById('notif-container');
+
+                // Konfigurasi Durasi
+                const durations = { success: 2500, info: 3000, warning: 4000, error: 5000 };
+                const duration = durations[type] || 3000;
+
+                // Konfigurasi Ikon
+                const icons = { success: '✓', warning: '⚠', error: '✕', info: 'ℹ' };
+                const iconChar = icons[type] || 'ℹ';
+
+                // SISTEM ANTI SPAM (Cek apakah pesan sama persis sudah ada)
+                if (activeToasts.has(message)) {
+                    const existingData = activeToasts.get(message);
+                    existingData.count += 1;
+                    
+                    // Update jumlah "(3x)" pada UI
+                    let countSpan = existingData.element.querySelector('.notif-count');
+                    if (!countSpan) {
+                        const titleEl = existingData.element.querySelector('.notif-title');
+                        countSpan = document.createElement('span');
+                        countSpan.className = 'notif-count';
+                        countSpan.style.marginLeft = '8px';
+                        countSpan.style.color = 'var(--gold)';
+                        countSpan.style.fontSize = '0.8rem';
+                        titleEl.appendChild(countSpan);
+                    }
+                    countSpan.textContent = `(${existingData.count}x)`;
+                    
+                    // Reset timer & animasi bar
+                    clearTimeout(existingData.timer);
+                    const progress = existingData.element.querySelector('.notif-progress');
+                    progress.style.animation = 'none';
+                    progress.offsetHeight; // trigger reflow
+                    progress.style.animation = `progressLinear ${duration}ms linear forwards`;
+
+                    // Reset timeout auto-close
+                    existingData.timer = setTimeout(() => {
+                        removeToast(existingData.element, message);
+                    }, duration);
+
+                    // Efek mental halus (Bounce) untuk memberi tahu ada update
+                    existingData.element.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        existingData.element.style.transform = '';
+                    }, 150);
+
+                    return;
+                }
+
+                // KAPASITAS MAKSIMAL 3 NOTIFIKASI
+                if (notifContainer.children.length >= 3) {
+                    const oldestToast = notifContainer.firstElementChild;
+                    if (oldestToast) {
+                        const oldestMsg = oldestToast.getAttribute('data-message');
+                        removeToast(oldestToast, oldestMsg);
+                    }
+                }
+
+                // Membuat elemen Toast baru
                 const toast = document.createElement('div');
                 toast.className = `notif-toast ${type}`;
-                
-                const iconClass = type === 'success' ? 'fa-check' : 'fa-exclamation-triangle';
+                toast.setAttribute('data-message', message);
                 
                 toast.innerHTML = `
-                    <div class="notif-icon">
-                        <i class="fas ${iconClass}"></i>
-                    </div>
+                    <div class="notif-icon">${iconChar}</div>
                     <div class="notif-content">
                         <h4 class="notif-title">${title}</h4>
                         <p class="notif-message">${message}</p>
                     </div>
-                    <button class="notif-close" onclick="this.parentElement.remove()">&times;</button>
-                    <div class="notif-progress"></div>
+                    <div class="notif-progress" style="animation: progressLinear ${duration}ms linear forwards"></div>
                 `;
 
                 notifContainer.appendChild(toast);
+                
+                // Animasi Masuk (Tunggu frame render siap)
                 requestAnimationFrame(() => {
                     toast.classList.add('show');
                 });
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    toast.addEventListener('transitionend', () => {
-                        if (toast.parentElement) toast.remove();
-                    });
-                }, 4000);
+
+                // Set Auto Close Timer
+                const timer = setTimeout(() => {
+                    removeToast(toast, message);
+                }, duration);
+
+                // Daftarkan ke Map memori aktif
+                activeToasts.set(message, { element: toast, count: 1, timer: timer });
             };
 
-            // --- V5 COMPRESSION ENGINE (UPDATED FOR PASSWORD) ---
+            function removeToast(toastEl, message) {
+                if (!toastEl) return;
+                toastEl.classList.remove('show');
+                toastEl.addEventListener('transitionend', () => {
+                    if (toastEl.parentElement) toastEl.remove();
+                    activeToasts.delete(message);
+                });
+            }
+            /* ========================================== */
+
             const SEP_ITEM = '\x01';
             const SEP_FIELD = '\x02';
             const TOKEN_MAP = [["https://api.whatsapp.com/send/?phone=", "*w"], ["https://", "*h"], ["http://", "*H"], [".com", "*c"], [".vercel.app", "*v"], ["&text=", "*t"], ["%20", "*s"], ["fas fa-", "*f"], ["fab fa-", "*b"], ["#ce00a7", "*1"], ["#4a0072", "*2"], ["#00c8e0", "*3"], [" ", "_"]];
@@ -1360,7 +1342,6 @@
                 detokenize(str) { [...TOKEN_MAP].reverse().forEach(([from, to]) => { str = str.split(to).join(from); }); return str; },
                 serialize(portals) { 
                     return portals.map(p => { 
-                        // Added field for password (index 5)
                         return [p.name, p.url, p.icon, p.color, p.description || "", p.password || ""].join(SEP_FIELD); 
                     }).join(SEP_ITEM); 
                 },
@@ -1368,13 +1349,12 @@
                     if (!str) return []; 
                     return str.split(SEP_ITEM).map(itemStr => { 
                         const parts = itemStr.split(SEP_FIELD); 
-                        // Deserialize password from index 5
                         return { name: parts[0], url: parts[1], icon: parts[2], color: parts[3], description: parts[4] || "", password: parts[5] || null }; 
                     }); 
                 },
                 encode(portals) { try { let raw = UrlManager.serialize(portals); raw = UrlManager.tokenize(raw); let compressed = LZString.compressToBase64(raw); return compressed.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); } catch (e) { console.error("Encode Error", e); return null; } },
                 decode(encoded) { try { let b64 = encoded.replace(/-/g, "+").replace(/_/g, "/"); while (b64.length % 4 !== 0) b64 += "="; let raw = LZString.decompressFromBase64(b64); if (!raw) return null; raw = UrlManager.detokenize(raw); return UrlManager.deserialize(raw); } catch (e) { console.error("Decode Error", e); return null; } },
-                load(payload) { if (payload.startsWith("v5_")) return UrlManager.decode(payload.slice(3)); if (payload.startsWith("v4:") || payload.startsWith("id:")) { window.showNotification('Format Lama', 'Terdeteksi link versi lama.', 'error'); return null; } const legacy = LZString.decompressFromEncodedURIComponent(payload); if (legacy && legacy.startsWith("[")) return JSON.parse(legacy); return null; }
+                load(payload) { if (payload.startsWith("v5_")) return UrlManager.decode(payload.slice(3)); if (payload.startsWith("v4:") || payload.startsWith("id:")) { window.showNotification('Peringatan', 'Terdeteksi tautan versi lama', 'warning'); return null; } const legacy = LZString.decompressFromEncodedURIComponent(payload); if (legacy && legacy.startsWith("[")) return JSON.parse(legacy); return null; }
             };
 
             const defaultPortals = [
@@ -1401,7 +1381,6 @@
                 }
             ];
 
-            // --- APP INITIALIZATION ---
             function initPortalApp() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const encodedData = urlParams.get('p');
@@ -1412,7 +1391,7 @@
                         localStorage.setItem('portals', JSON.stringify(portals));
                         window.history.replaceState({}, document.title, window.location.pathname);
                         renderPortals();
-                        window.showNotification('Data Loaded', 'Portal berhasil dimuat dari link.', 'success');
+                        window.showNotification('Berhasil', 'Data berhasil dimuat dari tautan', 'success');
                     } else loadFromStorage();
                 } else loadFromStorage();
                 setupEventListeners();
@@ -1425,10 +1404,7 @@
                 renderPortals();
             }
 
-            // --- Fungsi Tambahan untuk Fullscreen ---
             function toggleFullScreen() {
-                // Hanya memaksa masuk ke mode fullscreen. 
-                // Jika sudah fullscreen, tidak akan melakukan apa-apa (tetap full layar).
                 if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
                     if (document.documentElement.requestFullscreen) {
                         document.documentElement.requestFullscreen();
@@ -1444,9 +1420,7 @@
                 logoContainer.addEventListener('click', () => {
                     document.body.classList.toggle('light-mode');
                     const mode = document.body.classList.contains('light-mode') ? 'Light Mode' : 'Shura Mode';
-                    window.showNotification('Theme Changed', `Mode tampilan diubah ke ${mode}.`, 'success');
-                    
-                    // Memanggil fungsi fullscreen saat logo diklik
+                    window.showNotification('Berhasil', `Mode tampilan diubah ke ${mode}`, 'success');
                     toggleFullScreen();
                 });
                 mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.add('open'); mobileMenuOverlay.classList.remove('hidden'); mobileMenuOverlay.style.display = 'block'; document.body.style.overflow = 'hidden'; });
@@ -1473,7 +1447,6 @@
                 confirmationMessage.textContent = message; onConfirmCallback = callback; confirmationModal.classList.remove('hidden'); confirmationModal.style.display = 'flex';
             }
 
-            // --- PORTAL RENDERING & PASSWORD LOGIC ---
             function renderPortals() {
                 portalsGrid.innerHTML = '';
                 portals.forEach((portal, index) => {
@@ -1492,7 +1465,6 @@
                     const descriptionHtml = portal.description ? portal.description : '&nbsp;';
                     const lockIconHtml = isLocked ? `<div class="lock-indicator"><i class="fas fa-lock"></i></div>` : '';
                     
-                    // Modified click handler
                     const clickAction = `onclick="handlePortalClick(event, ${index})"`;
                     
                     portalElement.innerHTML = `
@@ -1504,7 +1476,7 @@
                                 <h3 class="font-cinzel" style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; word-break: break-word; font-size: 1.125rem; margin-bottom: 0.5rem;">${portal.name}</h3>
                                 <p class="portal-description">${descriptionHtml}</p>
                             </div>
-                            <button onclick="event.stopPropagation(); showConfirmationModal('Destroy portal ${portal.name}?', () => deletePortalAction(${index}))" class="delete-btn">
+                            <button onclick="event.stopPropagation(); showConfirmationModal('Yakin ingin menghapus portal ${portal.name}?', () => deletePortalAction(${index}))" class="delete-btn">
                                 <i class="fas fa-times" style="font-size: 0.875rem;"></i>
                             </button>
                         </div>
@@ -1521,11 +1493,9 @@
                 const portal = portals[index];
                 
                 if (portal.password && portal.password.trim() !== "") {
-                    // Portal Locked
                     currentUnlockIndex = index;
                     openPasswordModal();
                 } else {
-                    // Portal Unlocked
                     window.open(portal.url, '_blank');
                 }
             }
@@ -1551,55 +1521,15 @@
                 const input = document.getElementById('unlock-input').value;
                 const portal = portals[currentUnlockIndex];
                 
-                // Simple Base64 check
                 if (btoa(input) === portal.password) {
                     closePasswordModal();
-                    // PERUBAHAN: Langsung buka link tanpa notifikasi atau popup modal
                     window.open(portal.url, '_blank');
                 } else {
-                    window.showNotification("Salah!", "Password tidak cocok. Coba lagi.", "error");
+                    window.showNotification("Kesalahan", "Kata sandi tidak cocok. Coba lagi.", "error");
                     const inputField = document.getElementById('unlock-input');
                     inputField.style.borderColor = 'var(--error-red)';
                     setTimeout(() => inputField.style.borderColor = 'rgba(0, 200, 224, 0.4)', 500);
                 }
-            }
-
-            window.showSuccessModal = function(url) {
-                const modal = document.getElementById('success-modal');
-                const countdownText = document.getElementById('countdown-text');
-                const btnLanjut = document.getElementById('btn-lanjut');
-                
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
-                
-                let timeLeft = 5;
-                countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
-                
-                // Set target URL globally or via closure
-                const doRedirect = () => {
-                    clearInterval(countdownInterval);
-                    clearTimeout(redirectTimer);
-                    window.open(url, '_blank');
-                    modal.classList.add('hidden');
-                    modal.style.display = 'none';
-                };
-
-                // Clear existing timers if any
-                if (redirectTimer) clearTimeout(redirectTimer);
-                if (countdownInterval) clearInterval(countdownInterval);
-
-                // Auto redirect timer
-                redirectTimer = setTimeout(doRedirect, 5000);
-
-                // Countdown interval
-                countdownInterval = setInterval(() => {
-                    timeLeft--;
-                    countdownText.textContent = `Otomatis masuk dalam ${timeLeft} detik...`;
-                    if (timeLeft <= 0) clearInterval(countdownInterval);
-                }, 1000);
-
-                // Button click
-                btnLanjut.onclick = doRedirect;
             }
 
             function handlePortalFormSubmit(e) { 
@@ -1610,9 +1540,8 @@
                 const icon = document.getElementById('portal-icon').value; 
                 const color = document.querySelector('input[name="portal-color"]:checked').value; 
                 
-                // Handle Password
                 const passwordInput = document.getElementById('portal-password').value;
-                const password = passwordInput ? btoa(passwordInput) : ""; // Encode or empty
+                const password = passwordInput ? btoa(passwordInput) : ""; 
 
                 addPortalToArray(name, url, icon, color, description, password); 
             }
@@ -1624,17 +1553,16 @@
                 document.getElementById('add-portal-modal').classList.add('hidden'); 
                 document.getElementById('add-portal-modal').style.display = 'none'; 
                 resetPortalForm(); 
-                window.showNotification('Success', 'Portal baru berhasil ditempa!', 'success'); 
+                window.showNotification('Berhasil', 'Portal berhasil ditambahkan', 'success'); 
             }
 
-            window.deletePortalAction = function(index) { portals.splice(index, 1); savePortals(); renderPortals(); window.showNotification('Deleted', 'Portal berhasil dihapus.', 'success'); }
+            window.deletePortalAction = function(index) { portals.splice(index, 1); savePortals(); renderPortals(); window.showNotification('Berhasil', 'Portal berhasil dihapus', 'success'); }
             function resetPortalForm() { portalForm.reset(); }
             function savePortals() { localStorage.setItem('portals', JSON.stringify(portals)); }
             window.showAddLinkModal = function() { document.getElementById('add-portal-modal').classList.remove('hidden'); document.getElementById('add-portal-modal').style.display = 'flex'; resetPortalForm(); if (mobileMenu.classList.contains('open')) closeMobileMenu(); }
-            function updateTime() { const now = new Date(); timeDisplay.textContent = now.toLocaleTimeString('en-GB'); dateDisplay.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); }
-            window.resetAllSettings = function() { localStorage.removeItem('portals'); Object.keys(localStorage).forEach(key => { if (key.startsWith('sl_')) localStorage.removeItem(key); }); location.href = window.location.pathname; }
+            
+            window.resetAllSettings = function() { localStorage.removeItem('portals'); location.href = window.location.pathname; }
 
-            // --- TOGGLE REVEAL FUNCTIONS ---
             window.revealLink = function() {
                 document.getElementById('btn-show-link').style.display = 'none';
                 document.getElementById('link-content').style.display = 'block';
@@ -1647,11 +1575,10 @@
                 document.getElementById('capacity-container').classList.add('hide-capacity');
             }
 
-            // --- QR CODE GENERATION LOGIC ---
             window.generateSmartLink = function() {
                 const portalData = localStorage.getItem('portals');
                 if (!portalData || JSON.parse(portalData).length === 0) {
-                    window.showNotification('Error', 'Tidak ada portal untuk di-generate.', 'error');
+                    window.showNotification('Kesalahan', 'Tidak ada portal untuk dibuat', 'error');
                     return;
                 }
 
@@ -1659,19 +1586,16 @@
                 const modal = document.getElementById('smart-link-modal');
                 const qrDisplayCanvas = document.getElementById('qr-canvas-display');
                 
-                // RESET VISIBILITY STATE EVERY TIME MODAL OPENS
                 document.getElementById('btn-show-link').style.display = 'flex';
                 document.getElementById('link-content').style.display = 'none';
                 document.getElementById('btn-show-qr').style.display = 'flex';
                 document.getElementById('qr-content').style.display = 'none';
                 
-                // Reset capacity container visibility
                 document.getElementById('capacity-container').classList.remove('hide-capacity');
 
-                // Tampilkan loading sementara
                 modal.classList.remove('hidden');
                 modal.style.display = 'flex';
-                inputField.value = "Generating...";
+                inputField.value = "Memproses...";
 
                 setTimeout(() => {
                     const parsedPortals = JSON.parse(portalData);
@@ -1680,15 +1604,13 @@
                     if (encoded) {
                         const finalParam = `v5_${encoded}`;
                         
-                        // NEW LOGIC: Menggunakan variabel MAX_QR_LENGTH
                         if (finalParam.length > MAX_QR_LENGTH) {
-                            document.getElementById('smart-link-modal').style.display = 'none'; // Sembunyikan modal sukses
+                            document.getElementById('smart-link-modal').style.display = 'none'; 
                             document.getElementById('limit-warning-modal').classList.remove('hidden');
                             document.getElementById('limit-warning-modal').style.display = 'flex';
-                            return; // Hentikan proses agar QR tidak digambar
+                            return; 
                         }
 
-                        // --- Capacity Logic ---
                         const usedLength = finalParam.length;
                         const percentage = Math.min(100, Math.round((usedLength / MAX_QR_LENGTH) * 100));
                         const remaining = Math.max(0, MAX_QR_LENGTH - usedLength);
@@ -1697,12 +1619,10 @@
                         const capText = document.getElementById('capacity-text');
                         const capDetail = document.getElementById('capacity-detail');
                         
-                        // Update Width & Text
                         capBar.style.width = percentage + "%";
                         capText.textContent = percentage + "%";
                         capDetail.textContent = `Sisa Karakter: ${remaining}`;
                         
-                        // Update Color
                         if (percentage < 70) {
                             capBar.style.background = "var(--success-green)";
                         } else if (percentage < 90) {
@@ -1715,16 +1635,14 @@
                         inputField.value = finalUrl;
                         currentGeneratedUrl = finalUrl; 
 
-                        // Generate Preview on small canvas (Even if hidden, canvas can be drawn)
                         renderCustomQR(qrDisplayCanvas, finalUrl, false); 
                     } else {
-                        inputField.value = "Error generating link.";
-                        window.showNotification('Error', 'Gagal membuat Smart Link.', 'error');
+                        inputField.value = "Kesalahan dalam memproses tautan.";
+                        window.showNotification('Kesalahan', 'Gagal membuat Smart Link', 'error');
                     }
                 }, 100);
             }
 
-            // --- MASTER QR RENDERER (WHATSAPP STYLE) ---
             function renderCustomQR(targetCanvas, textData, isHighQuality) {
                 const size = isHighQuality ? 3000 : 600;
                 
@@ -1737,7 +1655,6 @@
                 targetCanvas.height = size + (textSpace * 0.5); 
                 const ctx = targetCanvas.getContext('2d');
 
-                // 1. Draw The "Card" (White Rounded Rectangle)
                 const qrX = padding;
                 const qrY = padding;
                 const cornerRadius = size * 0.05;
@@ -1754,7 +1671,6 @@
                 
                 ctx.shadowColor = "transparent";
 
-                // 2. Generate QR Matrix via QRious
                 const tempQrCanvas = document.createElement('canvas');
                 const qrMargin = cardWidth * 0.1;
                 const qrSize = cardWidth - (qrMargin * 2);
@@ -1768,10 +1684,8 @@
                     foreground: '#000000' 
                 });
 
-                // 3. Draw QR onto Main Canvas
                 ctx.drawImage(tempQrCanvas, qrX + qrMargin, qrY + qrMargin);
 
-                // 4. Draw Logo
                 const logoUrl = "https://files.catbox.moe/oyk6sx.png";
                 const img = new Image();
                 img.crossOrigin = "Anonymous";
@@ -1809,10 +1723,10 @@
                             link.download = 'Hayabusa_Shura_Portal_QR.png';
                             link.href = dataUrl;
                             link.click();
-                            window.showNotification('Success', 'Download dimulai!', 'success');
+                            window.showNotification('Berhasil', 'Unduhan dimulai', 'success');
                         } catch (e) {
                             console.error(e);
-                            window.showNotification('Error', 'Gagal menyimpan gambar.', 'error');
+                            window.showNotification('Kesalahan', 'Gagal menyimpan gambar', 'error');
                         }
                     }
                 };
@@ -1838,10 +1752,10 @@
 
             window.downloadHighResQR = function() {
                 if (!currentGeneratedUrl) {
-                    window.showNotification('Error', 'Smart Link belum di-generate.', 'error');
+                    window.showNotification('Kesalahan', 'Smart Link belum dibuat', 'error');
                     return;
                 }
-                window.showNotification('Processing', 'Memproses QR Code High-Res...', 'success');
+                window.showNotification('Info', 'Memproses QR Code resolusi tinggi', 'info');
                 
                 const downloadCanvas = document.createElement('canvas');
                 renderCustomQR(downloadCanvas, currentGeneratedUrl, true);
@@ -1851,10 +1765,10 @@
                 const inputField = document.getElementById('generated-smart-link');
                 inputField.select(); inputField.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(inputField.value).then(() => {
-                    window.showNotification('Berhasil!', 'Link berhasil disalin ke clipboard.', 'success');
+                    window.showNotification('Berhasil', 'Tautan berhasil disalin', 'success');
                 }).catch(err => {
                     console.error('Gagal menyalin text: ', err);
-                    window.showNotification('Gagal', 'Gagal menyalin link otomatis.', 'error');
+                    window.showNotification('Kesalahan', 'Gagal menyalin tautan', 'error');
                 });
             }
 
@@ -1869,8 +1783,8 @@
                     const a = document.createElement('a');
                     a.href = url; a.download = 'uranusfazry_backup.zip';
                     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-                    window.showNotification('Backup Ready', 'File backup sedang didownload.', 'success');
-                } catch (error) { window.showNotification('Backup Error', 'Gagal membuat backup.', 'error'); }
+                    window.showNotification('Berhasil', 'File cadangan sedang diunduh', 'success');
+                } catch (error) { window.showNotification('Kesalahan', 'Gagal membuat cadangan', 'error'); }
             };
 
             window.importData = () => { importFileInput.click(); };
@@ -1888,106 +1802,66 @@
                         const imported = JSON.parse(jsonContent);
                         if (imported && Array.isArray(imported.portals)) {
                             localStorage.setItem('portals', JSON.stringify(imported.portals));
-                            showConfirmationModal('Data imported. Page will reload.', () => location.reload());
-                        } else { window.showNotification('Import Error', 'Format file backup tidak valid.', 'error'); }
-                    } catch (error) { window.showNotification('Import Error', 'Gagal membaca file.', 'error'); }
+                            showConfirmationModal('Data berhasil diimpor. Halaman akan dimuat ulang.', () => location.reload());
+                        } else { window.showNotification('Kesalahan', 'Format file tidak valid', 'error'); }
+                    } catch (error) { window.showNotification('Kesalahan', 'Gagal membaca file', 'error'); }
                 };
                 if (file.name.endsWith(".zip")) reader.readAsArrayBuffer(file); else reader.readAsText(file);
                 event.target.value = '';
             }
 
-            /* --- WHATSAPP GENERATOR LOGIC (IMPROVED) --- */
-            
-            // 1. DATA NEGARA (DIKELOMPOKKAN PER BENUA)
             const countryGroups = [
                 {
                     region: "🌏 ASIA",
                     countries: [
-                        { code: "62", name: "Indonesia" },
-                        { code: "60", name: "Malaysia" },
-                        { code: "65", name: "Singapore" },
-                        { code: "63", name: "Philippines" },
-                        { code: "66", name: "Thailand" },
-                        { code: "84", name: "Vietnam" },
-                        { code: "82", name: "South Korea" },
-                        { code: "81", name: "Japan" },
-                        { code: "86", name: "China" },
-                        { code: "91", name: "India" },
-                        { code: "92", name: "Pakistan" },
-                        { code: "971", name: "United Arab Emirates (UAE)" },
-                        { code: "966", name: "Saudi Arabia" },
-                        { code: "94", name: "Sri Lanka" },
-                        { code: "880", name: "Bangladesh" },
-                        { code: "98", name: "Iran" },
-                        { code: "964", name: "Iraq" },
-                        { code: "90", name: "Turkey" },
-                        { code: "856", name: "Laos" },
-                        { code: "855", name: "Cambodia" },
-                        { code: "95", name: "Myanmar" },
-                        { code: "853", name: "Macau" },
-                        { code: "852", name: "Hong Kong" }
+                        { code: "62", name: "Indonesia" }, { code: "60", name: "Malaysia" }, { code: "65", name: "Singapore" },
+                        { code: "63", name: "Philippines" }, { code: "66", name: "Thailand" }, { code: "84", name: "Vietnam" },
+                        { code: "82", name: "South Korea" }, { code: "81", name: "Japan" }, { code: "86", name: "China" },
+                        { code: "91", name: "India" }, { code: "92", name: "Pakistan" }, { code: "971", name: "United Arab Emirates (UAE)" },
+                        { code: "966", name: "Saudi Arabia" }, { code: "94", name: "Sri Lanka" }, { code: "880", name: "Bangladesh" },
+                        { code: "98", name: "Iran" }, { code: "964", name: "Iraq" }, { code: "90", name: "Turkey" },
+                        { code: "856", name: "Laos" }, { code: "855", name: "Cambodia" }, { code: "95", name: "Myanmar" },
+                        { code: "853", name: "Macau" }, { code: "852", name: "Hong Kong" }
                     ]
                 },
                 {
                     region: "🌍 EUROPE",
                     countries: [
-                        { code: "44", name: "United Kingdom (UK)" },
-                        { code: "49", name: "Germany" },
-                        { code: "33", name: "France" },
-                        { code: "31", name: "Netherlands" },
-                        { code: "34", name: "Spain" },
-                        { code: "39", name: "Italy" },
-                        { code: "43", name: "Austria" },
-                        { code: "41", name: "Switzerland" },
-                        { code: "45", name: "Denmark" },
-                        { code: "46", name: "Sweden" },
-                        { code: "47", name: "Norway" },
-                        { code: "48", name: "Poland" },
-                        { code: "7", name: "Russia" },
-                        { code: "420", name: "Czech Republic" },
-                        { code: "421", name: "Slovakia" }
+                        { code: "44", name: "United Kingdom (UK)" }, { code: "49", name: "Germany" }, { code: "33", name: "France" },
+                        { code: "31", name: "Netherlands" }, { code: "34", name: "Spain" }, { code: "39", name: "Italy" },
+                        { code: "43", name: "Austria" }, { code: "41", name: "Switzerland" }, { code: "45", name: "Denmark" },
+                        { code: "46", name: "Sweden" }, { code: "47", name: "Norway" }, { code: "48", name: "Poland" },
+                        { code: "7", name: "Russia" }, { code: "420", name: "Czech Republic" }, { code: "421", name: "Slovakia" }
                     ]
                 },
                 {
                     region: "🌎 AMERICA",
                     countries: [
-                        { code: "1", name: "USA / Canada" },
-                        { code: "52", name: "Mexico" },
-                        { code: "55", name: "Brazil" },
-                        { code: "54", name: "Argentina" },
-                        { code: "57", name: "Colombia" },
-                        { code: "58", name: "Venezuela" },
-                        { code: "56", name: "Chile" },
-                        { code: "51", name: "Peru" }
+                        { code: "1", name: "USA / Canada" }, { code: "52", name: "Mexico" }, { code: "55", name: "Brazil" },
+                        { code: "54", name: "Argentina" }, { code: "57", name: "Colombia" }, { code: "58", name: "Venezuela" },
+                        { code: "56", name: "Chile" }, { code: "51", name: "Peru" }
                     ]
                 },
                 {
                     region: "🌍 AFRICA",
                     countries: [
-                        { code: "20", name: "Egypt" },
-                        { code: "212", name: "Morocco" },
-                        { code: "234", name: "Nigeria" },
-                        { code: "254", name: "Kenya" },
-                        { code: "27", name: "South Africa" },
-                        { code: "256", name: "Uganda" }
+                        { code: "20", name: "Egypt" }, { code: "212", name: "Morocco" }, { code: "234", name: "Nigeria" },
+                        { code: "254", name: "Kenya" }, { code: "27", name: "South Africa" }, { code: "256", name: "Uganda" }
                     ]
                 },
                 {
                     region: "🌏 OCEANIA",
                     countries: [
-                        { code: "61", name: "Australia" },
-                        { code: "64", name: "New Zealand" }
+                        { code: "61", name: "Australia" }, { code: "64", name: "New Zealand" }
                     ]
                 }
             ];
 
-            // 2. POPULATE DROPDOWN (UPDATED WITH OPTGROUP)
             function populateCountries() {
                 const select = document.getElementById('wa-country-code');
-                select.innerHTML = ''; // Clear existing
+                select.innerHTML = ''; 
                 
                 countryGroups.forEach(group => {
-                    // Buat Label Group (Misal: ASIA)
                     const optgroup = document.createElement('optgroup');
                     optgroup.label = group.region;
                     optgroup.style.color = "var(--gold)"; 
@@ -1995,12 +1869,11 @@
                     optgroup.style.fontWeight = "bold";
                     optgroup.style.backgroundColor = "rgba(11, 14, 49, 0.95)";
 
-                    // Isi negara di dalam group tersebut
                     group.countries.forEach(c => {
                         const option = document.createElement('option');
                         option.value = c.code;
                         option.textContent = `+${c.code} (${c.name})`;
-                        option.style.color = "#fff"; // Reset warna item agar putih
+                        option.style.color = "#fff"; 
                         option.style.fontFamily = "'Inter', sans-serif";
                         optgroup.appendChild(option);
                     });
@@ -2014,7 +1887,6 @@
                 document.getElementById('wa-form').reset();
                 document.getElementById('wa-result-container').style.display = 'none';
                 
-                // Pastikan list negara terisi (jika belum)
                 if(document.getElementById('wa-country-code').options.length === 0) {
                     populateCountries();
                 }
@@ -2027,36 +1899,28 @@
                 let numberInput = document.getElementById('wa-number').value;
                 const msgInput = document.getElementById('wa-message').value;
 
-                // VALIDASI 1: Cek Kode Negara
                 if (!countryCode) {
-                    window.showNotification('Error', 'Pilih kode negara terlebih dahulu.', 'error');
+                    window.showNotification('Kesalahan', 'Pilih kode negara terlebih dahulu', 'error');
                     return;
                 }
 
-                // VALIDASI 2: Bersihkan Nomor (Hapus simbol selain angka)
                 let cleanNum = numberInput.replace(/\D/g, ''); 
 
-                // VALIDASI 3: Cek Input Kosong
                 if (!cleanNum) {
-                    window.showNotification('Error', 'Nomor WhatsApp wajib diisi.', 'error');
+                    window.showNotification('Kesalahan', 'Nomor WhatsApp wajib diisi', 'error');
                     return;
                 }
 
-                // LOGIKA: Hapus '0' di depan jika ada (0812 -> 812)
                 if (cleanNum.startsWith('0')) {
                     cleanNum = cleanNum.substring(1);
                 }
 
-                // LOGIKA: Cek panjang minimal (misal min 5 digit agar valid)
                 if (cleanNum.length < 5) {
-                    window.showNotification('Error', 'Nomor terlalu pendek.', 'error');
+                    window.showNotification('Kesalahan', 'Nomor terlalu pendek', 'error');
                     return;
                 }
 
-                // LOGIKA: Gabung Kode Negara + Nomor Bersih
                 const fullNumber = countryCode + cleanNum;
-
-                // LOGIKA: Encode Pesan (Spasi -> %20, Enter -> %0A)
                 let waUrl = `https://wa.me/${fullNumber}`;
                 
                 if (msgInput.trim().length > 0) {
@@ -2064,33 +1928,27 @@
                     waUrl += `?text=${encodedMsg}`;
                 }
 
-                // OUTPUT
                 document.getElementById('wa-result-link').value = waUrl;
                 document.getElementById('wa-result-container').style.display = 'block';
-                window.showNotification('Success', 'Link WhatsApp berhasil dibuat!', 'success');
+                window.showNotification('Berhasil', 'Tautan WhatsApp berhasil dibuat', 'success');
             }
 
             window.copyWaLink = function() {
                 const copyText = document.getElementById("wa-result-link");
                 copyText.select();
-                copyText.setSelectionRange(0, 99999); // For mobile
-                document.execCommand("copy"); // Fallback simple copy
+                copyText.setSelectionRange(0, 99999); 
+                document.execCommand("copy"); 
                 
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(copyText.value);
                 }
 
-                window.showNotification('Copied', 'Link WhatsApp disalin ke clipboard.', 'success');
+                window.showNotification('Berhasil', 'Tautan WhatsApp berhasil disalin', 'success');
             }
 
             window.openWaLink = function() {
                 const url = document.getElementById("wa-result-link").value;
                 if(url) window.open(url, '_blank');
-            }
-
-            window.showHelpModal = function() {
-                document.getElementById('help-modal').style.display = 'flex';
-                if (mobileMenu.classList.contains('open')) closeMobileMenu();
             }
 
             // --- TIKTOK SWIPE / FOCUS MODE LOGIC ---
@@ -2099,7 +1957,7 @@
             let savedScrollY = 0;
 
             function enableFocusMode() {
-                if (document.body.classList.contains("focus-mode")) return; // Prevent double trigger
+                if (document.body.classList.contains("focus-mode")) return; 
                 savedScrollY = window.scrollY;
 
                 document.body.classList.add("focus-mode");
@@ -2109,7 +1967,7 @@
             }
 
             function disableFocusMode() {
-                if (!document.body.classList.contains("focus-mode")) return; // Prevent double trigger
+                if (!document.body.classList.contains("focus-mode")) return; 
                 document.body.classList.remove("focus-mode");
                 document.documentElement.classList.remove("focus-mode");
 
@@ -2152,7 +2010,7 @@
     </script>
 
     <script>
-        // Anti Layout Jumping Script untuk Mobile Browser
+        // Anti Layout Jumping Script
         function setViewportHeight() {
             document.documentElement.style.setProperty(
                 '--vh',
