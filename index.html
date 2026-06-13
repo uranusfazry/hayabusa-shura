@@ -57,7 +57,9 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(180deg, var(--dark-stone) 0%, var(--deep-magma) 100%);
             color: #fff;
-            min-height: calc(var(--vh, 1vh) * 100);
+            min-height: 100vh; /* Fallback browser lama */
+            min-height: 100dvh; /* Fallback mobile modern (Dynamic Viewport) */
+            min-height: calc(var(--vh, 1vh) * 100); /* Anti Layout Jump */
             overflow-x: hidden;
             position: relative;
             display: flex;
@@ -111,6 +113,8 @@
         .flame-text { color: var(--flame-red); }
         .gold-text { color: var(--gold); }
         .lava-text { color: var(--gold); }
+
+        main { padding-top: 110px; }
 
         /* Navbar */
         .navbar {
@@ -785,10 +789,11 @@
         }
 
         /* === TIKTOK SWIPE / FOCUS MODE === */
+        .profile-container,
         .navbar,
         #portals-grid,
         footer {
-            transition: opacity 0.45s ease, transform 0.45s ease !important;
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease !important;
         }
 
         body.focus-mode .navbar {
@@ -799,7 +804,7 @@
 
         body.focus-mode #portals-grid {
             opacity: 0;
-            transform: translateX(100px);
+            transform: translateX(80px);
             pointer-events: none;
         }
 
@@ -809,12 +814,46 @@
             pointer-events: none;
         }
 
+        body.focus-mode .profile-container {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+
+        body.focus-mode .profile-container,
+        body.focus-mode .navbar,
+        body.focus-mode #portals-grid,
+        body.focus-mode footer {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        html.focus-mode,
+        body.focus-mode {
+            overflow: hidden !important;
+        }
+
+        body.focus-mode {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        body.focus-mode #bg-container {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 999;
+        }
+
         .profile-container {
             position: relative;
             z-index: 999;
         }
 
-        #bg-image {
+        body.focus-mode #bg-image {
             transform: none !important;
         }
     </style>
@@ -2057,6 +2096,27 @@
             // --- TIKTOK SWIPE / FOCUS MODE LOGIC ---
             let startX = 0;
             let touchStart = 0;
+            let savedScrollY = 0;
+
+            function enableFocusMode() {
+                if (document.body.classList.contains("focus-mode")) return; // Prevent double trigger
+                savedScrollY = window.scrollY;
+
+                document.body.classList.add("focus-mode");
+                document.documentElement.classList.add("focus-mode");
+
+                document.body.style.top = `-${savedScrollY}px`;
+            }
+
+            function disableFocusMode() {
+                if (!document.body.classList.contains("focus-mode")) return; // Prevent double trigger
+                document.body.classList.remove("focus-mode");
+                document.documentElement.classList.remove("focus-mode");
+
+                document.body.style.top = "";
+
+                window.scrollTo(0, savedScrollY);
+            }
 
             document.addEventListener("mousedown", (e) => {
                 startX = e.clientX;
@@ -2065,10 +2125,10 @@
             document.addEventListener("mouseup", (e) => {
                 const diff = e.clientX - startX;
                 if (diff > 100) {
-                    document.body.classList.add("focus-mode");
+                    enableFocusMode();
                 }
                 if (diff < -100) {
-                    document.body.classList.remove("focus-mode");
+                    disableFocusMode();
                 }
             });
 
@@ -2080,10 +2140,10 @@
                 const touchEnd = e.changedTouches[0].clientX;
                 const diff = touchEnd - touchStart;
                 if (diff > 100) {
-                    document.body.classList.add("focus-mode");
+                    enableFocusMode();
                 }
                 if (diff < -100) {
-                    document.body.classList.remove("focus-mode");
+                    disableFocusMode();
                 }
             });
 
