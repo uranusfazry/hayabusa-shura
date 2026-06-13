@@ -1339,30 +1339,34 @@
                 renderPortals();
             }
 
+            // --- Fungsi Tambahan untuk Fullscreen ---
             function toggleFullScreen() {
-                if (!document.fullscreenElement) {
+                if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
                     if (document.documentElement.requestFullscreen) {
                         document.documentElement.requestFullscreen();
-                    } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                    } else if (document.documentElement.webkitRequestFullscreen) {
                         document.documentElement.webkitRequestFullscreen();
-                    } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+                    } else if (document.documentElement.msRequestFullscreen) {
                         document.documentElement.msRequestFullscreen();
                     }
-                    window.showNotification('Layar Penuh', 'Mode layar penuh diaktifkan.', 'success');
                 } else {
                     if (document.exitFullscreen) {
                         document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) { /* Safari */
+                    } else if (document.webkitExitFullscreen) {
                         document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) { /* IE11 */
+                    } else if (document.msExitFullscreen) {
                         document.msExitFullscreen();
                     }
-                    window.showNotification('Layar Normal', 'Kembali ke tampilan normal.', 'success');
                 }
             }
 
             function setupEventListeners() {
                 logoContainer.addEventListener('click', () => {
+                    document.body.classList.toggle('light-mode');
+                    const mode = document.body.classList.contains('light-mode') ? 'Light Mode' : 'Shura Mode';
+                    window.showNotification('Theme Changed', `Mode tampilan diubah ke ${mode}.`, 'success');
+                    
+                    // Memanggil fungsi fullscreen saat logo diklik
                     toggleFullScreen();
                 });
                 mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.add('open'); mobileMenuOverlay.classList.remove('hidden'); mobileMenuOverlay.style.display = 'block'; document.body.style.overflow = 'hidden'; });
