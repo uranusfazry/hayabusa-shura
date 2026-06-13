@@ -47,15 +47,15 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* === 1. LOCK BODY (NATIVE APP FEEL) DIHAPUS, GANTI SCROLL NORMAL === */
+        /* === 1. LOCK BODY (NATIVE APP FEEL) === */
         html,
         body {
             width: 100%;
-            min-height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
+            height: 100%;
+            overflow: hidden;
             margin: 0;
             padding: 0;
+            overscroll-behavior: none; /* Mencegah pull-to-refresh bawaan browser */
         }
 
         body {
@@ -65,15 +65,18 @@
             position: relative;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: auto;
         }
 
-        /* === 2. APP WRAPPER (SISTEM SCROLL NORMAL) === */
+        /* === 2. APP WRAPPER (SISTEM SCROLL INTERNAL) === */
         #app-wrapper {
-            position: relative;
-            min-height: 100vh;
-            overflow: visible;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; /* Momentum scrolling iOS */
             display: flex;
             flex-direction: column;
         }
@@ -125,16 +128,9 @@
         .lava-text { color: var(--gold); }
 
         /* === 3. RUANG UNTUK NAVBAR === */
-        main { 
-            padding-top: 110px; 
-            padding-bottom: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex-grow: 1;
-        }
+        main { padding-top: 110px; }
 
-        /* === 4. NAVBAR STABIL ANTI BROWSER JUMPING === */
+        /* === 4. NAVBAR SUPER STABIL === */
         .navbar {
             background: rgba(11, 14, 49, 0.9);
             backdrop-filter: blur(15px);
@@ -143,15 +139,16 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
             
             position: fixed !important;
-            top: 0;
+            top: 0 !important;
             left: 0;
+            right: 0;
             width: 100%;
-            z-index: 999999;
-            transform: translate3d(0,0,0);
-            will-change: transform;
+            z-index: 999999 !important;
+            transform: none !important;
+            transition: none !important;
+            will-change: auto;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            padding-top: env(safe-area-inset-top);
         }
 
         .navbar .container > div {
@@ -288,7 +285,7 @@
         /* Grid Portal */
         #portals-grid {
             display: grid;
-            gap: 16px;
+            gap: 1.5rem;
             margin-bottom: 3rem;
             grid-template-columns: 1fr;
         }
@@ -582,7 +579,7 @@
         /* === 5. NOTIFIKASI OFFSET YANG BENAR === */
         .notif-container {
             position: fixed; 
-            top: calc(90px + env(safe-area-inset-top)); 
+            top: 95px; 
             right: 20px; 
             z-index: 100000;
             display: flex; 
@@ -593,7 +590,7 @@
 
         @media (orientation: landscape) {
             .notif-container {
-                top: calc(105px + env(safe-area-inset-top));
+                top: 105px;
                 right: 20px;
             }
         }
@@ -684,7 +681,7 @@
             .notif-container { 
                 left: 50%;
                 right: auto;
-                top: calc(95px + env(safe-area-inset-top));
+                top: 95px;
                 bottom: auto;
                 transform: translateX(-50%);
                 width: 100%;
@@ -697,16 +694,11 @@
         footer {
             background: rgba(11, 14, 49, 0.9);
             border-top: 2px solid rgba(0, 200, 224, 0.3);
-            height: 70px;
+            margin-top: auto; height: 70px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             padding: 0 1rem;
             box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
-            position: relative;
-            bottom: auto;
-            margin-top: 40px;
-            width: 100%;
-            z-index: 50;
         }
 
         footer p:first-child { font-size: 14px; }
@@ -866,7 +858,7 @@
         }
 
         body.focus-mode #app-wrapper {
-            overflow: visible; 
+            overflow: hidden !important; /* MEMATIKAN SCROLL SAAT SWIPE MODE */
         }
 
         body.focus-mode #bg-container {
@@ -1966,7 +1958,7 @@
                 if(url) window.open(url, '_blank');
             }
 
-            // --- TIKTOK SWIPE / FOCUS MODE LOGIC (DIPERBARUI UNTUK SCROLL WINDOW) ---
+            // --- TIKTOK SWIPE / FOCUS MODE LOGIC (DIPERBARUI) ---
             let startX = 0;
             let touchStart = 0;
             let savedScrollY = 0;
@@ -1974,7 +1966,8 @@
             function enableFocusMode() {
                 if (document.body.classList.contains("focus-mode")) return; 
                 
-                savedScrollY = window.scrollY; // Simpan posisi scroll dari WINDOW
+                const appWrapper = document.getElementById('app-wrapper');
+                savedScrollY = appWrapper.scrollTop; // Simpan posisi scroll dari APP WRAPPER
 
                 document.body.classList.add("focus-mode");
                 document.documentElement.classList.add("focus-mode");
@@ -1982,11 +1975,13 @@
 
             function disableFocusMode() {
                 if (!document.body.classList.contains("focus-mode")) return; 
+                
+                const appWrapper = document.getElementById('app-wrapper');
 
                 document.body.classList.remove("focus-mode");
                 document.documentElement.classList.remove("focus-mode");
 
-                window.scrollTo(0, savedScrollY); // Kembalikan posisi scroll
+                appWrapper.scrollTop = savedScrollY; // Kembalikan posisi scroll
             }
 
             document.addEventListener("mousedown", (e) => {
@@ -2018,30 +2013,21 @@
                 }
             });
 
+            // --- AUTO OFFSET NAVBAR TOAST ---
+            function updateToastPosition() {
+                const navbar = document.querySelector(".navbar");
+                const toast = document.querySelector(".notif-container");
+                if (!navbar || !toast) return;
+
+                const navbarHeight = navbar.offsetHeight;
+                toast.style.top = `${navbarHeight + 15}px`;
+            }
+
+            window.addEventListener("resize", updateToastPosition);
+            updateToastPosition();
+
             initPortalApp();
         });
-    </script>
-
-    <script>
-        (function(){
-            const navbar = document.querySelector('.navbar');
-
-            function updateNavbar(){
-                if(!window.visualViewport)
-                    return;
-
-                navbar.style.top = window.visualViewport.offsetTop + 'px';
-            }
-
-            updateNavbar();
-
-            if (window.visualViewport) {
-                window.visualViewport.addEventListener('resize', updateNavbar);
-                window.visualViewport.addEventListener('scroll', updateNavbar);
-            }
-
-            window.addEventListener('orientationchange', updateNavbar);
-        })();
     </script>
 </body>
 </html>
